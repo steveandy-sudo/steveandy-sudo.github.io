@@ -22,6 +22,9 @@ contributions:
 technologies: [ROS 2, PyTorch, TorchScript, YOLO, Roboflow]
 github: https://github.com/steveandy-sudo/kookmin-autonomous-portfolio
 githubVisibility: public
+thumbnail:
+  src: /media/projects/kookmin-ai-edge/01-competition-vehicle.jpg
+  alt: Team KAI competition vehicle on the Kookmin course
 featured: true
 ---
 
@@ -66,11 +69,15 @@ Learning-based driving was explored and implemented, but steering oscillation re
 
 I managed the dataset workflow from upload through annotation, annotation review, class organization, augmentation, train/validation/test splits, and export. I directly trained one unified YOLO object-detection model for traffic lights, vehicles, obstacles, and cones.
 
+<MediaSlot id="kookmin-annotation" />
+
 <MediaSlot id="kookmin-yolo" />
 
 ## Mission Manager & Final Driver
 
 I implemented Mission Manager / Final Driver integration and applied it to the real competition vehicle. This work included traffic-light and mission-state handling, connecting modules in the team stack, and participating in real-vehicle parameter tuning.
+
+<MediaSlot id="kookmin-driving" />
 
 ## Engineering decisions
 
@@ -94,6 +101,8 @@ Mission Manager / Final Driver integration was applied to the competition vehicl
 
 Separate claims about perception accuracy, tracking error, maximum speed, or recovery success rate require additional recorded evidence.
 
+<MediaSlot id="kookmin-practice" />
+
 ## Results
 
 <div className="results-grid">
@@ -101,6 +110,8 @@ Separate claims about perception accuracy, tracking error, maximum speed, or rec
   <Result label="Final round" value="13th place" context="Course completed · team ranking" />
   <Result label="Parking event" value="Special Award" context="Team outcome; personal parking work covered map waypoints and reverse recovery" />
 </div>
+
+<MediaSlot id="kookmin-finish" />
 
 ## Challenges & debugging
 

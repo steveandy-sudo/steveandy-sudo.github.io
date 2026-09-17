@@ -6,4 +6,4 @@ interface Props { id: string; }
 const item = media[Astro.props.id];
 if (!item) throw new Error(`Unknown media slot: ${Astro.props.id}`);
 ---
-{item.youtubeId || (item.src && item.kind === 'video') ? <Video src={item.src} youtubeId={item.youtubeId} title={item.alt} caption={item.caption} poster={item.poster} /> : item.src ? <Figure src={item.src} alt={item.alt} caption={item.caption} /> : import.meta.env.DEV && <aside class="media-request" data-media-slot={Astro.props.id}><span class="eyebrow">Development preview / 자료 요청</span><strong>{item.title}</strong><p>{item.request}</p><code>{item.target}</code></aside>}
+{item.youtubeId || (item.src && item.kind === 'video') ? <Video src={item.src} youtubeId={item.youtubeId} title={item.alt} caption={item.caption} poster={item.poster} gifSrc={item.gifSrc} portrait={item.portrait} /> : item.src ? <Figure src={item.src} alt={item.alt} caption={item.caption} /> : import.meta.env.DEV && <aside class="media-request" data-media-slot={Astro.props.id}><span class="eyebrow">Development preview / 자료 요청</span><strong>{item.title}</strong><p>{item.request}</p><code>{item.target}</code></aside>}

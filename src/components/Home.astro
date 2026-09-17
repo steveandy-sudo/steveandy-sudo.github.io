@@ -52,7 +52,7 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
     </section>
     <ResearchInterests lang={lang} {...research} />
     <section id="projects" class="home-section" aria-labelledby="projects-title"><div class="section-heading"><h2 id="projects-title">{ko ? '주요 프로젝트' : 'Selected projects'}</h2><span class="eyebrow">01—05 / Technical case studies</span></div>
-      <ol class="project-list">{projects.map(({data}) => { const translated = entries.find(e => e.data.slug === data.slug && e.data.lang === lang); const target = translated?.data ?? data; return <li><span class="project-index" aria-hidden="true">{String(data.order).padStart(2,'0')}</span><div class="project-summary"><p class="project-context">{data.context}</p><h3><a href={projectUrl(target)}>{ko ? data.titleKo ?? data.title : data.title}</a></h3><p>{ko ? koSummaries[data.slug] : data.summary}</p><div class="technology-tags">{data.technologies.map(tech => <span>{tech}</span>)}</div><a class="case-link" href={projectUrl(target)}>{ko ? `기술 문서 보기${target.lang === 'en' ? ' (English)' : ''}` : 'View technical case study'} <span aria-hidden="true">→</span></a></div><div class="project-side"><span class={`status ${data.status}`}>{statusLabel[lang][data.status]}</span><p>{data.period}</p><p>{data.role}</p></div></li>; })}</ol>
+      <ol class="project-list">{projects.map(({data}) => { const translated = entries.find(e => e.data.slug === data.slug && e.data.lang === lang); const target = translated?.data ?? data; return <li class:list={{ "has-thumbnail": !!data.thumbnail }}><span class="project-index" aria-hidden="true">{String(data.order).padStart(2,'0')}</span><div class="project-summary"><p class="project-context">{data.context}</p><h3><a href={projectUrl(target)}>{ko ? data.titleKo ?? data.title : data.title}</a></h3><p>{ko ? koSummaries[data.slug] : data.summary}</p><div class="technology-tags">{data.technologies.map(tech => <span>{tech}</span>)}</div><a class="case-link" href={projectUrl(target)}>{ko ? `기술 문서 보기${target.lang === 'en' ? ' (English)' : ''}` : 'View technical case study'} <span aria-hidden="true">→</span></a></div><div class="project-side">{data.thumbnail && <a class="project-preview" href={projectUrl(target)}><img src={data.thumbnail.src} alt={ko ? "국민대 대회 코스 위의 Team KAI 차량" : data.thumbnail.alt} width="1576" height="884" loading="lazy" decoding="async" /></a>}<span class={`status ${data.status}`}>{statusLabel[lang][data.status]}</span><p>{data.period}</p><p>{data.role}</p></div></li>; })}</ol>
     </section>
     <section id="awards" class="home-section" aria-labelledby="awards-title"><div class="section-heading"><h2 id="awards-title">{ko ? '수상 및 경진대회' : 'Awards & competitions'}</h2></div><div class="award-row"><span class="year">2026</span><div><h3>{ko ? '국민대 자율주행 경진대회 AI-엣지 챌린지' : 'Kookmin AI-Edge Challenge'}</h3><p>{ko ? '예선 2위 · 본선 완주 13위 · 주차경기 특별상' : 'Preliminary 2nd · Finals 13th, course completed · Parking Special Award'}</p><span class="small-muted">{ko ? '팀 성과' : 'Team result'}</span></div></div><div class="award-row"><span class="year">2022</span><div><h3>Drone Clash</h3><p>{ko ? '일반부 3위' : 'General Division — 3rd Place'}</p></div></div></section>
     <section id="skills" class="home-section" aria-labelledby="skills-title"><div class="section-heading"><h2 id="skills-title">{ko ? '기술 역량' : 'Technical skills'}</h2></div><dl class="skills-list">{skills.map(([label,tools]) => <div><dt>{label}</dt><dd>{tools}</dd></div>)}</dl></section>
@@ -60,6 +60,16 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
 </BaseLayout>
 
 <style>
+  .project-list > li.has-thumbnail { grid-template-columns: 38px minmax(0, 1fr) 280px; }
+  .project-preview { display: block; margin-bottom: 16px; }
+  .project-preview img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 4px; }
+  @media (min-width: 761px) and (max-width: 1000px) {
+    .project-list > li.has-thumbnail { grid-template-columns: 30px minmax(0, 1fr) 220px; }
+  }
+  @media (max-width: 760px) {
+    .project-list > li.has-thumbnail { grid-template-columns: 26px minmax(0, 1fr); }
+    .project-preview { flex-basis: 100%; margin: 0 0 8px; }
+  }
   .intro { width: 100%; max-width: 960px; margin-inline: auto; padding: 48px 0 44px; grid-template-columns: 210px minmax(0, 1fr); align-items: center; gap: 56px; }
   .intro-profile { width: 210px; max-width: 100%; }
   .intro-profile img { width: 100%; height: auto; aspect-ratio: 1843 / 2458; object-fit: cover; object-position: center; border: 1px solid var(--line); border-radius: 6px; }
