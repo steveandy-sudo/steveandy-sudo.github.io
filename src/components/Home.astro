@@ -45,7 +45,10 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
         </dl>
         <a class="contact-link" href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a>
       </div>
-      <div class="intro-note"><span class="eyebrow">Focus</span><p>Implementation<br />Integration<br />Experimentation</p><span class="small-muted">{ko ? '2027년 2월 졸업 예정' : 'B.S. expected February 2027'}</span></div>
+      <figure class="intro-profile">
+        <img src="/media/profile/junghun-hwang.webp" alt={ko ? '황정헌 프로필 사진' : 'Portrait of Junghun Hwang'} width="1632" height="2044" fetchpriority="high" />
+        <figcaption>{ko ? '2027년 2월 졸업 예정' : 'B.S. expected February 2027'}</figcaption>
+      </figure>
     </section>
     <ResearchInterests lang={lang} {...research} />
     <section id="projects" class="home-section" aria-labelledby="projects-title"><div class="section-heading"><h2 id="projects-title">{ko ? '주요 프로젝트' : 'Selected projects'}</h2><span class="eyebrow">01—05 / Technical case studies</span></div>
@@ -57,8 +60,17 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
 </BaseLayout>
 
 <style>
+  .intro { align-items: center; }
+  .intro-profile { width: 230px; max-width: 100%; }
+  .intro-profile img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 6px; }
+  .intro-profile figcaption { margin-top: 12px; color: var(--muted); font-size: .8125rem; text-align: center; }
   .intro-details { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 22px; font-size: .875rem; }
   .intro-details > div { display: flex; flex-wrap: wrap; gap: 4px 12px; }
   .intro-details dt { color: var(--muted); }
   .intro-details dd { color: var(--ink); }
+  @media (max-width: 760px) {
+    .intro { display: flex; flex-direction: column; align-items: stretch; gap: 26px; }
+    .intro-profile { order: -1; width: 180px; }
+    .intro-profile figcaption { text-align: left; }
+  }
 </style>
