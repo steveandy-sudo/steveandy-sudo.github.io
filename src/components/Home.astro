@@ -33,7 +33,20 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
 ---
 <BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={ko ? '황정헌의 자율주행·AI·자율시스템 프로젝트와 기술 기록.' : 'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'} lang={lang} alternate={{lang: ko ? 'en' : 'ko', href: ko ? '/' : '/ko/'}}>
   <main id="main" class="container home-page">
-    <section class="intro" aria-labelledby="intro-title"><div><p class="eyebrow">Engineering portfolio / Konkuk University</p><h1 id="intro-title">Junghun Hwang <span lang="ko">황정헌</span></h1><p class="intro-field">Autonomous Driving / AI / Autonomous Systems</p><p class="intro-summary">{ko ? '건국대학교 스마트운행체공학과 학부생입니다. ROS 2 기반 판단·제어, AI 인지, 시스템 통합을 구현하고 시뮬레이션과 실차 실험으로 확인합니다.' : 'I study Smart Mobility Engineering at Konkuk University. My work connects ROS 2 decision-making, AI perception, and control integration through simulation and initial vehicle experiments.'}</p><a class="contact-link" href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a></div><div class="intro-note"><span class="eyebrow">Focus</span><p>Implementation<br />Integration<br />Experimentation</p><span class="small-muted">{ko ? '2027년 2월 졸업 예정' : 'B.S. expected February 2027'}</span></div></section>
+    <section class="intro" aria-labelledby="intro-title">
+      <div>
+        <p class="eyebrow">Engineering portfolio / Konkuk University</p>
+        <h1 id="intro-title">Junghun Hwang <span lang="ko">황정헌</span></h1>
+        <p class="intro-field">Autonomous Driving / AI / Autonomous Systems</p>
+        <p class="intro-summary">{ko ? '건국대학교 스마트운행체공학과 학부생입니다. ROS 2 기반 판단·제어, AI 인지, 시스템 통합을 구현하고 시뮬레이션과 실차 실험으로 확인합니다.' : 'I study Smart Mobility Engineering at Konkuk University. My work connects ROS 2 decision-making, AI perception, and control integration through simulation and initial vehicle experiments.'}</p>
+        <dl class="intro-details">
+          <div><dt>{ko ? '생년월일' : 'Date of birth'}</dt><dd><time datetime="2001-12-10">2001.12.10</time></dd></div>
+          <div><dt>{ko ? '거주지' : 'Based in'}</dt><dd>Seoul, Korea</dd></div>
+        </dl>
+        <a class="contact-link" href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="intro-note"><span class="eyebrow">Focus</span><p>Implementation<br />Integration<br />Experimentation</p><span class="small-muted">{ko ? '2027년 2월 졸업 예정' : 'B.S. expected February 2027'}</span></div>
+    </section>
     <ResearchInterests lang={lang} {...research} />
     <section id="projects" class="home-section" aria-labelledby="projects-title"><div class="section-heading"><h2 id="projects-title">{ko ? '주요 프로젝트' : 'Selected projects'}</h2><span class="eyebrow">01—05 / Technical case studies</span></div>
       <ol class="project-list">{projects.map(({data}) => { const translated = entries.find(e => e.data.slug === data.slug && e.data.lang === lang); const target = translated?.data ?? data; return <li><span class="project-index" aria-hidden="true">{String(data.order).padStart(2,'0')}</span><div class="project-summary"><p class="project-context">{data.context}</p><h3><a href={projectUrl(target)}>{ko ? data.titleKo ?? data.title : data.title}</a></h3><p>{ko ? koSummaries[data.slug] : data.summary}</p><div class="technology-tags">{data.technologies.map(tech => <span>{tech}</span>)}</div><a class="case-link" href={projectUrl(target)}>{ko ? `기술 문서 보기${target.lang === 'en' ? ' (English)' : ''}` : 'View technical case study'} <span aria-hidden="true">→</span></a></div><div class="project-side"><span class={`status ${data.status}`}>{statusLabel[lang][data.status]}</span><p>{data.period}</p><p>{data.role}</p></div></li>; })}</ol>
@@ -42,3 +55,10 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
     <section id="skills" class="home-section" aria-labelledby="skills-title"><div class="section-heading"><h2 id="skills-title">{ko ? '기술 역량' : 'Technical skills'}</h2></div><dl class="skills-list">{skills.map(([label,tools]) => <div><dt>{label}</dt><dd>{tools}</dd></div>)}</dl></section>
   </main>
 </BaseLayout>
+
+<style>
+  .intro-details { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 22px; font-size: .875rem; }
+  .intro-details > div { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .intro-details dt { color: var(--muted); }
+  .intro-details dd { color: var(--ink); }
+</style>
