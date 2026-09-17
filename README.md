@@ -4,6 +4,8 @@ Astro, TypeScript, MDX 기반의 정적 포트폴리오입니다. 개인 홈페�
 
 사이트 주소: **https://steveandy-sudo.github.io/**
 
+홈페이지는 자기소개, 연구 관심 분야, 프로젝트, 수상, 기술 역량 순서입니다. 연구 관심 분야는 사용자에게 확인한 자율주행 인지·판단 및 딥러닝·학습 기반 방법이며, `Home.astro`의 영문·국문 문구를 `ResearchInterests.astro`로 표시합니다.
+
 ## 개발과 검증
 
 Node.js 24 이상과 npm을 사용합니다. 의존성 버전은 `package-lock.json`으로 고정합니다.
@@ -52,6 +54,7 @@ npm run test:ui
 │   ├── content/projects/en/*.mdx     # 5개 기술 문서
 │   ├── components/
 │   │   ├── Home.astro
+│   │   ├── ResearchInterests.astro
 │   │   ├── ProjectToc.astro
 │   │   ├── Figure.astro / Video.astro / MediaSlot.astro
 │   │   ├── Result.astro / Decision.astro / Investigation.astro
