@@ -37,7 +37,7 @@ test('keyboard, language links, project repositories and development slot visibi
   await expect(page.locator('.global-nav a[href$="#cv"], a[href="https://github.com/steveandy-sudo"]')).toHaveCount(0);
   for (const [slug, repository] of [
     ['kookmin-ai-edge', 'https://github.com/steveandy-sudo/kookmin-autonomous-portfolio'],
-    ['ai-sw-mobility', 'https://github.com/steveandy-sudo/kai_personal'],
+    ['ai-sw-mobility', 'https://github.com/steveandy-sudo/ai-sw-mobility-portfolio'],
     ['vmodel-neuro-symbolic', 'https://github.com/subin11111/autonomous-driving-platform'],
   ]) {
     await page.goto(`/projects/${slug}/`);
