@@ -1,7 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import ProjectToc from '../components/ProjectToc.astro';
-import Figure from '../components/Figure.astro';
 import { allProjects, projectUrl, statusLabel } from '../lib/projects';
 import type { CollectionEntry } from 'astro:content';
 import type { MarkdownHeading } from 'astro';
@@ -23,7 +22,6 @@ if (publicGithub || d.demo) toc.push({ slug:'links', text: d.lang === 'ko' ? '�
       <h1>{d.title}</h1>{d.titleKo && d.lang === 'en' && <p class="title-ko" lang="ko">{d.titleKo}</p>}
       <dl class="project-meta"><div><dt>Period</dt><dd>{d.period}</dd></div>{d.team && <div><dt>Team</dt><dd>{d.team}</dd></div>}<div><dt>Role</dt><dd>{d.role}</dd></div><div><dt>Status</dt><dd><span class={`status ${d.status}`}>{statusLabel[d.lang][d.status]}</span></dd></div></dl>
       {publicGithub && <a class="case-link" href={publicGithub}>{d.lang === 'ko' ? 'GitHub 저장소' : 'GitHub repository'} <span aria-hidden="true">↗</span></a>}
-      {d.thumbnail && <Figure {...d.thumbnail} />}
     </header>
     <div class="case-grid"><ProjectToc items={toc} lang={d.lang} /><article class="case-content">
       <section aria-labelledby="overview"><h2 id="overview">{d.lang === 'ko' ? '개요' : 'Overview'}</h2><p class="lead">{d.summary}</p><p class="outcome"><strong>{d.lang === 'ko' ? '결과' : 'Outcome'}</strong> {d.outcome}</p></section>
