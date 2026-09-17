@@ -17,8 +17,9 @@ contributions:
   - Developed uav_waypoint_mission with CSV x/y/z/yaw waypoints, optional gimbal pitch, TF2 pose tracking, 3D goal distance, and arrival tolerance.
   - Implemented sequential target advancement and integrated PoseStamped commands on /command/pose with an existing PX4 offboard controller.
   - Supported map/ENU and PX4 local-NED coordinate modes, start/stop/reset controls, mission status, and current-goal reporting.
-  - Implemented hold, land, disarm, and land_then_disarm finish options with a low-altitude disarm safety gate.
+  - Implemented hold, land, disarm, and land_then_disarm finish options, with an altitude check in the land_then_disarm path.
 technologies: [ROS 2 Humble, PX4 SITL, Gazebo, TF2, QGroundControl]
+github: https://github.com/steveandy-sudo/uav-waypoint-portfolio
 featured: true
 ---
 
@@ -52,13 +53,11 @@ Supported finish options were `hold`, `land`, `disarm`, and `land_then_disarm`. 
 
 The package supported map/ENU and PX4 local-NED coordinate modes when connecting ROS 2 mission targets with the existing offboard controller. Coordinate handling was part of the integration responsibility.
 
-The supplied record does not specify a new localization algorithm or a separately measured coordinate-conversion accuracy, so neither is claimed.
+The collected source includes the mission node, offboard controller, PX4 message definitions, and Gazebo integration package. The repository's setup guide records their coordinate conventions and runtime connections.
 
 ## Safety logic
 
-A low-altitude disarm safety gate was included in the mission lifecycle logic. The finish behavior distinguished landing and disarming options rather than treating mission completion as one undifferentiated action.
-
-No safety certification, exhaustive fault coverage, or hardware-flight validation is implied by the existence of this gate.
+In the `land_then_disarm` path, the mission node checks altitude relative to its initial pose before requesting disarm. The collected offboard controller also includes an altitude guard. These checks connect mission completion with the vehicle's current state and depend on the runtime TF configuration.
 
 ## Simulation & integration
 
