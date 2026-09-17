@@ -34,6 +34,10 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
 <BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={ko ? '황정헌의 자율주행·AI·자율시스템 프로젝트와 기술 기록.' : 'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'} lang={lang} alternate={{lang: ko ? 'en' : 'ko', href: ko ? '/' : '/ko/'}}>
   <main id="main" class="container home-page">
     <section class="intro" aria-labelledby="intro-title">
+      <figure class="intro-profile">
+        <img src="/media/profile/junghun-hwang.webp" alt={ko ? '황정헌 프로필 사진' : 'Portrait of Junghun Hwang'} width="1632" height="2044" fetchpriority="high" />
+        <figcaption>{ko ? '2027년 2월 졸업 예정' : 'B.S. expected February 2027'}</figcaption>
+      </figure>
       <div>
         <p class="eyebrow">Engineering portfolio / Konkuk University</p>
         <h1 id="intro-title">Junghun Hwang <span lang="ko">황정헌</span></h1>
@@ -45,10 +49,6 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
         </dl>
         <a class="contact-link" href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a>
       </div>
-      <figure class="intro-profile">
-        <img src="/media/profile/junghun-hwang.webp" alt={ko ? '황정헌 프로필 사진' : 'Portrait of Junghun Hwang'} width="1632" height="2044" fetchpriority="high" />
-        <figcaption>{ko ? '2027년 2월 졸업 예정' : 'B.S. expected February 2027'}</figcaption>
-      </figure>
     </section>
     <ResearchInterests lang={lang} {...research} />
     <section id="projects" class="home-section" aria-labelledby="projects-title"><div class="section-heading"><h2 id="projects-title">{ko ? '주요 프로젝트' : 'Selected projects'}</h2><span class="eyebrow">01—05 / Technical case studies</span></div>
@@ -60,17 +60,20 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
 </BaseLayout>
 
 <style>
-  .intro { align-items: center; column-gap: 150px; }
-  .intro-profile { width: 230px; max-width: 100%; transform: translate(-124px, 18px); }
+  .intro { grid-template-columns: 210px minmax(0, 1fr); align-items: center; gap: 64px; }
+  .intro-profile { width: 210px; max-width: 100%; }
   .intro-profile img { width: 100%; height: auto; aspect-ratio: 1532 / 2044; object-fit: cover; object-position: left center; border: 1px solid var(--line); border-radius: 6px; }
   .intro-profile figcaption { margin-top: 12px; color: var(--muted); font-size: .8125rem; text-align: center; }
   .intro-details { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 22px; font-size: .875rem; }
   .intro-details > div { display: flex; flex-wrap: wrap; gap: 4px 12px; }
   .intro-details dt { color: var(--muted); }
   .intro-details dd { color: var(--ink); }
+  @media (min-width: 761px) and (max-width: 1000px) {
+    .intro { grid-template-columns: 180px minmax(0, 1fr); gap: 36px; }
+    .intro-profile { width: 180px; }
+  }
   @media (max-width: 760px) {
-    .intro { display: flex; flex-direction: column; align-items: stretch; gap: 26px; }
-    .intro-profile { order: -1; width: 180px; transform: translateY(8px); margin-bottom: 8px; }
-    .intro-profile figcaption { text-align: left; }
+    .intro { display: flex; flex-direction: column; align-items: stretch; gap: 30px; }
+    .intro-profile { width: 160px; align-self: center; }
   }
 </style>
