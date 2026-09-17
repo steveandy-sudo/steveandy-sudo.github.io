@@ -1,0 +1,9 @@
+---
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+interface Props { src?: string; alt: string; caption?: string; number?: number; source?: { label: string; href: string }; width?: number; height?: number; srcset?: string; sizes?: string; }
+const { src, alt, caption, number, source, width, height, srcset, sizes = '(max-width: 850px) 100vw, 760px' } = Astro.props;
+if (src && (!src.startsWith('/media/') || !existsSync(resolve('public', src.slice(1))))) throw new Error(`Figure must reference an existing public/media file: ${src}`);
+if (src && !alt.trim()) throw new Error('Technical figures require meaningful alt text.');
+---
+{src && <figure><img src={src} alt={alt} width={width} height={height} srcset={srcset} sizes={sizes} loading="lazy" decoding="async" />{(caption || source) && <figcaption>{number && <strong>Figure {number}. </strong>}{caption}{source && <> <a href={source.href}>{source.label}</a></>}</figcaption>}</figure>}

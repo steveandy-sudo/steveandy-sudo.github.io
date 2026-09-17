@@ -1,0 +1,216 @@
+# Junghun Hwang — Engineering Portfolio
+
+Astro, TypeScript, MDX 기반의 정적 포트폴리오입니다. 개인 홈페이지에서 5개 프로젝트의 기술 문서로 연결됩니다.
+
+사이트 주소: **https://steveandy-sudo.github.io/**
+
+## 개발과 검증
+
+Node.js 24 이상과 npm을 사용합니다. 의존성 버전은 `package-lock.json`으로 고정합니다.
+
+```sh
+npm install
+npm run dev
+npm run check
+npm run build
+npm run verify
+```
+
+`npm run dev`는 개발 화면을 제공합니다. 실제 파일이 없는 미디어 슬롯은 이 화면에서만 자료 요청 상자로 보입니다. `npm run build`는 `dist/`에 정적 HTML을 생성하며 빈 미디어 슬롯은 출력하지 않습니다.
+
+배포 결과와 같은 화면을 확인하려면:
+
+```sh
+npm run preview
+```
+
+브라우저 검사는 실행 중인 미리보기(`http://127.0.0.1:4321`)를 대상으로 합니다.
+
+```sh
+npx playwright install chromium
+npm run test:ui
+```
+
+별도 브라우저 실행 파일을 쓰려면 `BROWSER_PATH`, 다른 미리보기 주소를 쓰려면 `SITE_URL` 환경변수를 설정합니다. 예를 들어 Windows PowerShell에서는:
+
+```powershell
+$env:BROWSER_PATH = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+npm run test:ui
+```
+
+검사는 1440 / 768 / 390 / 320px 화면, 목차 이동과 현재 섹션 강조, 키보드 접근, 언어 전환, CV 링크, 200% 글자 확대를 확인합니다. 캡처는 무시되는 `test-results/`에 저장됩니다. HTML·앵커 검사는 실제 화면의 가독성이나 사실관계 검토를 대신하지 않습니다.
+
+## 구조
+
+```text
+.
+├── .github/workflows/deploy.yml
+├── astro.config.mjs
+├── package.json / package-lock.json / tsconfig.json
+├── src/
+│   ├── content.config.ts             # 엄격한 프로젝트 메타데이터 스키마
+│   ├── content/projects/en/*.mdx     # 5개 기술 문서
+│   ├── components/
+│   │   ├── Home.astro
+│   │   ├── ProjectToc.astro
+│   │   ├── Figure.astro / Video.astro / MediaSlot.astro
+│   │   ├── Result.astro / Decision.astro / Investigation.astro
+│   │   └── StageTimeline.astro
+│   ├── layouts/BaseLayout.astro
+│   ├── layouts/ProjectCaseStudy.astro
+│   ├── data/cv.ts / media.ts
+│   ├── lib/projects.ts
+│   ├── pages/index.astro / ko/index.astro / [...route].astro / 404.astro
+│   └── styles/global.css
+├── public/
+│   ├── cv/                          # 실제 존재하는 PDF만 다운로드 링크 생성
+│   ├── media/projects/              # 실제 자료를 추가할 위치
+│   ├── favicon.svg / robots.txt / .nojekyll
+├── docs/MEDIA_REQUESTS.md
+├── scripts/verify-site.mjs
+└── tests/site.spec.ts / playwright.config.ts
+```
+
+`node_modules/`, `.astro/`, `dist/`, 테스트 출력은 버전 관리에서 제외합니다. 서버, 데이터베이스, CMS, 인증은 사용하지 않습니다. 클라이언트 JavaScript는 프로젝트 목차 강조와 모바일 목차 접기에만 사용하며, 본문과 링크는 JavaScript 없이도 읽을 수 있습니다.
+
+## 주소
+
+| 주소 | 내용 |
+| --- | --- |
+| `/` | 영어 홈페이지 |
+| `/ko/` | 제공된 한국어 CV 내용을 바탕으로 구성한 한국어 홈페이지 |
+| `/projects/kookmin-ai-edge/` | 국민대 AI-엣지 챌린지 |
+| `/projects/ai-sw-mobility/` | 대학생 AI·SW 모빌리티 |
+| `/projects/camera-v2i-e2e/` | Camera V2I E2E 졸업설계 |
+| `/projects/uav-waypoint/` | UAV waypoint 미션 |
+| `/projects/vmodel-neuro-symbolic/` | V-Model 드림학기제 |
+| `/404.html` | 없는 페이지 안내 |
+
+각 프로젝트의 기간·역할·팀·상태·결과를 위쪽에 표시합니다. `My contribution`에서 팀 시스템과 본인 작업을 구분합니다. 데스크톱 목차는 고정되며, 모바일에서는 펼칠 수 있는 목차로 전환됩니다. 목차는 실제 존재하는 2단계 제목(`##`)에서 만들어집니다.
+
+## 프로젝트 추가와 수정
+
+본문은 `src/content/projects/en/<slug>.mdx`에서 관리합니다. `src/content.config.ts`의 스키마가 잘못된 값과 알 수 없는 필드를 빌드 단계에서 차단합니다.
+
+메타데이터 필드는 다음과 같습니다.
+
+| 필드 | 용도 |
+| --- | --- |
+| `slug`, `lang`, `order` | 주소, 언어, 노출 순서. 같은 언어에서 slug 중복 금지 |
+| `title`, `titleEn`, `titleKo` | 표시 제목, 영어 제목, 선택적 한국어 제목 |
+| `context`, `period`, `team`, `role` | 프로젝트 맥락, 기간, 선택적 팀 정보, 개인 역할 |
+| `status` | `completed`, `ongoing`, `design` 중 하나 |
+| `summary`, `outcome` | 요약과 현재 결과. 계획을 완료로 서술하지 않음 |
+| `teamScope`, `contributions` | 팀 전체 범위와 개인 기여 목록. 모든 프로젝트에서 필수 |
+| `technologies` | 3–5개의 실제 사용 기술 |
+| `github`, `githubVisibility`, `demo` | 선택적 링크. 비공개 저장소는 `githubVisibility: private`로 숨김 |
+| `thumbnail` | 선택적 `src`, `alt`, `caption`. 실제 이미지가 있을 때만 지정 |
+| `featured` | 홈페이지 표시 여부 |
+
+새 프로젝트는 기존 문서를 복사한 뒤 실제 확인된 내용으로 바꾸고, `slug`와 `order`를 지정합니다. 새 영어 프로젝트의 한국어 요약을 준비했다면 `Home.astro`의 `koSummaries`에도 추가합니다. `##` 제목으로 필요한 문서 구간만 작성합니다. 내용이 없는 구간이나 빈 Gallery 제목은 만들지 않습니다. `overview`, `my-contribution`, `links`는 공통 레이아웃에서 사용하는 ID이므로 본문 제목으로 중복하지 않습니다.
+
+주간 업데이트는 해당 MDX의 `outcome`, 상태, 실험 내용부터 바꿉니다. 측정값은 환경·시험 조건·의미를 함께 기입하고, 추정 원인은 `hypothesis`로 유지합니다.
+
+## 기여와 결과의 경계
+
+- 국민대: 통합 YOLO 검출 모델과 별도 lane 모델을 구분합니다. 전체 회피·콘 알고리즘·모든 제어기를 개인 구현으로 쓰지 않습니다. 수상과 순위는 팀 결과입니다.
+- AI·SW: AEB는 공동 개발입니다. 약 7 km/h는 초기 실차 시험이며 조향 액추에이터 관련 원인은 가설입니다. 최종 성공이나 진동 해결을 주장하지 않습니다.
+- V2I: 시스템·실험 설계 단계입니다. 객체 상태 필드와 검증 지표는 계획이며 측정 결과가 아닙니다.
+- UAV: waypoint 패키지를 기존 offboard controller와 연동했습니다. UGV, ArUco, 정밀 착륙 서브시스템과 전체 mission manager는 개인 기여가 아닙니다.
+- V-Model: 안정적인 자율주행을 달성하지 못했다는 결과를 유지합니다.
+
+국민대 저장소 주소는 제공된 주소를 메타데이터에 저장했습니다. 접근 확인 시 비공개였으므로 외부 방문자용 링크는 숨깁니다. 저장소가 실제로 공개되면 익명 접근을 확인한 뒤 `githubVisibility`를 변경하고, 현재 비공개 정책을 검사하는 `verify-site.mjs`와 UI 검사도 함께 갱신합니다. 이 사이트 작업은 원본 저장소의 공개 범위를 변경하지 않습니다.
+
+## 이미지·GIF·아키텍처 그림
+
+자료 요청과 정확한 슬롯 위치는 [MEDIA_REQUESTS.md](docs/MEDIA_REQUESTS.md)에 있습니다. 실제 사진, 영상, 아키텍처 그림이 없는 상태에서 가상의 실험 자료를 만들지 않았습니다.
+
+```text
+public/media/projects/
+├── kookmin-ai-edge/
+├── ai-sw-mobility/
+├── camera-v2i/
+├── uav-waypoint/
+└── vmodel-neuro-symbolic/
+```
+
+파일명은 `01_system_architecture.webp`, `02_gazebo_test.webp`, `03_real_vehicle.mp4`처럼 순서와 내용을 표현합니다. 대문자·공백 대신 소문자와 밑줄을 사용합니다. 사진은 JPG/WebP, 선과 글자가 많은 그림은 PNG/SVG, 짧은 동작은 MP4를 권장합니다. GIF도 이미지로 지원합니다.
+
+기존 슬롯은 `src/data/media.ts`에 `src`와 `kind`를 추가하면 연결됩니다. `target`은 제안 경로이며 링크가 아닙니다. 캡션은 반드시 받은 자료의 실제 장면과 맞춰 검토합니다. 존재하지 않는 경로를 지정하면 빌드를 실패시켜 깨진 이미지를 방지합니다.
+
+직접 그림을 배치할 수도 있습니다. 아래는 **실제 파일을 준비한 뒤** 사용하는 예시이며, 이 경로에 가짜 그림을 생성하지 않습니다.
+
+```mdx
+import Figure from '../../../components/Figure.astro';
+
+<Figure
+  src="/media/projects/kookmin-ai-edge/01_system_architecture.webp"
+  alt="확인된 실제 시스템의 모듈과 연결을 설명하는 대체 텍스트"
+  number={1}
+  caption="실제 그림의 의미와 개인·팀 기여 범위를 설명하는 캡션"
+  width={1200}
+  height={700}
+/>
+```
+
+`srcset`과 `sizes`로 여러 해상도를 지정할 수 있습니다. `source={{ label: '자료 출처', href: '실제 확인한 주소' }}`는 출처가 있을 때만 추가합니다. 아키텍처는 확인된 노드·토픽·데이터 흐름을 사용하고 팀 시스템과 개인 구현 범위를 캡션에 명시합니다.
+
+## 동영상
+
+`Video`는 MP4와 YouTube를 지원합니다. 자동 재생은 없으며 MP4는 재생 컨트롤과 선택적 WebVTT 자막을 제공합니다.
+
+```mdx
+import Video from '../../../components/Video.astro';
+
+<Video
+  src="/media/projects/uav-waypoint/01_waypoint_landing.mp4"
+  title="실제 시연 내용을 설명하는 제목"
+  caption="시뮬레이션 환경과 본인 패키지의 역할을 설명하는 캡션"
+/>
+```
+
+실제 YouTube 영상이 있으면 `src` 대신 `youtubeId`에 11자리 영상 ID를 지정합니다. `poster`, `captionsSrc`, `captionsLang`도 선택적으로 사용할 수 있습니다. 파일을 추가하기 전에는 컴포넌트를 렌더링하지 않거나 기존 `MediaSlot`을 유지합니다.
+
+## 결과·설계 판단·개발 단계
+
+`Result`는 `label`, `value`, `context`를 모두 요구합니다. 예를 들어 국민대 순위의 `context`에는 대회와 팀 결과임을 포함합니다. 속도는 시뮬레이션/실차, 초기 시험/최종 검증 등 측정 맥락을 함께 씁니다.
+
+`Decision`은 `title`, `considered`, `observation`, `choice`, `reason`으로 선택의 근거를 설명합니다. `Investigation`은 `problem`, `observation`, `investigation`, `status`로 미해결 문제를 기록합니다. `StageTimeline`은 각 단계의 `state`를 `complete`, `current`, `planned`로 구분합니다. 미래 단계를 완료로 표시하지 않습니다.
+
+## 한국어·영어
+
+영어 상세 문서는 제공된 영어 프로젝트 기록으로 작성했습니다. 한국어 홈페이지는 기존 한국어 CV의 요약을 사용합니다. 아직 없는 상세 번역을 자동 생성하거나 빈 언어 페이지로 연결하지 않습니다. 한국어 홈페이지에서 영어 문서로 연결되는 링크에는 English를 표시합니다.
+
+검토한 한국어 상세 원고가 준비되면 `src/content/projects/ko/<slug>.mdx`를 추가하고 `lang: ko`, 동일한 `slug`를 사용합니다. `/ko/projects/<slug>/`가 자동 생성되며, 두 문서가 모두 존재할 때 언어 전환 링크와 `hreflang`이 나타납니다. 영어 번역 추가도 동일한 방식입니다. UI 번역은 `BaseLayout`, `Home`, `ProjectCaseStudy`, `ProjectToc`에서 관리합니다.
+
+## CV PDF
+
+`public/cv/`에 다음 이름으로 실제 PDF를 넣습니다.
+
+- `Junghun_Hwang_CV_V1_EN.pdf` — 영어, 학점 포함
+- `Junghun_Hwang_CV_V1_KO.pdf` — 한국어, 학점 포함
+- `Junghun_Hwang_CV_V2_EN.pdf` — 영어, 학점 미표기
+- `Junghun_Hwang_CV_V2_KO.pdf` — 한국어, 학점 미표기
+
+현재는 검증된 V2 2종을 포함합니다. V1은 학점 미확정 때문에 넣지 않았으며 다운로드 링크 대신 확인 대기 안내를 표시합니다. `cv.ts`가 실제 존재하는 파일만 링크합니다. 기존 CV 저장소에서 수정했다면 PDF를 이 폴더에 다시 복사한 뒤 사이트를 빌드합니다.
+
+## GitHub Pages 배포
+
+저장소 이름은 `steveandy-sudo.github.io`, 사이트 주소는 `https://steveandy-sudo.github.io`입니다. Astro 설정에 저장소 이름을 `base`로 추가하지 않습니다.
+
+1. GitHub 저장소의 **Settings → Pages → Source**를 **GitHub Actions**로 설정합니다.
+2. `main`에 변경을 push합니다. `.github/workflows/deploy.yml`이 설치, 타입 검사, 정적 빌드, 링크 검사를 수행한 뒤 배포합니다.
+3. Pull request에서는 검사만 수행하고 공개 배포하지 않습니다.
+4. Actions에서 배포 완료를 확인한 뒤 실제 주소와 PDF를 열어 확인합니다.
+
+```sh
+npm run verify -- --live https://steveandy-sudo.github.io
+```
+
+생성 결과 `dist/`를 직접 수정하거나 커밋하지 않습니다. 콘텐츠와 원본 자산을 수정하고 다시 배포합니다. Pages 배포 권한은 배포 작업에만 부여하며 별도 비밀 토큰을 저장하지 않습니다.
+
+## 참고 범위
+
+[Avionics 기술 문서 사이트](https://graduationproject-team3-avionics.github.io/)의 개요·시스템·하위 모듈·검증으로 이어지는 문서 구조를 참고했습니다. 해당 사이트의 코드, CSS, 문장, 그림, 시각 정체성은 가져오지 않았습니다. 이 사이트의 구조는 개인 홈페이지에서 여러 프로젝트의 기술 문서로 분기하도록 작성했습니다.
+
+기술 참고: [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/), [Astro GitHub Pages 배포](https://docs.astro.build/en/guides/deploy/github/).

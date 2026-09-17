@@ -1,0 +1,77 @@
+---
+slug: ai-sw-mobility
+lang: en
+order: 2
+title: 2026 Student AI·SW Mobility Competition
+titleEn: 2026 Student AI·SW Mobility Competition
+titleKo: 2026 대학생 AI·SW 모빌리티 경진대회
+context: Student AI·SW Mobility Competition
+period: Mar 2026 – Ongoing
+team: 27 members / decision team of 5
+role: Decision-Making / AEB Co-development
+status: ongoing
+summary: Shared ROS 2 AEB development, Stanley path tracking, and validation from Gazebo closed-loop simulation to initial vehicle testing.
+outcome: Initial real-vehicle tests were conducted at approximately 7 km/h. Steering oscillation remains under investigation; final competition success is not claimed.
+teamScope: A 27-member competition team is developing the vehicle system. I work in the five-member decision-making team; AEB development and overall vehicle integration include shared work.
+contributions:
+  - Co-developed the ROS 2 AEB pipeline, including cone-boundary center-path generation, a red-entry stop latch, and stateful fail-safe behavior.
+  - Implemented Stanley tracking with steering limits, steering-rate limits, and motion preview.
+  - Validated the AEB pipeline in Gazebo closed-loop simulation and used Foxglove for path, steering, and stop-state debugging.
+  - Conducted initial real-vehicle testing around 7 km/h and investigated observed steering oscillation.
+technologies: [ROS 2, Stanley, Gazebo, Foxglove, AEB]
+github: https://github.com/steveandy-sudo/kai_personal
+featured: true
+---
+
+import MediaSlot from '../../../components/MediaSlot.astro';
+import StageTimeline from '../../../components/StageTimeline.astro';
+import Result from '../../../components/Result.astro';
+import Investigation from '../../../components/Investigation.astro';
+
+## Development progression
+
+<StageTimeline stages={[
+  { label: 'Simulation', state: 'complete', detail: 'Closed-loop AEB validation performed in Gazebo.' },
+  { label: 'Initial real-vehicle test', state: 'current', detail: 'Approximately 7 km/h testing; steering oscillation under investigation.' },
+  { label: 'Competition preparation', state: 'planned', detail: 'Further integration and testing are needed before final competition claims.' },
+]} />
+
+Completion of a simulation stage does not mean the full real-vehicle system has been validated. The project remains ongoing.
+
+## AEB pipeline
+
+The shared ROS 2 AEB work included generating a center path from cone boundaries, latching a stop at the red entry, and maintaining stateful fail-safe behavior. These functions form part of the decision-making pipeline integrated into the broader team system.
+
+The AEB pipeline was **co-developed**. It should not be interpreted as a system authored solely by me.
+
+## Stanley tracking
+
+I implemented Stanley-based path tracking for cone-corridor driving. The work included steering constraints, steering-rate limits, and motion-preview compensation.
+
+Those mechanisms were part of the implementation and tuning work. Their presence alone does not demonstrate that the observed real-vehicle oscillation was eliminated.
+
+## Simulation & debugging
+
+Gazebo provided the closed-loop environment used to validate the AEB pipeline. Foxglove was used to visualize and debug the generated path, steering behavior, and stop state.
+
+The simulation work and vehicle tests are reported separately because they exercise different conditions. No simulation speed or tracking-error metric is presented as a real-vehicle result.
+
+<MediaSlot id="mobility-simulation" />
+
+## Initial vehicle testing
+
+<Result label="Initial real-vehicle testing" value="Approximately 7 km/h" context="Early track tests, not competition-speed validation or a final performance result" />
+
+Steering oscillation was observed during the track tests. This remains a development problem rather than a resolved issue.
+
+<MediaSlot id="mobility-vehicle" />
+
+## Challenges & hypotheses
+
+<Investigation problem="Steering oscillation on the vehicle" observation="Oscillation appeared during initial real-vehicle testing." investigation="The team suspects that steering actuator or motor capability may contribute. This is a hypothesis, not a confirmed root cause." status="Under investigation. No confirmed cause, successful fix, or final competition outcome is reported." />
+
+## Current record
+
+The current evidence consists of Gazebo closed-loop validation, Foxglove debugging, and initial vehicle testing. Further results should identify their environment, test conditions, and observed behavior before changing the project status.
+
+The linked public repository contains broader team integration material. Its complete contents should not be treated as my individual contribution.

@@ -1,0 +1,10 @@
+---
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+interface Props { src?: string; youtubeId?: string; title: string; caption?: string; poster?: string; captionsSrc?: string; captionsLang?: string; }
+const { src, youtubeId, title, caption, poster, captionsSrc, captionsLang = 'en' } = Astro.props;
+for (const file of [src, poster, captionsSrc].filter(Boolean)) if (!file?.startsWith('/media/') || !existsSync(resolve('public', file.slice(1)))) throw new Error(`Missing local video asset: ${file}`);
+if (src && youtubeId) throw new Error('Use one video source.');
+if (youtubeId && !/^[\w-]{11}$/.test(youtubeId)) throw new Error('Invalid YouTube video ID.');
+---
+{(src || youtubeId) && <figure class="video-figure">{src ? <video controls preload="metadata" poster={poster} aria-label={title}><source src={src} type="video/mp4" />{captionsSrc && <track kind="captions" src={captionsSrc} srclang={captionsLang} label="Captions" default />}</video> : <iframe src={`https://www.youtube-nocookie.com/embed/${youtubeId}`} title={title} loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" />}{caption && <figcaption>{caption}</figcaption>}</figure>}

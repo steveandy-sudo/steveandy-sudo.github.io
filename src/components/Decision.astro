@@ -1,0 +1,5 @@
+---
+interface Props { title: string; considered?: string; observation?: string; choice: string; reason?: string; }
+const { title, considered, observation, choice, reason } = Astro.props;
+---
+<article class="decision"><h3>{title}</h3><dl>{considered && <><dt>Considered</dt><dd>{considered}</dd></>}{observation && <><dt>Observation</dt><dd>{observation}</dd></>}<dt>Decision</dt><dd>{choice}</dd>{reason && <><dt>Reason</dt><dd>{reason}</dd></>}</dl></article>

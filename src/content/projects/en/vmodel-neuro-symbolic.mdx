@@ -1,0 +1,64 @@
+---
+slug: vmodel-neuro-symbolic
+lang: en
+order: 5
+title: V-Model Neuro-Symbolic Driving
+titleEn: V-Model Neuro-Symbolic Driving
+titleKo: V-Model Neuro-Symbolic Driving
+context: Dream Semester Project
+period: Mar 2026 – Jun 2026
+team: 3 members
+role: Decision-Making
+status: completed
+summary: An early ROS 2 / CARLA decision-and-control integration project, centered on waypoint following and iterative path-tracking debugging.
+outcome: Stable autonomous driving was not achieved. The implementation and debugging experience informed later autonomous-driving projects.
+teamScope: A three-member Dream Semester team worked on the driving platform. My contribution covered decision-making and control integration; the linked repository is a team codebase.
+contributions:
+  - Implemented ROS 2 decision-making, waypoint following, Pure Pursuit, and longitudinal speed control, and integrated the components with CARLA.
+  - Conducted closed-loop driving experiments and investigated steering direction, lookahead, smoothing, rate limiting, and command bounds.
+  - Worked on later MCU bridge adaptation.
+technologies: [ROS 2, CARLA, Pure Pursuit, Control Integration]
+github: https://github.com/subin11111/autonomous-driving-platform
+featured: true
+---
+
+import MediaSlot from '../../../components/MediaSlot.astro';
+import Investigation from '../../../components/Investigation.astro';
+
+## What I tried
+
+The project combined ROS 2 decision-making and waypoint-following components with CARLA. My implementation covered Pure Pursuit for path tracking and longitudinal speed control, alongside the integration work required to connect these components to the simulation.
+
+This was an early learning project. The goal was to establish a working driving loop, but the completed project did not achieve stable autonomous driving.
+
+## What failed
+
+**Stable autonomous driving was not achieved.** Closed-loop experiments exposed unstable path tracking that persisted through the project's adjustments.
+
+The project's completed status refers to the end of the Dream Semester project. It does not mean the driving objective was successfully completed.
+
+## Debugging work
+
+<Investigation problem="Unstable path tracking" observation="The integrated driving loop did not produce stable autonomous driving." investigation="I iteratively adjusted steering direction, lookahead, target smoothing, rate limiting, and command bounds during closed-loop experiments." status="Unsuccessful driving outcome at project completion. No single confirmed root cause or successful final fix is claimed." />
+
+| Area investigated | Work performed |
+| --- | --- |
+| Steering direction | Debugged the direction of steering response |
+| Lookahead | Adjusted the target-following lookahead |
+| Smoothing | Adjusted target smoothing |
+| Rate limiting | Investigated limits on command changes |
+| Command bounds | Adjusted allowable command ranges |
+
+These entries document investigation and modification, not independently validated solutions.
+
+<MediaSlot id="vmodel-debug" />
+
+## Integration work
+
+ROS 2 decision and control components were connected with CARLA for closed-loop experiments. The contribution record also includes later MCU bridge adaptation, without claiming that it resolved the original tracking problem or established successful hardware driving.
+
+## What I learned
+
+The project established foundational experience in ROS 2, CARLA, path tracking, and control integration. Its value lies in the implementation and experimental work, alongside an explicit record of the unsuccessful outcome.
+
+The later projects continued this trajectory through Gazebo testing, vehicle integration, and more structured mission logic. The portfolio records those later results on their own pages rather than retroactively treating them as success in this project.
