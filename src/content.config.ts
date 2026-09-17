@@ -8,7 +8,7 @@ const projects = defineCollection({
     lang: z.enum(['en', 'ko']).default('en'), order: z.number().int().positive(),
     title: z.string().min(1), titleEn: z.string().min(1), titleKo: z.string().optional(),
     context: z.string(), period: z.string(), team: z.string().optional(), role: z.string(),
-    status: z.enum(['completed', 'ongoing', 'design']),
+    status: z.enum(['completed', 'ended', 'ongoing', 'design']),
     summary: z.string().min(1), outcome: z.string().min(1), teamScope: z.string().min(1),
     contributions: z.array(z.string().min(1)).min(1), technologies: z.array(z.string()).min(3).max(5),
     github: z.url().optional(), githubVisibility: z.enum(['public','private']).default('public'), demo: z.url().optional(),
