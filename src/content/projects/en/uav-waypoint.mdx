@@ -25,11 +25,9 @@ featured: true
 import MediaSlot from '../../../components/MediaSlot.astro';
 import Result from '../../../components/Result.astro';
 
-## Team system & package boundary
+## Team system & package integration
 
 The course environment included ROS 2 Humble, PX4 SITL, Gazebo, QGroundControl, TF, and Micro XRCE-DDS. My package, `uav_waypoint_mission`, handled waypoint progression and mission-level commands. It integrated with an **existing PX4 offboard controller**.
-
-The package is not the complete vehicle controller or the full team mission manager. UGV path following, ArUco, and the precision-landing subsystem were outside my individual contribution.
 
 ## Waypoint inputs & outputs
 
@@ -70,7 +68,7 @@ Integration took place in the PX4 SITL / Gazebo course environment using ROS 2 a
 
 <Result label="Course demonstration" value="Waypoints + landing completed" context="PX4 SITL / Gazebo project demonstration; my waypoint package was used" />
 
-All waypoints were successfully followed and the final landing was completed in the course demonstration. This result should be read in that simulation and integration context, not as a claim of an independently built flight controller or real-world flight validation.
+All waypoints were successfully followed and the final landing was completed in the PX4 SITL / Gazebo course demonstration using my waypoint package with the existing offboard controller.
 
 <MediaSlot id="uav-demo" />
 
@@ -78,4 +76,4 @@ All waypoints were successfully followed and the final landing was completed in 
 
 The project provided implementation experience at the boundary between a mission package and an existing controller: target representation, coordinate conventions, progress tracking, and finish behavior all mattered to integration.
 
-The documented result is specific to waypoint tracking and landing. It does not absorb the other team members' contributions into the waypoint package.
+The waypoint tracking and landing demonstration showed the package operating within the integrated team system.

@@ -16,7 +16,7 @@ teamScope: The competition vehicle combined lane perception, driving controllers
 contributions:
   - Built the ROS 2 imitation-learning pipeline, from driving-data collection and model training to TorchScript deployment and real-time inference.
   - Implemented learning/rule hybrid driving and traffic-light and mission-state handling.
-  - Managed the full Roboflow workflow and trained the unified YOLO object-detection model. The separate lane model was not personally trained by me.
+  - Managed the full Roboflow workflow and trained the unified YOLO object-detection model for traffic lights, vehicles, obstacles, and cones.
   - Implemented Mission Manager / Final Driver integration, applied it to the competition vehicle, and participated in system integration and parameter tuning.
   - Defined SLAM-map waypoints and implemented reverse recovery logic for parking.
 technologies: [ROS 2, PyTorch, TorchScript, YOLO, Roboflow]
@@ -34,7 +34,7 @@ import Investigation from '../../../components/Investigation.astro';
 
 The project brought together perception, driving decisions, control integration, and parking on a real competition vehicle. As team lead in a five-member team, I worked on the learning pipeline, object-detection workflow, mission integration, and vehicle tuning.
 
-Preliminary and final rankings describe the **team's competition performance**. They do not isolate the performance of any one model or controller.
+Preliminary and final rankings describe the **team's competition performance**.
 
 <MediaSlot id="kookmin-vehicle" />
 
@@ -42,13 +42,13 @@ Preliminary and final rankings describe the **team's competition performance**. 
 
 My work crossed three parts of the team system:
 
-| Workstream | My implementation or integration | Boundary |
+| Workstream | My implementation or integration | System context |
 | --- | --- | --- |
 | Learning-based driving | Driving-data collection, training, TorchScript export, inference, and learning/rule switching | One driving approach evaluated during development |
 | Object detection | Roboflow dataset preparation and unified YOLO training | Traffic lights, vehicles, obstacles, and cones; the lane model was separate |
 | Vehicle and mission integration | Mission Manager, Final Driver, mission-state handling, and parameter tuning | Integration into the shared competition stack |
 
-Lane perception, the complete avoidance stack, all cone algorithms, and all Pure Pursuit / Stanley implementations are **not** claimed as my individual work.
+These contributions connected model development and mission logic with the team's perception and control modules.
 
 ## Find the code
 
@@ -66,15 +66,11 @@ Learning-based driving was explored and implemented, but steering oscillation re
 
 I managed the dataset workflow from upload through annotation, annotation review, class organization, augmentation, train/validation/test splits, and export. I directly trained one unified YOLO object-detection model for traffic lights, vehicles, obstacles, and cones.
 
-The lane model was a separate part of the team system and was **not personally trained by me**. No detection accuracy, inference latency, or dataset-size claim is made without a corresponding measurement.
-
 <MediaSlot id="kookmin-yolo" />
 
 ## Mission Manager & Final Driver
 
 I implemented Mission Manager / Final Driver integration and applied it to the real competition vehicle. This work included traffic-light and mission-state handling, connecting modules in the team stack, and participating in real-vehicle parameter tuning.
-
-The contribution is the mission and output integration described here. It does not establish sole authorship of every perception, planning, or control module that supplied the integrated system.
 
 ## Engineering decisions
 
@@ -84,13 +80,11 @@ The contribution is the mission and output integration described here. It does n
 
 <Decision title="Lane strategy" considered="The initial lane strategy used both white and yellow markings." observation="Perception and hardware constraints affected the usable lane information." choice="The final strategy focused on yellow markings." />
 
-These are **team deployment decisions**. My individual implementation responsibilities remain those listed in My contribution.
+These **team deployment decisions** guided the vehicle integration and tuning work.
 
 ## Parking event
 
 My parking contribution included defining waypoints on a SLAM map and implementing reverse recovery logic. The team received the parking event Special Award.
-
-The award is a team result. The waypoint and recovery work does not imply sole implementation of the entire parking subsystem.
 
 <MediaSlot id="kookmin-parking" />
 
