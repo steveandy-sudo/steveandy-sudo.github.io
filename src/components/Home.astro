@@ -6,14 +6,14 @@ interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === 'ko';
 const research = ko ? {
-  summary: '자율주행의 인지와 판단, 딥러닝과 학습 기반 방법에 관심이 있습니다. 특히 End-to-End(E2E) 자율주행을 직접 구현하고 실험하며 연구를 발전시키고 싶습니다.',
+  summary: '자율주행의 인지와 판단에 관심이 있으며, 딥러닝과 학습 기반 방법을 중심으로 연구하고 싶습니다. 센서 데이터에서 주변 환경을 이해하는 과정이 상황에 맞는 주행 행동으로 어떻게 이어지는지 탐구하고자 합니다. 특히 학습 기반 주행 모델을 직접 개발하고 평가하면서 End-to-End(E2E) 자율주행에 대한 이해를 넓히고 싶습니다. 다양한 교통 상황에서 모델의 행동을 분석하고, 주행 환경이 달라졌을 때 나타나는 성능 변화와 한계를 살펴보며 더 신뢰할 수 있는 자율주행을 위한 개선 방향을 찾고자 합니다.',
   topics: [
     { title: '자율주행 인지', description: '센서 데이터를 통해 주변 객체와 도로 상황을 이해하는 방법에 관심이 있습니다.' },
     { title: '자율주행 판단', description: '인지한 정보를 바탕으로 교통 상황에 맞는 주행 행동을 결정하는 방법을 연구하고 싶습니다.' },
     { title: '딥러닝과 E2E 자율주행', description: '센서 입력에서 주행 행동까지 연결하는 학습 기반 모델을 구현하고, 다양한 주행 상황에서 그 성능과 한계를 탐구하고 싶습니다.' },
   ],
 } : {
-  summary: 'I am interested in perception and decision-making for autonomous driving, with a focus on deep learning and learning-based approaches. I am particularly interested in exploring end-to-end (E2E) autonomous driving by developing and evaluating learning-based driving models.',
+  summary: 'I am interested in perception and decision-making for autonomous driving, with a focus on deep learning and learning-based approaches. I want to understand how models connect scene understanding from sensor data with appropriate driving actions. I am particularly interested in exploring end-to-end (E2E) autonomous driving by developing and evaluating learning-based driving models. Through experiments across different traffic scenarios, I hope to examine how these models behave, understand their limitations under changing driving conditions, and identify ways to make their behavior more reliable.',
   topics: [
     { title: 'Perception', description: 'Understanding surrounding objects and road scenes through sensor data.' },
     { title: 'Decision-making', description: 'Using perception to select driving actions that respond to traffic conditions.' },
