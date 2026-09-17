@@ -1,0 +1,28 @@
+---
+interface Props {
+  lang: 'en' | 'ko';
+  summary: string;
+  topics: { title: string; description: string }[];
+}
+const { lang, summary, topics } = Astro.props;
+---
+<section id="research" class="home-section" aria-labelledby="research-title">
+  <div class="section-heading">
+    <h2 id="research-title">{lang === 'ko' ? '연구 관심 분야' : 'Research interests'}</h2>
+  </div>
+  <p class="research-summary">{summary}</p>
+  <ul class="research-topics">
+    {topics.map(topic => <li><h3>{topic.title}</h3><p>{topic.description}</p></li>)}
+  </ul>
+</section>
+<style>
+  .research-summary { max-width: 760px; font-size: 1.05rem; line-height: 1.85; }
+  .research-topics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 28px; list-style: none; padding: 0; margin-top: 28px; }
+  .research-topics li { border-left: 2px solid var(--line); padding-left: 20px; }
+  .research-topics h3 { color: var(--accent); font-size: 1rem; line-height: 1.5; }
+  .research-topics p { margin-top: 9px; font-size: .9375rem; line-height: 1.8; }
+  @media (max-width: 760px) {
+    .research-summary { font-size: 1rem; }
+    .research-topics { grid-template-columns: 1fr; gap: 22px; }
+  }
+</style>
