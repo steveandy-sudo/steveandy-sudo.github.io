@@ -1,0 +1,5 @@
+---
+interface Props { problem: string; observation: string; investigation: string; status: string; }
+const { problem, observation, investigation, status } = Astro.props;
+---
+<article class="investigation"><h3>{problem}</h3><dl><dt>Observed</dt><dd>{observation}</dd><dt>Investigation</dt><dd>{investigation}</dd><dt>Current status</dt><dd>{status}</dd></dl></article>

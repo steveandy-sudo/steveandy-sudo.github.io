@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+import type { Language } from '../lib/projects';
+interface Props { title: string; description: string; lang?: Language; alternate?: { lang: Language; href: string }; noindex?: boolean; }
+const { title, description, lang = 'en', alternate, noindex = false } = Astro.props;
+const home = lang === 'ko' ? '/ko/' : '/';
+const canonical = new URL(noindex ? "/404.html" : Astro.url.pathname, Astro.site);
+const nav = lang === 'ko' ? [['projects','프로젝트'],['awards','수상'],['skills','기술'],['cv','CV']] : [['projects','Projects'],['awards','Awards'],['skills','Skills'],['cv','CV']];
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title><meta name="description" content={description} />
+    <link rel="canonical" href={canonical} /><link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content="website" /><meta property="og:title" content={title} />
+    <meta property="og:description" content={description} /><meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Junghun Hwang — Engineering Portfolio" />
+    <meta property="og:locale" content={lang === 'ko' ? 'ko_KR' : 'en_US'} />
+    <meta name="twitter:card" content="summary" /><meta name="theme-color" content="#ffffff" />
+    {noindex && <meta name="robots" content="noindex" />}
+    {alternate && <><link rel="alternate" hreflang={lang} href={canonical} /><link rel="alternate" hreflang={alternate.lang} href={new URL(alternate.href, Astro.site)} /></>}
+  </head>
+  <body>
+    <a href="#main" class="skip-link">{lang === 'ko' ? '본문으로 이동' : 'Skip to content'}</a>
+    <header class="site-header"><div class="header-inner">
+      <a class="wordmark" href={home}><span class="monogram" aria-hidden="true">JH</span>Junghun Hwang</a>
+      <nav aria-label={lang === 'ko' ? '주 메뉴' : 'Main navigation'} class="global-nav">
+        {nav.map(([id,label]) => <a href={`${home}#${id}`}>{label}</a>)}
+        <a href="https://github.com/steveandy-sudo">GitHub <span aria-hidden="true">↗</span></a>
+        {alternate && <a class="language-link" href={alternate.href} lang={alternate.lang} hreflang={alternate.lang}>{alternate.lang === 'ko' ? '한국어' : 'EN'}</a>}
+      </nav>
+    </div></header>
+    <slot />
+    <footer class="site-footer"><div><span>Junghun Hwang <span lang="ko">황정헌</span></span><a href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com</a></div><p>Autonomous driving · AI · Autonomous systems</p></footer>
+  </body>
+</html>

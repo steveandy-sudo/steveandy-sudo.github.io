@@ -1,0 +1,5 @@
+---
+interface Props { stages: { label: string; state: 'complete' | 'current' | 'planned'; detail: string }[]; }
+const { stages } = Astro.props;
+---
+<ol class="stage-timeline" aria-label="Development stages">{stages.map(stage => <li class={stage.state}><span class="stage-state">{stage.state === 'complete' ? 'Completed stage' : stage.state === 'current' ? 'Current stage' : 'Planned'}</span><strong>{stage.label}</strong><p>{stage.detail}</p></li>)}</ol>

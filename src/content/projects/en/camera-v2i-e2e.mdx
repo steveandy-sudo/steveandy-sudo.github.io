@@ -1,0 +1,86 @@
+---
+slug: camera-v2i-e2e
+lang: en
+order: 3
+title: Camera-Based V2I Cooperative End-to-End Autonomous Driving
+titleEn: Camera-Based V2I Cooperative End-to-End Autonomous Driving
+titleKo: Camera 기반 V2I 협력형 End-to-End 자율주행
+context: Capstone Design Project
+period: 2026 – Ongoing
+role: System & Experiment Design
+status: design
+summary: Designing a comparison of camera-only and V2I-assisted end-to-end driving in a pedestrian blind-spot scenario with parked-car occlusion.
+outcome: System and experiment design is the current phase. Implementation and closed-loop validation are planned; there are no measured driving results yet.
+teamScope: The capstone investigates camera-based infrastructure support for end-to-end driving. The scope presented here covers system and experiment design, not a completed cooperative-driving system.
+contributions:
+  - Compared smartphone, radar, LiDAR, and camera options for infrastructure sensing and selected a camera-based V2I concept.
+  - Designed a blind-spot child/pedestrian scenario involving parked-car occlusion.
+  - Defined a comparison between Camera-only E2E and V2I-assisted E2E.
+  - Planned infrastructure pedestrian object-state fields and a distance-to-hazard experiment with quantitative evaluation metrics.
+technologies: [Camera V2I, E2E Driving, Experiment Design, Pedestrian Safety]
+featured: true
+---
+
+import MediaSlot from '../../../components/MediaSlot.astro';
+import StageTimeline from '../../../components/StageTimeline.astro';
+import Decision from '../../../components/Decision.astro';
+
+## Research question
+
+**How much additional safe-response distance can V2I provide in a blind-spot scenario?**
+
+The study is designed around a pedestrian emerging from behind parked vehicles. Vehicle-mounted cameras may encounter the pedestrian only after the occlusion clears; the proposed infrastructure sensing is intended to provide an additional source of pedestrian information. Whether that information improves the response is a question for the planned experiments.
+
+<MediaSlot id="v2i-scenario" />
+
+## Development stages
+
+<StageTimeline stages={[
+  { label: 'System & experiment design', state: 'current', detail: 'Sensor choice, scenario, comparison, object state, and metrics.' },
+  { label: 'Implementation', state: 'planned', detail: 'Implement the proposed camera-based V2I system.' },
+  { label: 'Closed-loop validation', state: 'planned', detail: 'Run the comparison and measure driving outcomes.' },
+]} />
+
+## Infrastructure sensor decision
+
+<Decision title="Camera-based V2I" considered="Smartphone, radar, LiDAR, and camera options for external sensing." choice="Camera was selected for the proposed infrastructure sensing architecture." reason="The design considered deployment feasibility, use of existing road infrastructure, and semantic information." />
+
+This is a system-design decision. It is not evidence of a deployed infrastructure sensor or validated perception system.
+
+## Planned object-state interface
+
+The proposed infrastructure message describes pedestrian object state using the following fields:
+
+| Fields | Intended information |
+| --- | --- |
+| `x`, `y` | Pedestrian position |
+| `vx`, `vy` | Pedestrian velocity |
+| `confidence` | Confidence associated with the object state |
+| `timestamp` | Time associated with the state |
+
+These are **planned fields**. A message definition, coordinate-frame convention, synchronization method, or implemented communication interface is not claimed here.
+
+## Experiment design
+
+The planned comparison uses the same blind-spot scenario for two configurations:
+
+1. **Camera-only E2E:** the vehicle-side camera-based driving configuration.
+2. **V2I-assisted E2E:** the configuration augmented with the proposed infrastructure pedestrian state.
+
+Distance to hazard, **d**, is the primary experimental variable. The design asks how the available distance affects safe response in the parked-car occlusion scenario.
+
+## Planned evaluation
+
+| Metric | Role in the comparison |
+| --- | --- |
+| Collision Rate | Compare collision outcomes across trials |
+| Minimum TTC | Examine the closest time-to-collision condition |
+| Braking Onset | Compare when braking begins |
+| Stopping Distance | Compare distance associated with stopping |
+| Success Rate | Compare successful scenario outcomes |
+
+These are evaluation measures selected for the experiment, **not measured results**. Trial counts, operating conditions, and success criteria must be documented with the eventual experiment record.
+
+## Current outcome
+
+The current output is the system and experiment design. Implementation and closed-loop validation remain planned, and the research question remains open.

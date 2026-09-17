@@ -1,0 +1,113 @@
+---
+slug: kookmin-ai-edge
+lang: en
+order: 1
+title: 2026 9th Kookmin University Autonomous Driving Competition — AI-Edge Challenge
+titleEn: 2026 9th Kookmin University Autonomous Driving Competition — AI-Edge Challenge
+titleKo: 2026년 제9회 국민대 자율주행 경진대회 AI-엣지 챌린지
+context: Kookmin AI-Edge Challenge
+period: Apr 2026 – Aug 2026
+team: 5 members
+role: Team Lead
+status: completed
+summary: ROS 2 learning-based driving, unified object detection, and mission-level vehicle integration for a five-member autonomous-driving competition team.
+outcome: "Team result: preliminary 2nd place; finals 13th place with course completion; Special Award in the parking event."
+teamScope: The competition vehicle combined lane perception, driving controllers, mission logic, obstacle and cone handling, and parking. The complete autonomous-driving stack was a team effort.
+contributions:
+  - Built the ROS 2 imitation-learning pipeline, from driving-data collection and model training to TorchScript deployment and real-time inference.
+  - Implemented learning/rule hybrid driving and traffic-light and mission-state handling.
+  - Managed the full Roboflow workflow and trained the unified YOLO object-detection model. The separate lane model was not personally trained by me.
+  - Implemented Mission Manager / Final Driver integration, applied it to the competition vehicle, and participated in system integration and parameter tuning.
+  - Defined SLAM-map waypoints and implemented reverse recovery logic for parking.
+technologies: [ROS 2, PyTorch, TorchScript, YOLO, Roboflow]
+github: https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI
+githubVisibility: private
+featured: true
+---
+
+import MediaSlot from '../../../components/MediaSlot.astro';
+import Result from '../../../components/Result.astro';
+import Decision from '../../../components/Decision.astro';
+import Investigation from '../../../components/Investigation.astro';
+
+## Competition context
+
+The project brought together perception, driving decisions, control integration, and parking on a real competition vehicle. As team lead in a five-member team, I worked on the learning pipeline, object-detection workflow, mission integration, and vehicle tuning.
+
+Preliminary and final rankings describe the **team's competition performance**. They do not isolate the performance of any one model or controller.
+
+<MediaSlot id="kookmin-vehicle" />
+
+## System scope
+
+My work crossed three parts of the team system:
+
+| Workstream | My implementation or integration | Boundary |
+| --- | --- | --- |
+| Learning-based driving | Driving-data collection, training, TorchScript export, inference, and learning/rule switching | One driving approach evaluated during development |
+| Object detection | Roboflow dataset preparation and unified YOLO training | Traffic lights, vehicles, obstacles, and cones; the lane model was separate |
+| Vehicle and mission integration | Mission Manager, Final Driver, mission-state handling, and parameter tuning | Integration into the shared competition stack |
+
+Lane perception, the complete avoidance stack, all cone algorithms, and all Pure Pursuit / Stanley implementations are **not** claimed as my individual work.
+
+## Learning pipeline
+
+The ROS 2 imitation-learning workflow covered driving-data collection, model training, TorchScript export, and real-time inference for XYCAR. I implemented hybrid logic to switch between learning-based driving and deterministic traffic-light and mission handling.
+
+Learning-based driving was explored and implemented, but steering oscillation remained. The final competition driving strategy used rule-based driving; the existence of the learning pipeline should not be read as evidence that it was the final deployed driving method.
+
+## YOLO & Roboflow
+
+I managed the dataset workflow from upload through annotation, annotation review, class organization, augmentation, train/validation/test splits, and export. I directly trained one unified YOLO object-detection model for traffic lights, vehicles, obstacles, and cones.
+
+The lane model was a separate part of the team system and was **not personally trained by me**. No detection accuracy, inference latency, or dataset-size claim is made without a corresponding measurement.
+
+<MediaSlot id="kookmin-yolo" />
+
+## Mission Manager & Final Driver
+
+I implemented Mission Manager / Final Driver integration and applied it to the real competition vehicle. This work included traffic-light and mission-state handling, connecting modules in the team stack, and participating in real-vehicle parameter tuning.
+
+The contribution is the mission and output integration described here. It does not establish sole authorship of every perception, planning, or control module that supplied the integrated system.
+
+## Engineering decisions
+
+<Decision title="Competition driving strategy" considered="Learning-based driving and rule-based driving were explored." observation="Steering oscillation remained in learning-based driving." choice="Rule-based driving was selected for competition deployment." reason="The deployment decision reflected the unresolved behavior observed during development." />
+
+<Decision title="SLAM / IMU constraints" considered="Localization and mapping approaches involving SLAM / IMU." observation="Hardware limitations and reflected-light issues constrained the approach." choice="The final driving strategy used rule-based driving." reason="These constraints informed the competition strategy; no claim is made that all localization issues were resolved." />
+
+<Decision title="Lane strategy" considered="The initial lane strategy used both white and yellow markings." observation="Perception and hardware constraints affected the usable lane information." choice="The final strategy focused on yellow markings." />
+
+These are **team deployment decisions**. My individual implementation responsibilities remain those listed in My contribution.
+
+## Parking event
+
+My parking contribution included defining waypoints on a SLAM map and implementing reverse recovery logic. The team received the parking event Special Award.
+
+The award is a team result. The waypoint and recovery work does not imply sole implementation of the entire parking subsystem.
+
+<MediaSlot id="kookmin-parking" />
+
+## Vehicle integration & validation
+
+Mission Manager / Final Driver integration was applied to the competition vehicle. I participated in connecting the team modules and tuning real-vehicle parameters. The reported competition outcomes provide event context, but they are not a controlled evaluation of individual subsystems.
+
+Separate claims about perception accuracy, tracking error, maximum speed, or recovery success rate require additional recorded evidence.
+
+## Results
+
+<div className="results-grid">
+  <Result label="Preliminary round" value="2nd place" context="2026 Kookmin AI-Edge Challenge · team ranking" />
+  <Result label="Final round" value="13th place" context="Course completed · team ranking" />
+  <Result label="Parking event" value="Special Award" context="Team outcome; personal parking work covered map waypoints and reverse recovery" />
+</div>
+
+## Challenges & debugging
+
+<Investigation problem="Unresolved learning-based steering oscillation" observation="Steering oscillation remained during learning-based driving development." investigation="The team considered available driving approaches alongside the perception and hardware constraints." status="Rule-based driving was selected for the competition. Resolution of the learning-based oscillation is not claimed." />
+
+## Lessons & scope
+
+This project connected model development with mission logic and the practical constraints of a shared vehicle. The main engineering lesson is visible in the deployment record: an implemented approach may still need to be set aside when its behavior remains unresolved.
+
+The competition code repository is not currently public. This case study documents the supplied contribution record; architecture figures, experiment logs, and real-vehicle media can be added when those materials are available.

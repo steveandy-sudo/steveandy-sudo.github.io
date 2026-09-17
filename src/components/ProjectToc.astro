@@ -1,0 +1,20 @@
+---
+interface Props { items: { slug: string; text: string }[]; lang: 'en' | 'ko'; }
+const { items, lang } = Astro.props;
+---
+<aside class="project-toc">
+  <nav class="toc-desktop" aria-label="Project sections"><p class="eyebrow">{lang === 'ko' ? '이 프로젝트' : 'In this project'}</p><ol>{items.map((item,i) => <li><a href={`#${item.slug}`} data-section={item.slug}><span>{String(i+1).padStart(2,'0')}</span>{item.text}</a></li>)}</ol></nav>
+  <details class="toc-mobile"><summary>{lang === 'ko' ? '프로젝트 목차' : 'On this page'}</summary><nav aria-label="Project sections"><ol>{items.map(item => <li><a href={`#${item.slug}`}>{item.text}</a></li>)}</ol></nav></details>
+</aside>
+<script>
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-section]')];
+  const headings = links.map(link => document.getElementById(link.dataset.section ?? '')).filter((el): el is HTMLElement => Boolean(el));
+  function updateSection() {
+    const current = [...headings].reverse().find(el => el.getBoundingClientRect().top <= 150) ?? headings[0];
+    links.forEach(link => current?.id === link.dataset.section ? link.setAttribute('aria-current','location') : link.removeAttribute('aria-current'));
+  }
+  let pending = false;
+  window.addEventListener('scroll', () => { if (!pending) { pending = true; requestAnimationFrame(() => { updateSection(); pending = false; }); } }, { passive: true });
+  updateSection();
+  document.querySelectorAll('.toc-mobile a').forEach(link => link.addEventListener('click', () => link.closest('details')?.removeAttribute('open')));
+</script>
