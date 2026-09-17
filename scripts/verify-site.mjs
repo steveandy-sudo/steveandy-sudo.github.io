@@ -68,7 +68,7 @@ for (const file of htmlFiles) {
       checkedLinks++;
     } catch { errors.push(`${route}: missing local target ${ref}`); }
   }
-  if (document.querySelector('a[href*="kookmin_autonomous_competition_teamKAI"]')) errors.push(`${route}: private repository exposed as public code link`);
+  if (route === '/projects/kookmin-ai-edge/' && !document.querySelector('a[href="https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI"]')) errors.push(`${route}: missing public team repository link`);
 }
 for (const file of ['sitemap-index.xml','sitemap-0.xml','robots.txt','favicon.svg']) if (!files.includes(resolve(root,file))) errors.push(`Missing ${file}`);
 const liveIndex = process.argv.indexOf('--live');
