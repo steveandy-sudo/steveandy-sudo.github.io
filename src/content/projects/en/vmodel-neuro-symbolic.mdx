@@ -8,38 +8,38 @@ titleKo: V-Model Neuro-Symbolic Driving
 context: Dream Semester Project
 period: Mar 2026 – Jun 2026
 team: 3 members
-role: Decision-Making
-status: completed
-summary: An early ROS 2 / CARLA decision-and-control integration project, centered on waypoint following and iterative path-tracking debugging.
-outcome: Stable autonomous driving was not achieved. The implementation and debugging experience informed later autonomous-driving projects.
-teamScope: A three-member Dream Semester team worked on the driving platform. My contribution covered decision-making and control integration; the linked repository is a team codebase.
+role: Decision-Making / Control Integration
+status: ended
+summary: A Dream Semester project on ROS 2 / CARLA decision and control integration. The driving objective was not achieved; the work is recorded through implementation and debugging.
+outcome: The project failed to achieve its autonomous-driving objective. The final code did not lead to an actual vehicle run.
+teamScope: A three-member Dream Semester team worked on the driving platform. My development focus was decision-making, path tracking, and control integration.
 contributions:
   - Implemented ROS 2 decision-making, waypoint following, Pure Pursuit, and longitudinal speed control, and integrated the components with CARLA.
-  - Conducted closed-loop driving experiments and investigated steering direction, lookahead, smoothing, rate limiting, and command bounds.
+  - Conducted closed-loop simulation experiments and investigated steering direction, lookahead, smoothing, rate limiting, and command bounds.
   - Worked on later MCU bridge adaptation.
 technologies: [ROS 2, CARLA, Pure Pursuit, Control Integration]
-github: https://github.com/subin11111/autonomous-driving-platform
+github: https://github.com/steveandy-sudo/vmodel-driving-portfolio
 featured: true
 ---
 
 import MediaSlot from '../../../components/MediaSlot.astro';
 import Investigation from '../../../components/Investigation.astro';
 
-## What I tried
+## Project goal
 
 The project combined ROS 2 decision-making and waypoint-following components with CARLA. My implementation covered Pure Pursuit for path tracking and longitudinal speed control, alongside the integration work required to connect these components to the simulation.
 
-This was an early learning project. The goal was to establish a working driving loop, but the completed project did not achieve stable autonomous driving.
+The Dream Semester project aimed to establish a working autonomous-driving loop. The implementation covered both the simulation interface and later adaptation toward a vehicle command interface.
 
-## What failed
+## Outcome
 
-**Stable autonomous driving was not achieved.** Closed-loop experiments exposed unstable path tracking that persisted through the project's adjustments.
+**The autonomous-driving objective was not achieved, and the final code did not lead to an actual vehicle run.** Earlier closed-loop simulation work exposed unstable path tracking that persisted through the project's adjustments.
 
-The project's completed status refers to the end of the Dream Semester project. It does not mean the driving objective was successfully completed.
+The project ended with the Dream Semester period. The repository preserves the final implementation and the investigation record.
 
 ## Debugging work
 
-<Investigation problem="Unstable path tracking" observation="The integrated driving loop did not produce stable autonomous driving." investigation="I iteratively adjusted steering direction, lookahead, target smoothing, rate limiting, and command bounds during closed-loop experiments." status="Unsuccessful driving outcome at project completion. No single confirmed root cause or successful final fix is claimed." />
+<Investigation problem="Unstable path tracking in simulation" observation="The vehicle response remained unstable during the closed-loop simulation work." investigation="I iteratively adjusted steering direction, lookahead, target smoothing, rate limiting, and command bounds." status="Unresolved at the end of the project; a single root cause was not conclusively isolated." />
 
 | Area investigated | Work performed |
 | --- | --- |
@@ -49,16 +49,16 @@ The project's completed status refers to the end of the Dream Semester project. 
 | Rate limiting | Investigated limits on command changes |
 | Command bounds | Adjusted allowable command ranges |
 
-These entries document investigation and modification, not independently validated solutions.
+The investigation connected observed tracking behavior with target selection, command filtering, and output limits.
 
 <MediaSlot id="vmodel-debug" />
 
 ## Integration work
 
-ROS 2 decision and control components were connected with CARLA for closed-loop experiments. The contribution record also includes later MCU bridge adaptation, without claiming that it resolved the original tracking problem or established successful hardware driving.
+The code retains two stages: earlier CARLA control implementations under `src/neuro_decision/archive`, and the later behavior, steering, and MCU bridge packages. The latter separate desired speed and steering angle from the vehicle-specific serial command format and include a mock inspection path.
 
 ## What I learned
 
-The project established foundational experience in ROS 2, CARLA, path tracking, and control integration. Its value lies in the implementation and experimental work, alongside an explicit record of the unsuccessful outcome.
+The work made interface consistency a concrete debugging concern: target coordinates, steering units, input timing, and actuator commands all need to agree.
 
-The later projects continued this trajectory through Gazebo testing, vehicle integration, and more structured mission logic. The portfolio records those later results on their own pages rather than retroactively treating them as success in this project.
+It also motivated more systematic experiment records: keeping input conditions fixed, changing one control setting at a time, and recording the resulting trajectory and commands together.
