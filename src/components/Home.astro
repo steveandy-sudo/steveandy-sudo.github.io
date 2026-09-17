@@ -60,17 +60,14 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
 </BaseLayout>
 
 <style>
-  .intro { align-items: center; }
-  .intro-profile { width: 230px; max-width: 100%; transform: translate(-44px, 18px); }
+  .intro { align-items: center; column-gap: 150px; }
+  .intro-profile { width: 230px; max-width: 100%; transform: translate(-124px, 18px); }
   .intro-profile img { width: 100%; height: auto; aspect-ratio: 1532 / 2044; object-fit: cover; object-position: left center; border: 1px solid var(--line); border-radius: 6px; }
   .intro-profile figcaption { margin-top: 12px; color: var(--muted); font-size: .8125rem; text-align: center; }
   .intro-details { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 22px; font-size: .875rem; }
   .intro-details > div { display: flex; flex-wrap: wrap; gap: 4px 12px; }
   .intro-details dt { color: var(--muted); }
   .intro-details dd { color: var(--ink); }
-  @media (min-width: 761px) and (max-width: 1000px) {
-    .intro { column-gap: 60px; }
-  }
   @media (max-width: 760px) {
     .intro { display: flex; flex-direction: column; align-items: stretch; gap: 26px; }
     .intro-profile { order: -1; width: 180px; transform: translateY(8px); margin-bottom: 8px; }
