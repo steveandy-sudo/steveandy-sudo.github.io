@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { allProjects, projectUrl, statusLabel, type Language } from '../lib/projects';
-import { cvs } from '../data/cv';
 interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === 'ko';
@@ -24,7 +23,5 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
     </section>
     <section id="awards" class="home-section" aria-labelledby="awards-title"><div class="section-heading"><h2 id="awards-title">{ko ? '수상 및 경진대회' : 'Awards & competitions'}</h2></div><div class="award-row"><span class="year">2026</span><div><h3>{ko ? '국민대 자율주행 경진대회 AI-엣지 챌린지' : 'Kookmin AI-Edge Challenge'}</h3><p>{ko ? '예선 2위 · 본선 완주 13위 · 주차경기 특별상' : 'Preliminary 2nd · Finals 13th, course completed · Parking Special Award'}</p><span class="small-muted">{ko ? '팀 성과' : 'Team result'}</span></div></div><div class="award-row"><span class="year">2022</span><div><h3>Drone Clash</h3><p>{ko ? '일반부 3위' : 'General Division — 3rd Place'}</p></div></div></section>
     <section id="skills" class="home-section" aria-labelledby="skills-title"><div class="section-heading"><h2 id="skills-title">{ko ? '기술 역량' : 'Technical skills'}</h2></div><dl class="skills-list">{skills.map(([label,tools]) => <div><dt>{label}</dt><dd>{tools}</dd></div>)}</dl></section>
-    <section id="cv" class="home-section" aria-labelledby="cv-title"><div class="section-heading"><h2 id="cv-title">{ko ? '이력서 / CV' : 'Curriculum vitae'}</h2><span class="eyebrow">PDF / 2 pages</span></div><div class="cv-list">{cvs.map(cv => <div class="cv-row"><div><strong>{cv.name}</strong><span>{cv.language} · {cv.gpa ? (ko ? '학점 포함' : 'GPA included') : (ko ? '학점 미표기' : 'No GPA')}</span></div>{cv.href ? <a href={cv.href}>{ko ? 'PDF 열기' : 'Open PDF'} <span aria-hidden="true">↗</span></a> : <span class="small-muted">{ko ? '학점 확인 후 공개' : 'Pending GPA confirmation'}</span>}</div>)}</div></section>
-    <section class="home-section github-section" aria-labelledby="github-title"><h2 id="github-title">GitHub</h2><p>{ko ? '공개 코드와 프로젝트 저장소' : 'Public code and project repositories.'}</p><a href="https://github.com/steveandy-sudo">github.com/steveandy-sudo <span aria-hidden="true">↗</span></a></section>
   </main>
 </BaseLayout>

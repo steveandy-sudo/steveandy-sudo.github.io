@@ -38,7 +38,7 @@ $env:BROWSER_PATH = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.ex
 npm run test:ui
 ```
 
-검사는 1440 / 768 / 390 / 320px 화면, 목차 이동과 현재 섹션 강조, 키보드 접근, 언어 전환, CV 링크, 200% 글자 확대를 확인합니다. 캡처는 무시되는 `test-results/`에 저장됩니다. HTML·앵커 검사는 실제 화면의 가독성이나 사실관계 검토를 대신하지 않습니다.
+검사는 1440 / 768 / 390 / 320px 화면, 목차 이동과 현재 섹션 강조, 키보드 접근, 언어 전환, 프로젝트 저장소 링크, 200% 글자 확대를 확인합니다. 캡처는 무시되는 `test-results/`에 저장됩니다. HTML·앵커 검사는 실제 화면의 가독성이나 사실관계 검토를 대신하지 않습니다.
 
 ## 구조
 
@@ -58,12 +58,12 @@ npm run test:ui
 │   │   └── StageTimeline.astro
 │   ├── layouts/BaseLayout.astro
 │   ├── layouts/ProjectCaseStudy.astro
-│   ├── data/cv.ts / media.ts
+│   ├── data/media.ts
 │   ├── lib/projects.ts
 │   ├── pages/index.astro / ko/index.astro / [...route].astro / 404.astro
 │   └── styles/global.css
 ├── public/
-│   ├── cv/                          # 실제 존재하는 PDF만 다운로드 링크 생성
+│   ├── cv/                          # 기존 PDF 직접 주소 유지; 홈페이지에는 표시하지 않음
 │   ├── media/projects/              # 실제 자료를 추가할 위치
 │   ├── favicon.svg / robots.txt / .nojekyll
 ├── docs/MEDIA_REQUESTS.md
@@ -192,7 +192,7 @@ import Video from '../../../components/Video.astro';
 - `Junghun_Hwang_CV_V2_EN.pdf` — 영어, 학점 미표기
 - `Junghun_Hwang_CV_V2_KO.pdf` — 한국어, 학점 미표기
 
-현재는 검증된 V2 2종을 포함합니다. V1은 학점 미확정 때문에 넣지 않았으며 다운로드 링크 대신 확인 대기 안내를 표시합니다. `cv.ts`가 실제 존재하는 파일만 링크합니다. 기존 CV 저장소에서 수정했다면 PDF를 이 폴더에 다시 복사한 뒤 사이트를 빌드합니다.
+홈페이지의 CV 섹션과 상단 CV 메뉴는 제거했습니다. 기존 V2 PDF 2종은 직접 주소로 접근할 수 있도록 유지합니다. V1은 학점 미확정 때문에 포함하지 않았습니다. 홈페이지의 공통 GitHub 링크도 제거했으며, 확인된 공개 저장소 링크는 해당 프로젝트 상세 페이지 상단과 Code & links 섹션에만 표시합니다.
 
 ## GitHub Pages 배포
 

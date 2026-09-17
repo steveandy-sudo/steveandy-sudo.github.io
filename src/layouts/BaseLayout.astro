@@ -5,7 +5,7 @@ interface Props { title: string; description: string; lang?: Language; alternate
 const { title, description, lang = 'en', alternate, noindex = false } = Astro.props;
 const home = lang === 'ko' ? '/ko/' : '/';
 const canonical = new URL(noindex ? "/404.html" : Astro.url.pathname, Astro.site);
-const nav = lang === 'ko' ? [['projects','프로젝트'],['awards','수상'],['skills','기술'],['cv','CV']] : [['projects','Projects'],['awards','Awards'],['skills','Skills'],['cv','CV']];
+const nav = lang === 'ko' ? [['projects','프로젝트'],['awards','수상'],['skills','기술']] : [['projects','Projects'],['awards','Awards'],['skills','Skills']];
 ---
 <!doctype html>
 <html lang={lang}>
@@ -27,7 +27,6 @@ const nav = lang === 'ko' ? [['projects','프로젝트'],['awards','수상'],['s
       <a class="wordmark" href={home}><span class="monogram" aria-hidden="true">JH</span>Junghun Hwang</a>
       <nav aria-label={lang === 'ko' ? '주 메뉴' : 'Main navigation'} class="global-nav">
         {nav.map(([id,label]) => <a href={`${home}#${id}`}>{label}</a>)}
-        <a href="https://github.com/steveandy-sudo">GitHub <span aria-hidden="true">↗</span></a>
         {alternate && <a class="language-link" href={alternate.href} lang={alternate.lang} hreflang={alternate.lang}>{alternate.lang === 'ko' ? '한국어' : 'EN'}</a>}
       </nav>
     </div></header>

@@ -24,7 +24,7 @@ for (const width of [1440, 768, 390, 320]) {
     expect(pageErrors).toEqual([]);
   });
 }
-test('keyboard, language links, PDFs and development slot visibility', async ({ page }) => {
+test('keyboard, language links, project repositories and development slot visibility', async ({ page }) => {
   await page.goto('/');
   await page.keyboard.press('Tab');
   await expect(page.locator('.skip-link')).toBeFocused();
@@ -33,7 +33,15 @@ test('keyboard, language links, PDFs and development slot visibility', async ({ 
   await page.getByRole('link', { name: '한국어', exact: true }).click();
   await expect(page.locator('html')).toHaveAttribute('lang','ko');
   await page.getByRole('link', { name: 'EN', exact: true }).click();
-  expect(await page.locator('#cv a').count()).toBe(2);
+  await expect(page.locator('#cv, .github-section')).toHaveCount(0);
+  await expect(page.locator('.global-nav a[href$="#cv"], a[href="https://github.com/steveandy-sudo"]')).toHaveCount(0);
+  for (const [slug, repository] of [
+    ['ai-sw-mobility', 'https://github.com/steveandy-sudo/kai_personal'],
+    ['vmodel-neuro-symbolic', 'https://github.com/subin11111/autonomous-driving-platform'],
+  ]) {
+    await page.goto(`/projects/${slug}/`);
+    await expect(page.locator('.case-header').getByRole('link', { name: 'GitHub repository' })).toHaveAttribute('href', repository);
+  }
   await page.goto('/projects/kookmin-ai-edge/');
   await expect(page.locator('a[href*="kookmin_autonomous_competition_teamKAI"]')).toHaveCount(0);
   await expect(page.locator('[data-media-slot]')).toHaveCount(0);
