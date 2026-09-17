@@ -24,7 +24,7 @@ const entries = await allProjects();
 const projects = entries.filter(({data}) => data.lang === 'en' && data.featured);
 const koSummaries: Record<string,string> = {
   'kookmin-ai-edge':'모방학습 파이프라인, Roboflow·YOLO 학습, Mission Manager / Final Driver 통합 및 실차 튜닝.',
-  'ai-sw-mobility':'ROS 2 AEB 파이프라인 공동 개발, Stanley 경로 추종, 시뮬레이션 검증 및 실차 초기 시험.',
+  'ai-sw-mobility':'ROS 2 AEB, Stanley 경로 추종, 시뮬레이션·초기 실차 시험. 제어 파트의 조향 지연 수정 후 통합 재시험 준비.',
   'camera-v2i-e2e':'사각지대 보행자 시나리오의 Camera-only E2E와 V2I-assisted E2E 비교 실험 설계.',
   'uav-waypoint':'3D waypoint 순차 추종 패키지 개발과 기존 PX4 offboard controller 연동.',
   'vmodel-neuro-symbolic':'ROS 2·CARLA 판단·제어 통합과 경로 추종 실험. 안정적인 자율주행에는 도달하지 못함.',

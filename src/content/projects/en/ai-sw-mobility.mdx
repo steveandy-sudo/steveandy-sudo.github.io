@@ -8,13 +8,13 @@ titleKo: 2026 대학생 AI·SW 모빌리티 경진대회
 context: Student AI·SW Mobility Competition
 period: Mar 2026 – Ongoing
 team: 27 members / decision team of 5
-role: Decision-Making / AEB Co-development
+role: Decision-Making / AEB Development
 status: ongoing
-summary: Shared ROS 2 AEB development, Stanley path tracking, and validation from Gazebo closed-loop simulation to initial vehicle testing.
-outcome: Initial real-vehicle tests were conducted at approximately 7 km/h. Steering oscillation remains under investigation; final competition success is not claimed.
-teamScope: A 27-member competition team is developing the vehicle system. I work in the five-member decision-making team; AEB development and overall vehicle integration include shared work.
+summary: ROS 2 AEB development, Stanley path tracking, and validation from Gazebo simulation to initial vehicle trials, with integrated retesting planned after a control-side steering-delay correction.
+outcome: Initial vehicle tests were conducted at approximately 7 km/h. The control team has corrected an identified steering-motor delay issue; the decision stack has not yet been rerun with that correction.
+teamScope: A 27-member competition team is developing the vehicle system. I work in the five-member decision-making team on the connection between driving decisions, path tracking, and vehicle integration.
 contributions:
-  - Co-developed the ROS 2 AEB pipeline, including cone-boundary center-path generation, a red-entry stop latch, and stateful fail-safe behavior.
+  - Worked on the ROS 2 AEB pipeline, including cone-boundary center-path generation, a red-entry stop latch, and stateful fail-safe behavior.
   - Implemented Stanley tracking with steering limits, steering-rate limits, and motion preview.
   - Validated the AEB pipeline in Gazebo closed-loop simulation and used Foxglove for path, steering, and stop-state debugging.
   - Conducted initial real-vehicle testing around 7 km/h and investigated observed steering oscillation.
@@ -31,22 +31,22 @@ import Investigation from '../../../components/Investigation.astro';
 ## Development progression
 
 <StageTimeline stages={[
-  { label: 'Simulation', state: 'complete', detail: 'Closed-loop AEB validation performed in Gazebo.' },
-  { label: 'Initial real-vehicle test', state: 'current', detail: 'Approximately 7 km/h testing; steering oscillation under investigation.' },
-  { label: 'Competition preparation', state: 'planned', detail: 'Further integration and testing are needed before final competition claims.' },
+  { label: 'Simulation & initial trials', state: 'complete', detail: 'Gazebo validation and approximately 7 km/h vehicle testing; steering oscillation observed on the vehicle.' },
+  { label: 'Control-side correction', state: 'complete', detail: 'The control team identified and corrected a steering-motor delay issue.' },
+  { label: 'Decision-stack retest', state: 'planned', detail: 'Run the decision code with the correction and evaluate integrated vehicle behavior.' },
 ]} />
 
-Completion of a simulation stage does not mean the full real-vehicle system has been validated. The project remains ongoing.
+The project remains ongoing. The next step is to evaluate the decision stack together with the updated vehicle control.
 
 ## AEB pipeline
 
-The shared ROS 2 AEB work included generating a center path from cone boundaries, latching a stop at the red entry, and maintaining stateful fail-safe behavior. These functions form part of the decision-making pipeline integrated into the broader team system.
+The ROS 2 AEB work included generating a center path from cone boundaries, latching a stop at the red entry, and maintaining stateful fail-safe behavior. These functions connect the perceived cone corridor to tracking and braking commands.
 
 ## Stanley tracking
 
 I implemented Stanley-based path tracking for cone-corridor driving. The work included steering constraints, steering-rate limits, and motion-preview compensation.
 
-Those mechanisms were part of the implementation and tuning work. Their presence alone does not demonstrate that the observed real-vehicle oscillation was eliminated.
+The next integrated trial will examine tracking behavior with the control team's steering-delay correction in place.
 
 ## Simulation & debugging
 
@@ -60,16 +60,16 @@ The simulation work and vehicle tests are reported separately because they exerc
 
 <Result label="Initial real-vehicle testing" value="Approximately 7 km/h" context="Early track tests, not competition-speed validation or a final performance result" />
 
-Steering oscillation was observed during the track tests. This remains a development problem rather than a resolved issue.
+Steering oscillation was observed during the track tests. The control team subsequently identified and corrected a steering-motor delay issue. The decision code has not yet been run with the correction, so the resulting path-tracking behavior remains to be evaluated.
 
 <MediaSlot id="mobility-vehicle" />
 
-## Challenges & hypotheses
+## Steering response & next validation
 
-<Investigation problem="Steering oscillation on the vehicle" observation="Oscillation appeared during initial real-vehicle testing." investigation="The team suspects that steering actuator or motor capability may contribute. This is a hypothesis, not a confirmed root cause." status="Under investigation. No confirmed cause, successful fix, or final competition outcome is reported." />
+<Investigation problem="Steering response during vehicle trials" observation="Steering oscillation appeared during initial real-vehicle testing." investigation="The control team identified and corrected a steering-motor delay issue." status="Decision-stack retesting is pending. Target versus actual steering and path-tracking behavior will be checked in the next integrated trial." />
 
 ## Current record
 
-The current evidence consists of Gazebo closed-loop validation, Foxglove debugging, and initial vehicle testing. Further results should identify their environment, test conditions, and observed behavior before changing the project status.
+The current record consists of Gazebo closed-loop validation, Foxglove debugging, initial vehicle trials, and the reported control-side correction. The next trial will record the software versions, controller settings, speed, steering response, and observed path-tracking behavior.
 
-The linked repository shows the team integration context for my AEB co-development and Stanley path-tracking work.
+My development work connects AEB, path tracking, and integration testing within the vehicle system.
