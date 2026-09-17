@@ -20,7 +20,7 @@ contributions:
   - Implemented Mission Manager / Final Driver integration, applied it to the competition vehicle, and participated in system integration and parameter tuning.
   - Defined SLAM-map waypoints and implemented reverse recovery logic for parking.
 technologies: [ROS 2, PyTorch, TorchScript, YOLO, Roboflow]
-github: https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI
+github: https://github.com/steveandy-sudo/kookmin-autonomous-portfolio
 githubVisibility: public
 featured: true
 ---
@@ -52,9 +52,9 @@ Lane perception, the complete avoidance stack, all cone algorithms, and all Pure
 
 ## Find the code
 
-The original team repository contains several development branches. Start with [`main` for the final driving stack](https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI/tree/main). The parking event has a separate [`빠킹` branch](https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI/tree/%EB%B9%A0%ED%82%B9); its [`xycar_parking_nav` README](https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI/blob/%EB%B9%A0%ED%82%B9/xycar_ws/src/xycar_parking_nav/README.md) explains the Start → reverse parking → parallel parking → Start mission.
+The [project repository](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio) brings the selected driving and parking packages together. Start with the [driving integration code](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_map_nav) or the [parking package](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_parking_nav). The [Korean README](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/README.ko.md) introduces the project and my contributions.
 
-These links point to the shared team code. The contribution list above identifies my work within that system.
+The packages include shared team code. Driving and parking retain separate launch paths; collecting them here does not imply an automatic transition between the two systems.
 
 ## Learning pipeline
 
@@ -116,4 +116,4 @@ Separate claims about perception accuracy, tracking error, maximum speed, or rec
 
 This project connected model development with mission logic and the practical constraints of a shared vehicle. The main engineering lesson is visible in the deployment record: an implemented approach may still need to be set aside when its behavior remains unresolved.
 
-The competition code repository is not currently public. This case study documents the supplied contribution record; architecture figures, experiment logs, and real-vehicle media can be added when those materials are available.
+The linked project repository records the source versions of the selected packages. This case study distinguishes development work, the final driving strategy, and team competition outcomes.
