@@ -8,7 +8,7 @@
 - Desktop and mobile screenshots were visually inspected, including home, project, technical-body, CV, and footer layouts.
 - Development pages rendered exactly 8 media requests (3 Kookmin, 2 Mobility, 1 each V2I/UAV/V-Model). Production pages rendered none of the empty request boxes.
 - No generated project photography, experimental imagery, architecture diagrams, or invented performance measurements are included.
-- Public GitHub code links were checked anonymously. The Kookmin repository was confirmed private; its link is stored in source metadata and omitted from the public page.
+- The Kookmin repository is now public and anonymously accessible. The project page links to the team repository, its `main` driving branch, and its separate `빠킹` parking branch; other project repository links remain scoped to their own pages.
 - V2 English/Korean CVs are included. V1 files are not included while the GPA remains unconfirmed.
 
 ## Tooling note

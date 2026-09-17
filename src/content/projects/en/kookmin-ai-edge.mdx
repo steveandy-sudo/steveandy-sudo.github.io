@@ -21,7 +21,7 @@ contributions:
   - Defined SLAM-map waypoints and implemented reverse recovery logic for parking.
 technologies: [ROS 2, PyTorch, TorchScript, YOLO, Roboflow]
 github: https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI
-githubVisibility: private
+githubVisibility: public
 featured: true
 ---
 
@@ -49,6 +49,12 @@ My work crossed three parts of the team system:
 | Vehicle and mission integration | Mission Manager, Final Driver, mission-state handling, and parameter tuning | Integration into the shared competition stack |
 
 Lane perception, the complete avoidance stack, all cone algorithms, and all Pure Pursuit / Stanley implementations are **not** claimed as my individual work.
+
+## Find the code
+
+The original team repository contains several development branches. Start with [`main` for the final driving stack](https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI/tree/main). The parking event has a separate [`빠킹` branch](https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI/tree/%EB%B9%A0%ED%82%B9); its [`xycar_parking_nav` README](https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI/blob/%EB%B9%A0%ED%82%B9/xycar_ws/src/xycar_parking_nav/README.md) explains the Start → reverse parking → parallel parking → Start mission.
+
+These links point to the shared team code. The contribution list above identifies my work within that system.
 
 ## Learning pipeline
 

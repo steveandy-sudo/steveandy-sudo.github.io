@@ -36,6 +36,7 @@ test('keyboard, language links, project repositories and development slot visibi
   await expect(page.locator('#cv, .github-section')).toHaveCount(0);
   await expect(page.locator('.global-nav a[href$="#cv"], a[href="https://github.com/steveandy-sudo"]')).toHaveCount(0);
   for (const [slug, repository] of [
+    ['kookmin-ai-edge', 'https://github.com/steveandy-sudo/kookmin_autonomous_competition_teamKAI'],
     ['ai-sw-mobility', 'https://github.com/steveandy-sudo/kai_personal'],
     ['vmodel-neuro-symbolic', 'https://github.com/subin11111/autonomous-driving-platform'],
   ]) {
@@ -43,7 +44,8 @@ test('keyboard, language links, project repositories and development slot visibi
     await expect(page.locator('.case-header').getByRole('link', { name: 'GitHub repository' })).toHaveAttribute('href', repository);
   }
   await page.goto('/projects/kookmin-ai-edge/');
-  await expect(page.locator('a[href*="kookmin_autonomous_competition_teamKAI"]')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /main.*final driving stack/ })).toHaveAttribute('href', /\/tree\/main$/);
+  await expect(page.getByRole('link', { name: /빠킹.*branch/ })).toHaveAttribute('href', /\/tree\/%EB%B9%A0%ED%82%B9$/);
   await expect(page.locator('[data-media-slot]')).toHaveCount(0);
 });
 test('text enlargement and representative screenshots', async ({ page }, testInfo) => {
