@@ -1,98 +1,257 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ResearchInterests from './ResearchInterests.astro';
+import ReservedMedia from './ReservedMedia.astro';
 import { allProjects, projectUrl, statusLabel, type Language } from '../lib/projects';
+
 interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === 'ko';
 const research = ko ? {
-  summary: '자율주행의 인지·판단과 딥러닝 기반 주행을 연구하고 싶습니다. 모방학습 파이프라인과 ROS 2 판단·제어를 구현하고 실차 통합을 경험하면서, 센서 입력에서 나온 예측이 실제 차량의 행동으로 이어지는 과정에 관심을 갖게 되었습니다. 특히 End-to-End(E2E) 모델을 직접 구현하고, 가림이나 입력 지연이 있는 상황에서 모델의 행동과 한계를 실험으로 살펴보고 싶습니다. 현재는 주정차 차량에 가려진 보행자 상황에서 인프라 카메라 정보가 주행 판단과 제동 시점에 주는 영향을 비교하는 실험을 설계하고 있습니다.',
+  lead: '자율주행의 인지·판단과 딥러닝 기반 주행을 연구하고 싶습니다.',
+  summary: '모방학습 파이프라인과 ROS 2 판단·제어를 구현하고 실차 통합을 경험하면서, 센서 입력에서 나온 예측이 실제 차량의 행동으로 이어지는 과정에 관심을 갖게 되었습니다. 특히 End-to-End(E2E) 모델을 직접 구현하고, 가림이나 입력 지연이 있는 상황에서 모델의 행동과 한계를 실험으로 살펴보고 싶습니다. 현재는 주정차 차량에 가려진 보행자 상황에서 인프라 카메라 정보가 주행 판단과 제동 시점에 주는 영향을 비교하는 실험을 설계하고 있습니다.',
   topics: [
-    { title: '인지와 가림', description: '가려진 객체와 불확실한 인지 정보가 주행 행동에 미치는 영향을 살펴보고 싶습니다.' },
-    { title: '판단과 차량 응답', description: '인지·판단의 출력이 조향과 제동으로 이어지는 과정과 시간 지연의 영향을 연구하고 싶습니다.' },
-    { title: '학습 기반·E2E 주행', description: '동일한 시나리오에서 모델과 입력 조건을 비교하고, 궤적·제동 시점·실패 사례로 행동을 평가하고자 합니다.' },
+    { title: '인지와 가림', description: '보이지 않는 객체에 어떻게 대응할 수 있을까?' },
+    { title: '판단과 차량 응답', description: '입력·조향 지연은 주행 행동을 어떻게 바꿀까?' },
+    { title: '학습 기반·E2E 주행', description: '학습한 행동의 한계를 어떻게 실험으로 확인할까?' },
   ],
 } : {
-  summary: 'I want to study perception and decision-making for autonomous driving, with a focus on deep learning. My experience building an imitation-learning pipeline and integrating ROS 2 decision and control software motivates an interest in how sensor-based predictions become vehicle behavior. I am particularly interested in implementing end-to-end (E2E) driving models and examining their behavior under occlusion and input delay. My current experiment design compares camera-only driving with infrastructure-camera assistance when a pedestrian is hidden by a parked vehicle.',
+  lead: 'I want to study perception and decision-making for autonomous driving, with a focus on deep learning.',
+  summary: 'My experience building an imitation-learning pipeline and integrating ROS 2 decision and control software motivates an interest in how sensor-based predictions become vehicle behavior. I am particularly interested in implementing end-to-end (E2E) driving models and examining their behavior under occlusion and input delay. My current experiment design compares camera-only driving with infrastructure-camera assistance when a pedestrian is hidden by a parked vehicle.',
   topics: [
-    { title: 'Perception under occlusion', description: 'How hidden objects and uncertain perception affect driving behavior.' },
-    { title: 'Decisions and vehicle response', description: 'How perception and decisions become steering and braking, including the effects of delay.' },
-    { title: 'Learning-based & E2E driving', description: 'Comparing models and inputs in matched scenarios through trajectories, braking response, and failure cases.' },
+    { title: 'Perception under occlusion', description: 'How can a vehicle respond to what it cannot yet see?' },
+    { title: 'Decisions and vehicle response', description: 'How do input and steering delays change driving behavior?' },
+    { title: 'Learning-based & E2E driving', description: 'How can experiments reveal the limits of learned behavior?' },
   ],
 };
 const entries = await allProjects();
 const projects = entries.filter(({data}) => data.lang === 'en' && data.featured);
-const koSummaries: Record<string,string> = {
-  'kookmin-ai-edge':'모방학습 파이프라인, Roboflow·YOLO 학습, Mission Manager / Final Driver 통합 및 실차 튜닝.',
-  'ai-sw-mobility':'ROS 2 AEB, Stanley 경로 추종, 시뮬레이션·초기 실차 시험. 제어 파트의 조향 지연 수정 후 통합 재시험 준비.',
-  'camera-v2i-e2e':'사각지대 보행자 시나리오의 Camera-only E2E와 V2I-assisted E2E 비교 실험 설계.',
-  'uav-waypoint':'3D waypoint 순차 추종 패키지 개발과 기존 PX4 offboard controller 연동.',
-  'vmodel-neuro-symbolic':'드림학기제 ROS 2·CARLA 판단·제어 프로젝트. 실제 차량 주행에 이르지 못한 구현 및 디버깅 과정을 기록.',
+type Copy = { en: string; ko: string };
+type HomeProject = {
+  title: Copy; summary: Copy; result: Copy;
+  visual?: { src?: string; alt?: Copy; title: Copy; caption?: Copy; kind?: 'image' | 'video' };
 };
-const highlights: Record<string, { en: string; ko: string }> = {
-  'kookmin-ai-edge': { en: 'Preliminary 2nd · Finals completed · Parking Special Award', ko: '팀 성과: 예선 2위 · 본선 완주 · 주차 특별상' },
-  'ai-sw-mobility': { en: 'Initial vehicle trials ~7 km/h · Integrated retest pending', ko: '약 7 km/h 초기 실차 시험 · 통합 재시험 대기' },
-  'camera-v2i-e2e': { en: 'Research design · Matched camera-only / V2I comparison planned', ko: '연구 설계 · Camera-only / V2I 비교 실험 계획' },
-  'uav-waypoint': { en: 'SITL/Gazebo demonstration · Waypoints and landing completed', ko: 'SITL/Gazebo 시연 · waypoint 추종 및 착륙 완료' },
-  'vmodel-neuro-symbolic': { en: 'Implementation and debugging record · Driving objective unmet', ko: '구현·디버깅 기록 · 실제 차량 주행 목표 미달' },
+const projectCopy: Record<string, HomeProject> = {
+  'kookmin-ai-edge': {
+    title: { en: 'Kookmin AI-Edge Challenge', ko: '국민대 AI-엣지 챌린지' },
+    summary: { en: 'From imitation-learning and YOLO pipelines to mission-level integration on a competition vehicle.', ko: '모방학습·YOLO 파이프라인부터 Mission Manager / Final Driver의 실차 통합까지.' },
+    result: { en: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award.', ko: '팀 성과: 예선 2위, 본선 완주 13위, 주차경기 특별상.' },
+    visual: {
+      src: '/media/projects/kookmin-ai-edge/01-competition-vehicle.jpg',
+      alt: { en: 'Team KAI competition vehicle on the Kookmin course', ko: '국민대 대회 코스 위의 Team KAI 차량' },
+      title: { en: 'Competition vehicle', ko: '대회 차량' },
+      caption: { en: 'Competition broadcast · Team KAI vehicle', ko: '대회 중계 · Team KAI 차량' },
+    },
+  },
+  'ai-sw-mobility': {
+    title: { en: 'AI·SW Mobility: Decision-Making & AEB', ko: 'AI·SW 모빌리티: 주행 판단과 AEB' },
+    summary: { en: 'ROS 2 stop logic and constrained Stanley tracking, connected through Gazebo and vehicle integration.', ko: 'ROS 2 정지 판단과 조향 제약을 적용한 Stanley 추종, Gazebo 검증 및 실차 통합.' },
+    result: { en: 'Initial vehicle trials at ~7 km/h. Steering delay corrected by the control team; integrated retest pending.', ko: '약 7 km/h 초기 실차 시험. 제어 파트의 조향 지연 수정 후 통합 재시험 대기.' },
+    visual: {
+      src: '/media/projects/ai-sw-mobility/foxglove-recorded-monitor.png',
+      alt: { en: 'Foxglove MCAP replay monitor with route, camera, and vehicle signal panels', ko: '경로·카메라·차량 신호가 표시된 Foxglove MCAP 재생 화면' },
+      title: { en: 'Recorded-run inspection', ko: '기록 데이터 분석' },
+      caption: { en: 'Foxglove · Recorded-data replay', ko: 'Foxglove · 기록 데이터 재생' },
+    },
+  },
+  'camera-v2i-e2e': {
+    title: { en: 'Camera-Based V2I & End-to-End Driving', ko: 'Camera 기반 V2I·End-to-End 주행' },
+    summary: { en: 'Designing a matched comparison of camera-only and infrastructure-assisted E2E driving under pedestrian occlusion.', ko: '가려진 보행자 상황에서 Camera-only와 인프라 카메라 기반 E2E 주행을 비교하는 실험 설계.' },
+    result: { en: 'System and experiment design. Implementation and closed-loop trials are planned.', ko: '시스템·실험 설계 단계. 구현 및 폐루프 실험은 계획 중.' },
+    visual: { title: { en: 'Proposed occlusion scenario', ko: '사각지대 실험 배치도' }, kind: 'image' },
+  },
+  'uav-waypoint': {
+    title: { en: 'UAV Waypoint Mission', ko: 'UAV Waypoint 미션' },
+    summary: { en: 'A ROS 2 mission package for sequential 3D waypoints, TF2 arrival checks, and PX4 offboard integration.', ko: '3D waypoint 순차 추종, TF2 도착 판정, PX4 offboard 연동을 위한 ROS 2 미션 패키지.' },
+    result: { en: 'Waypoint tracking and final landing completed in the PX4 SITL/Gazebo demonstration.', ko: 'PX4 SITL/Gazebo 시연에서 waypoint 추종 및 최종 착륙 완료.' },
+    visual: { title: { en: 'Waypoint tracking & landing', ko: 'Waypoint 추종·착륙 시연' }, kind: 'video' },
+  },
+  'vmodel-neuro-symbolic': {
+    title: { en: 'Dream Semester: Decision & Control', ko: '드림학기제: 판단·제어 개발' },
+    summary: { en: 'An early ROS 2 / CARLA project exploring Pure Pursuit, longitudinal control, and vehicle-command integration.', ko: 'Pure Pursuit, 종방향 제어, 차량 명령 연동을 다룬 초기 ROS 2 / CARLA 프로젝트.' },
+    result: { en: 'Stable autonomous driving was not achieved, and the project did not reach real-vehicle driving. The case study documents implementation, debugging, and lessons for later work.', ko: '안정적인 자율주행을 달성하지 못했고, 실제 차량 주행에는 이르지 못했습니다. 구현·디버깅 과정과 이후 프로젝트를 위한 교훈을 정리했습니다.' },
+  },
 };
-const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA, Gazebo, PX4 SITL'],['AI / computer vision','PyTorch, YOLO, OpenCV, Roboflow'],['Tools / environment','Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2, QGroundControl']];
+const skills = [
+  { label: ko ? '프로그래밍' : 'Programming', tools: 'Python, C++' },
+  { label: ko ? '자율시스템' : 'Autonomous systems', tools: 'ROS 2, CARLA, Gazebo, PX4 SITL' },
+  { label: ko ? 'AI·컴퓨터 비전' : 'AI & computer vision', tools: 'PyTorch, YOLO, OpenCV, Roboflow' },
+  { label: ko ? '개발·분석 도구' : 'Development & inspection', tools: 'Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2, QGroundControl' },
+];
 ---
-<BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={ko ? '황정헌의 자율주행·AI·자율시스템 프로젝트와 기술 기록.' : 'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'} lang={lang} alternate={{lang: ko ? 'en' : 'ko', href: ko ? '/' : '/ko/'}}>
+<BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={ko ? '황정헌의 자율주행·AI·자율시스템 프로젝트와 기술 기록.' : 'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'} lang={lang} alternate={{ lang: ko ? 'en' : 'ko', href: ko ? '/' : '/ko/' }}>
   <main id="main" class="container home-page">
     <section class="intro" aria-labelledby="intro-title">
       <figure class="intro-profile">
         <img src="/media/profile/junghun-hwang.jpg" alt={ko ? '벚꽃나무 앞에 서 있는 황정헌' : 'Junghun Hwang standing beneath cherry blossoms'} width="1843" height="2458" fetchpriority="high" />
-        <figcaption>{ko ? '2027년 2월 졸업 예정' : 'B.S. expected February 2027'}</figcaption>
+        <figcaption>{ko ? '2027년 2월 학사 졸업 예정' : 'B.S. expected February 2027'}</figcaption>
       </figure>
-      <div>
-        <p class="eyebrow">Engineering portfolio / Konkuk University</p>
+      <div class="intro-copy">
+        <p class="eyebrow">{ko ? '건국대학교 / 스마트운행체공학과' : 'Konkuk University / Smart Mobility Engineering'}</p>
         <h1 id="intro-title">Junghun Hwang <span lang="ko">황정헌</span></h1>
-        <p class="intro-field">Autonomous Driving / AI / Autonomous Systems</p>
+        <p class="intro-field">Autonomous Driving · Perception · Learning</p>
         <p class="intro-summary">{ko ? '건국대학교 스마트운행체공학과 학부생입니다. ROS 2 기반 판단·제어, AI 인지, 시스템 통합을 구현하고 시뮬레이션과 실차 실험으로 확인합니다.' : 'I study Smart Mobility Engineering at Konkuk University. My work connects ROS 2 decision-making, AI perception, and control integration through simulation and initial vehicle experiments.'}</p>
         <dl class="intro-details">
-          <div><dt>{ko ? '생년월일' : 'Date of birth'}</dt><dd><time datetime="2001-12-10">2001.12.10</time></dd></div>
+          <div><dt>{ko ? '생년월일' : 'Born'}</dt><dd><time datetime="2001-12-10">2001.12.10</time></dd></div>
           <div><dt>{ko ? '거주지' : 'Based in'}</dt><dd>Seoul, Korea</dd></div>
         </dl>
-        <a class="contact-link" href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a>
+        <div class="intro-links">
+          <a class="primary-link" href="#projects">{ko ? '프로젝트 살펴보기' : 'Explore projects'} <span aria-hidden="true">↓</span></a>
+          <a class="email-link" href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a>
+        </div>
       </div>
     </section>
     <ResearchInterests lang={lang} {...research} />
-    <section id="projects" class="home-section" aria-labelledby="projects-title"><div class="section-heading"><h2 id="projects-title">{ko ? '주요 프로젝트' : 'Selected projects'}</h2><span class="eyebrow">01—05 / Technical case studies</span></div>
-      <ol class="project-list">{projects.map(({data}) => { const translated = entries.find(e => e.data.slug === data.slug && e.data.lang === lang); const target = translated?.data ?? data; return <li class:list={{ "has-thumbnail": !!data.thumbnail }}><span class="project-index" aria-hidden="true">{String(data.order).padStart(2,'0')}</span><div class="project-summary"><p class="project-context">{data.context}</p><h3><a href={projectUrl(target)}>{ko ? data.titleKo ?? data.title : data.title}</a></h3><p>{ko ? koSummaries[data.slug] : data.summary}</p><p class="project-result">{highlights[data.slug]?.[lang]}</p><div class="technology-tags">{data.technologies.map(tech => <span>{tech}</span>)}</div><a class="case-link" href={projectUrl(target)}>{ko ? `기술 문서 보기${target.lang === 'en' ? ' (English)' : ''}` : 'View technical case study'} <span aria-hidden="true">→</span></a>{data.github && data.githubVisibility === 'public' && <a class="project-code-link" href={data.github}>GitHub <span aria-hidden="true">↗</span></a>}</div><div class="project-side">{data.thumbnail && <a class="project-preview" href={projectUrl(target)}><img src={data.thumbnail.src} alt={ko ? "국민대 대회 코스 위의 Team KAI 차량" : data.thumbnail.alt} width="1576" height="884" loading="lazy" decoding="async" /></a>}<span class={`status ${data.status}`}>{statusLabel[lang][data.status]}</span><p>{data.period}</p><p>{data.role}</p></div></li>; })}</ol>
+    <section id="projects" class="home-section projects-section" aria-labelledby="projects-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">{ko ? '구현과 실험 기록' : 'Implementation & experiments'}</p><h2 id="projects-title">{ko ? '주요 프로젝트' : 'Selected projects'}</h2></div>
+        <p class="section-note">{ko ? '문제, 설계 선택, 그리고 확인한 결과.' : 'Problems, design decisions, and observed results.'}</p>
+      </div>
+      <ol class="project-list">
+        {projects.map(({ data }) => {
+          const translated = entries.find(e => e.data.slug === data.slug && e.data.lang === lang);
+          const target = translated?.data ?? data;
+          const copy = projectCopy[data.slug];
+          const visual = copy?.visual;
+          const url = projectUrl(target);
+          return (
+            <li class:list={['project-entry', { 'has-media': !!visual }]}>
+              <div class="project-heading">
+                <span class="project-index" aria-hidden="true">{String(data.order).padStart(2, '0')}</span>
+                <p class="project-context">{data.context}</p>
+                <span class={`status ${data.status}`}>{statusLabel[lang][data.status]}</span>
+              </div>
+              <div class="project-summary">
+                <h3><a href={url}>{copy?.title[lang] ?? (ko ? data.titleKo ?? data.title : data.title)}</a></h3>
+                <p class="project-description">{copy?.summary[lang] ?? data.summary}</p>
+                <dl class="project-facts">
+                  <div><dt>{ko ? '기간' : 'Period'}</dt><dd>{data.period}</dd></div>
+                  <div><dt>{ko ? '역할' : 'Role'}</dt><dd>{data.role}</dd></div>
+                </dl>
+                <div class="project-evidence"><span>{ko ? '결과 / 현재 단계' : 'Outcome / current stage'}</span><p>{copy?.result[lang] ?? data.outcome}</p></div>
+                <ul class="project-tech" aria-label={ko ? '사용 기술' : 'Technologies'}>{data.technologies.map(tech => <li>{tech}</li>)}</ul>
+                <div class="project-links">
+                  <a class="case-link" href={url}>{ko ? `기술 문서 보기${target.lang === 'en' ? ' (English)' : ''}` : 'Read case study'} <span aria-hidden="true">→</span></a>
+                  {data.github && data.githubVisibility === 'public' && <a class="project-code-link" href={data.github} aria-label={`${copy?.title[lang] ?? data.title} — GitHub`}>GitHub <span aria-hidden="true">↗</span></a>}
+                </div>
+              </div>
+              {visual && <div class="project-visual">
+                {visual.src ? <figure>
+                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={data.slug === 'ai-sw-mobility' ? 2880 : 1576} height={data.slug === 'ai-sw-mobility' ? 1800 : 884} loading="lazy" decoding="async" /></a>
+                  <figcaption>{visual.caption?.[lang]}</figcaption>
+                </figure> : <ReservedMedia title={visual.title[lang]} kind={visual.kind ?? 'image'} lang={lang} />}
+              </div>}
+            </li>
+          );
+        })}
+      </ol>
     </section>
-    <section id="awards" class="home-section" aria-labelledby="awards-title"><div class="section-heading"><h2 id="awards-title">{ko ? '수상 및 경진대회' : 'Awards & competitions'}</h2></div><div class="award-row"><span class="year">2026</span><div><h3>{ko ? '국민대 자율주행 경진대회 AI-엣지 챌린지' : 'Kookmin AI-Edge Challenge'}</h3><p>{ko ? '예선 2위 · 본선 완주 13위 · 주차경기 특별상' : 'Preliminary 2nd · Finals 13th, course completed · Parking Special Award'}</p><span class="small-muted">{ko ? '팀 성과' : 'Team result'}</span></div></div><div class="award-row"><span class="year">2022</span><div><h3>Drone Clash</h3><p>{ko ? '일반부 3위' : 'General Division — 3rd Place'}</p></div></div></section>
-    <section id="skills" class="home-section" aria-labelledby="skills-title"><div class="section-heading"><h2 id="skills-title">{ko ? '기술 역량' : 'Technical skills'}</h2></div><dl class="skills-list">{skills.map(([label,tools]) => <div><dt>{label}</dt><dd>{tools}</dd></div>)}</dl></section>
+    <div class="background-sections">
+      <section id="awards" class="home-section" aria-labelledby="awards-title">
+        <div class="section-heading"><div><p class="eyebrow">{ko ? '대회 경험' : 'Competition record'}</p><h2 id="awards-title">{ko ? '수상 및 경진대회' : 'Awards & competitions'}</h2></div></div>
+        <div class="award-row"><span class="year">2026</span><div><h3>{ko ? '국민대 AI-엣지 챌린지' : 'Kookmin AI-Edge Challenge'}</h3><p>{ko ? '주차경기 특별상 · 예선 2위' : 'Parking Special Award · Preliminary 2nd'}</p><p class="small-muted">{ko ? '본선 완주 13위 · 팀 성과' : 'Finals 13th, course completed · Team result'}</p></div></div>
+        <div class="award-row"><span class="year">2022</span><div><h3>Drone Clash</h3><p>{ko ? '일반부 3위' : 'General Division · 3rd Place'}</p></div></div>
+      </section>
+      <section id="skills" class="home-section" aria-labelledby="skills-title">
+        <div class="section-heading"><div><p class="eyebrow">{ko ? '프로젝트에서 사용한 도구' : 'Tools used in projects'}</p><h2 id="skills-title">{ko ? '기술 역량' : 'Technical skills'}</h2></div></div>
+        <dl class="skills-list">{skills.map(({label,tools}) => <div><dt>{label}</dt><dd>{tools}</dd></div>)}</dl>
+      </section>
+    </div>
   </main>
 </BaseLayout>
-
 <style>
-  .project-summary > .project-result { font-size: .8125rem; color: var(--accent); margin: 14px 0; font-weight: 600; }
-  .project-code-link { display: inline-block; margin-left: 22px; font-size: .875rem; }
-  .project-list > li.has-thumbnail { grid-template-columns: 38px minmax(0, 1fr) 280px; }
-  .project-preview { display: block; margin-bottom: 16px; }
-  .project-preview img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 4px; }
-  @media (min-width: 761px) and (max-width: 1000px) {
-    .project-list > li.has-thumbnail { grid-template-columns: 30px minmax(0, 1fr) 220px; }
-  }
-  @media (max-width: 760px) {
-    .project-list > li.has-thumbnail { grid-template-columns: 26px minmax(0, 1fr); }
-    .project-preview { flex-basis: 100%; margin: 0 0 8px; }
-  }
-  .intro { width: 100%; max-width: 960px; margin-inline: auto; padding: 48px 0 44px; grid-template-columns: 210px minmax(0, 1fr); align-items: center; gap: 56px; }
-  .intro-profile { width: 210px; max-width: 100%; }
-  .intro-profile img { width: 100%; height: auto; aspect-ratio: 1843 / 2458; object-fit: cover; object-position: center; border: 1px solid var(--line); border-radius: 6px; }
-  .intro-profile figcaption { margin-top: 12px; color: var(--muted); font-size: .8125rem; text-align: center; }
-  .intro-details { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 22px; font-size: .875rem; }
-  .intro-details > div { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .intro { max-width: 1020px; margin-inline: auto; padding: 62px 0 66px; grid-template-columns: 214px minmax(0, 1fr); align-items: center; gap: clamp(36px, 5vw, 76px); }
+  .intro-profile { width: 214px; max-width: 100%; }
+  .intro-profile img { width: 100%; height: auto; aspect-ratio: 1843 / 2458; object-fit: cover; border: 1px solid var(--line); border-radius: 4px; }
+  .intro-profile figcaption { margin-top: 12px; color: var(--muted); font-size: .75rem; text-align: center; }
+  .intro h1 { font-size: clamp(2.2rem, 4.2vw, 3.25rem); margin: 17px 0; }
+  .intro-field { font-size: 1rem; }
+  .intro-summary { max-width: 640px; margin-top: 19px; font-size: .975rem; }
+  .intro-details { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 19px; font-size: .8125rem; }
+  .intro-details > div { display: flex; flex-wrap: wrap; gap: 4px 10px; }
   .intro-details dt { color: var(--muted); }
   .intro-details dd { color: var(--ink); }
-  @media (min-width: 761px) and (max-width: 1000px) {
-    .intro { grid-template-columns: 180px minmax(0, 1fr); gap: 36px; }
+  .intro-links { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 26px; font-size: .8125rem; }
+  .primary-link { display: inline-flex; gap: 22px; justify-content: space-between; align-items: center; background: var(--ink); color: #fff; padding: 9px 15px; border: 1px solid var(--ink); border-radius: 3px; text-decoration: none; }
+  .primary-link:hover { background: var(--accent); border-color: var(--accent); }
+  .email-link { overflow-wrap: anywhere; }
+  .home-section { padding-top: 28px; margin-bottom: 68px; }
+  .section-heading { margin-bottom: 24px; }
+  .section-heading h2 { margin-top: 7px; }
+  .section-note { max-width: 330px; color: var(--muted); font-size: .8125rem; }
+  .project-list > .project-entry { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px 52px; padding: 34px 0 38px; }
+  .project-list > .project-entry:first-child { padding-top: 10px; }
+  .project-list > .project-entry:last-child { padding-bottom: 0; }
+  .project-list > .has-media { grid-template-columns: minmax(0, 1fr) minmax(260px, 35%); }
+  .project-heading { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 9px 16px; }
+  .project-index { font-size: .75rem; color: var(--accent); padding: 0; white-space: nowrap; }
+  .project-context { font-size: .75rem; margin: 0; flex: 1; min-width: min(100%, 140px); }
+  .status { font-size: .6875rem; }
+  .project-summary { min-width: 0; max-width: 810px; }
+  .project-summary h3 { font-size: 1.5rem; line-height: 1.35; letter-spacing: -.018em; }
+  .project-summary > .project-description { font-size: .9375rem; line-height: 1.8; margin: 13px 0 18px; }
+  .project-facts { display: flex; flex-wrap: wrap; gap: 5px 22px; font-size: .75rem; }
+  .project-facts > div { display: flex; flex-wrap: wrap; gap: 5px 8px; }
+  .project-facts dt { color: var(--muted); }
+  .project-facts dd { color: var(--ink); }
+  .project-evidence { margin-top: 20px; padding-left: 13px; border-left: 2px solid #9fb8c6; }
+  .project-evidence > span { display: block; color: var(--muted); font-size: .6875rem; font-weight: 600; letter-spacing: .035em; text-transform: uppercase; }
+  .project-evidence p { color: var(--ink); font-size: .875rem; line-height: 1.75; margin-top: 5px; }
+  .project-tech { display: flex; flex-wrap: wrap; gap: 5px 13px; list-style: none; padding: 0; margin: 18px 0 20px; font-family: var(--mono); font-size: .6875rem; color: var(--muted); }
+  .project-links { display: flex; flex-wrap: wrap; gap: 12px 25px; align-items: center; }
+  .case-link, .project-code-link { margin: 0; font-size: .8125rem; }
+  .project-code-link { color: var(--muted); text-decoration: none; }
+  .project-code-link:hover { color: var(--accent); text-decoration: underline; }
+  .project-visual { min-width: 0; align-self: center; }
+  .project-preview { display: block; padding: 7px; background: var(--soft); border: 1px solid var(--line); border-radius: 4px; }
+  .project-preview img { width: 100%; height: auto; }
+  .project-visual figcaption { font-size: .6875rem; margin-top: 9px; }
+  .background-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+  .background-sections .home-section { margin-bottom: 0; }
+  .background-sections h2 { font-size: 1.45rem; }
+  .award-row { grid-template-columns: 45px minmax(0, 1fr); gap: 18px; }
+  .award-row h3 { font-size: 1rem; line-height: 1.55; }
+  .award-row p { font-size: .875rem; }
+  .award-row p.small-muted { margin-top: 4px; font-size: .75rem; }
+  .skills-list > div { display: block; padding: 13px 0; }
+  .skills-list > div:first-child { padding-top: 20px; }
+  .skills-list > div:last-child { border: 0; }
+  .skills-list dt { font-size: .8125rem; }
+  .skills-list dd { margin-top: 5px; font-size: .875rem; line-height: 1.8; }
+  @media (max-width: 1000px) {
+    .intro { grid-template-columns: 180px minmax(0, 1fr); gap: 38px; padding: 46px 0 50px; }
     .intro-profile { width: 180px; }
+    .project-list > .has-media { grid-template-columns: minmax(0, 1fr) minmax(220px, 34%); gap: 18px 28px; }
+    .project-summary h3 { font-size: 1.3rem; }
+    .background-sections { gap: 36px; }
   }
   @media (max-width: 760px) {
-    .intro { display: flex; flex-direction: column; align-items: stretch; gap: 30px; padding: 32px 0 36px; }
-    .intro-profile { width: 160px; align-self: center; }
+    .intro { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 26px; padding: 34px 0 42px; align-items: start; }
+    .intro-profile { width: 120px; padding-top: 5px; }
+    .intro-profile figcaption { font-size: .6875rem; }
+    .intro h1 { font-size: 2.2rem; }
+    .intro h1 span { font-size: .9375rem; margin-top: 9px; }
+    .intro-copy > .eyebrow { font-size: .6875rem; }
+    .intro-field { font-size: .875rem; }
+    .intro-summary { font-size: .9375rem; }
+    .intro-links { gap: 15px; }
+    .project-list > .project-entry { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 28px 0 34px; }
+    .project-visual { width: 100%; max-width: 480px; }
+    .project-summary h3 { font-size: 1.4rem; }
+    .project-heading { gap: 8px 12px; }
+    .section-heading .eyebrow { margin-top: 0; }
+    .section-note { margin-top: 12px; }
+    .home-section { margin-bottom: 46px; }
+    .background-sections { grid-template-columns: 1fr; gap: 40px; }
   }
+  @media (max-width: 480px) {
+    .intro { grid-template-columns: minmax(0, 1fr); gap: 23px; }
+    .intro-profile { width: 132px; }
+    .intro-profile figcaption { text-align: left; }
+    .intro h1 { font-size: 2.35rem; }
+    .intro h1 span { display: inline; margin-left: 7px; }
+    .intro-links { align-items: flex-start; flex-direction: column; }
+    .project-context { min-width: 125px; }
+  }
+  @media print { .intro-links .primary-link { display: none; } .background-sections { display: block; } }
 </style>

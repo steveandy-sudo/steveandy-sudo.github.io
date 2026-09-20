@@ -88,5 +88,5 @@ if (liveIndex >= 0) {
   }
 }
 if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
-console.log(`PASS: ${htmlFiles.length} HTML pages, ${checkedLinks} local links/assets/anchors, SEO, contribution sections, public-link policy and hidden empty media slots.`);
+console.log(`PASS: ${htmlFiles.length} HTML pages, ${checkedLinks} local links/assets/anchors, SEO, contribution sections, public-link policy and no exposed internal media requests.`);
 console.log(routes.join('\n'));

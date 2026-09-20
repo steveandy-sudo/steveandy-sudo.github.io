@@ -4,7 +4,9 @@ Astro, TypeScript, MDX 기반의 정적 포트폴리오입니다. 개인 홈페�
 
 사이트 주소: **https://steveandy-sudo.github.io/**
 
-홈페이지는 자기소개, 연구 관심 분야, 프로젝트, 수상, 기술 역량 순서입니다. 연구 관심 분야는 사용자에게 확인한 자율주행 인지·판단 및 딥러닝·학습 기반 방법이며, E2E 자율주행을 직접 구현하고 실험하려는 연구 의지를 포함합니다. `Home.astro`의 영문·국문 문구를 `ResearchInterests.astro`로 표시합니다.
+홈페이지는 자기소개, 연구 관심 분야, 프로젝트, 수상, 기술 역량 순서입니다. 연구 관심 분야는 사용자에게 확인한 자율주행 인지·판단 및 딥러닝·학습 기반 방법이며, E2E 자율주행을 직접 구현하고 실험하려는 연구 의지를 포함합니다. `Home.astro`의 영문·국문 문구를 `ResearchInterests.astro`로 표시합니다. 연구 소개는 첫 문장을 강조하고 세 가지 질문을 나란히 보여주며, 프로젝트는 짧은 제목·역할·검증된 결과와 미디어를 함께 표시합니다.
+
+홈의 `projectCopy`에는 화면용 영문·국문 요약과 대표 미디어를 둡니다. 국민대와 AI·SW는 실제 이미지, V2I는 설계 배치도 예약, UAV는 시뮬레이션 영상 예약을 표시합니다. 새 대표 이미지나 영상 포스터를 받으면 해당 `visual.src`, `alt`, `caption`을 추가합니다. 실제 영상은 상세 페이지의 `media.ts` 슬롯에 연결하며, V2I 설계 자료를 실험 결과로 표현하지 않습니다. 드림학기제는 현재 미디어가 없어 텍스트 중심으로 표시합니다.
 
 ## 개발과 검증
 
@@ -18,7 +20,7 @@ npm run build
 npm run verify
 ```
 
-`npm run dev`는 개발 화면을 제공합니다. 실제 파일이 없는 미디어 슬롯은 이 화면에서만 자료 요청 상자로 보입니다. `npm run build`는 `dist/`에 정적 HTML을 생성하며 빈 미디어 슬롯은 출력하지 않습니다.
+`npm run dev`는 개발 화면을 제공합니다. 실제 파일이 없는 미디어 슬롯 중 `reserve: true`인 슬롯은 공개 화면에도 짧은 제목과 `Video forthcoming` 또는 `Image forthcoming`를 표시해 공간을 확보합니다. 나머지 빈 슬롯의 상세 자료 요청은 개발 화면에서만 보입니다. `npm run build`는 `dist/`에 정적 HTML을 생성합니다.
 
 배포 결과와 같은 화면을 확인하려면:
 
@@ -56,7 +58,7 @@ npm run test:ui
 │   │   ├── Home.astro
 │   │   ├── ResearchInterests.astro
 │   │   ├── ProjectToc.astro
-│   │   ├── Figure.astro / Video.astro / MediaSlot.astro
+│   │   ├── Figure.astro / Video.astro / MediaSlot.astro / ReservedMedia.astro
 │   │   ├── Result.astro / Decision.astro / Investigation.astro
 │   │   └── StageTimeline.astro
 │   ├── layouts/BaseLayout.astro
@@ -140,6 +142,10 @@ public/media/projects/
 파일명은 `01_system_architecture.webp`, `02_gazebo_test.webp`, `03_real_vehicle.mp4`처럼 순서와 내용을 표현합니다. 대문자·공백 대신 소문자와 밑줄을 사용합니다. 사진은 JPG/WebP, 선과 글자가 많은 그림은 PNG/SVG, 짧은 동작은 MP4를 권장합니다. GIF도 이미지로 지원합니다.
 
 기존 슬롯은 `src/data/media.ts`에 `src`와 `kind`를 추가하면 연결됩니다. `target`은 제안 경로이며 링크가 아닙니다. 캡션은 반드시 받은 자료의 실제 장면과 맞춰 검토합니다. 존재하지 않는 경로를 지정하면 빌드를 실패시켜 깨진 이미지를 방지합니다.
+
+현재 상세 페이지의 공개 예약 공간은 AI·SW의 `mobility-simulation`·`mobility-vehicle`, UAV의 `uav-demo`입니다. 자료를 받으면 해당 항목에 실제 `src`와 필요 시 `poster`를 추가하세요. 예약 상자는 자동으로 실제 사진·영상으로 교체됩니다. 공개 상자에는 파일명·업로드 버튼·재생 버튼을 표시하지 않습니다. V2I와 자료가 없는 드림학기제 상세 페이지에는 공개 예약 상자를 추가하지 않습니다.
+
+홈페이지 등에서 공간만 예약할 때는 `ReservedMedia.astro`에 `title`, `kind` (`image` 또는 `video`), `lang` (`en` 또는 `ko`)을 전달합니다. 이 컴포넌트는 영문·국문 상태 문구를 지원하며 실제 실험이나 자료가 존재한다고 주장하지 않습니다.
 
 직접 그림을 배치할 수도 있습니다. 아래는 **실제 파일을 준비한 뒤** 사용하는 예시이며, 이 경로에 가짜 그림을 생성하지 않습니다.
 
