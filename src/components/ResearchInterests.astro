@@ -1,28 +1,48 @@
 ---
 interface Props {
   lang: 'en' | 'ko';
+  lead: string;
   summary: string;
   topics: { title: string; description: string }[];
 }
-const { lang, summary, topics } = Astro.props;
+const { lang, lead, summary, topics } = Astro.props;
 ---
 <section id="research" class="home-section" aria-labelledby="research-title">
   <div class="section-heading">
-    <h2 id="research-title">{lang === 'ko' ? '연구 관심 분야' : 'Research interests'}</h2>
+    <div><p class="eyebrow">{lang === 'ko' ? '앞으로 탐구하고 싶은 질문' : 'Questions I want to explore'}</p><h2 id="research-title">{lang === 'ko' ? '연구 관심 분야' : 'Research interests'}</h2></div>
   </div>
-  <p class="research-summary">{summary}</p>
-  <ul class="research-topics">
-    {topics.map(topic => <li><h3>{topic.title}</h3><p>{topic.description}</p></li>)}
-  </ul>
+  <div class="research-grid">
+    <div class="research-statement">
+      <p class="research-lead">{lead}</p>
+      <p class="research-summary">{summary}</p>
+      <a class="research-link" href="/projects/camera-v2i-e2e/">{lang === 'ko' ? '현재 V2I·E2E 실험 설계 보기 (English)' : 'Current V2I / E2E research design'} <span aria-hidden="true">→</span></a>
+    </div>
+    <ul class="research-topics">
+      {topics.map((topic, index) => <li><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><div><h3>{topic.title}</h3><p>{topic.description}</p></div></li>)}
+    </ul>
+  </div>
 </section>
 <style>
-  .research-summary { max-width: 760px; font-size: 1.05rem; line-height: 1.85; }
-  .research-topics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 28px; list-style: none; padding: 0; margin-top: 28px; }
-  .research-topics li { border-left: 2px solid var(--line); padding-left: 20px; }
-  .research-topics h3 { color: var(--accent); font-size: 1rem; line-height: 1.5; }
-  .research-topics p { margin-top: 9px; font-size: .9375rem; line-height: 1.8; }
+  .home-section { padding-top: 28px; margin-bottom: 68px; }
+  .section-heading h2 { margin-top: 7px; }
+  .research-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 62px; }
+  .research-lead { font-size: 1.25rem; line-height: 1.6; letter-spacing: -.012em; color: var(--ink); }
+  .research-summary { margin-top: 17px; font-size: .9375rem; line-height: 1.95; }
+  .research-link { display: inline-block; font-size: .8125rem; margin-top: 21px; }
+  .research-topics { list-style: none; padding: 0 0 0 28px; border-left: 1px solid var(--line); align-self: start; }
+  .research-topics li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 13px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .research-topics li:first-child { padding-top: 0; }
+  .research-topics li:last-child { padding-bottom: 0; border-bottom: 0; }
+  .research-topics li > span { font: .6875rem var(--mono); color: var(--muted); padding-top: 6px; white-space: nowrap; }
+  .research-topics h3 { color: var(--accent); font-size: .9375rem; line-height: 1.6; }
+  .research-topics p { margin-top: 6px; font-size: .8125rem; line-height: 1.75; }
+  @media (max-width: 1000px) { .research-grid { gap: 30px; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } .research-topics { padding-left: 22px; } }
   @media (max-width: 760px) {
-    .research-summary { font-size: 1rem; }
-    .research-topics { grid-template-columns: 1fr; gap: 22px; }
+    .home-section { margin-bottom: 46px; }
+    .section-heading .eyebrow { margin-top: 0; }
+    .research-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .research-lead { font-size: 1.15rem; }
+    .research-topics { padding-left: 0; border-left: 0; }
+    .research-topics li { grid-template-columns: 25px minmax(0, 1fr); }
   }
 </style>

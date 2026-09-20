@@ -1,0 +1,50 @@
+---
+interface Props {
+  title: string;
+  kind?: 'image' | 'video';
+  lang?: 'en' | 'ko';
+  slotId?: string;
+}
+const { title, kind = 'video', lang = 'en', slotId } = Astro.props;
+const status = lang === 'ko'
+  ? (kind === 'video' ? '영상 추가 예정' : '이미지 추가 예정')
+  : (kind === 'video' ? 'Video forthcoming' : 'Image forthcoming');
+---
+
+<aside class="reserved-media" data-media-reserved={slotId ?? 'true'}>
+  <span>{status}</span>
+  <strong>{title}</strong>
+</aside>
+
+<style>
+  .reserved-media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: clamp(150px, 18vw, 230px);
+    padding: 28px 24px;
+    border: 1px dashed #bacad4;
+    background: #f8fafb;
+    text-align: center;
+  }
+  .reserved-media span {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: .6875rem;
+    letter-spacing: .07em;
+    line-height: 1.6;
+    text-transform: uppercase;
+  }
+  .reserved-media strong {
+    color: var(--body);
+    font-size: .9375rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  @media print {
+    .reserved-media { display: none; }
+  }
+</style>
