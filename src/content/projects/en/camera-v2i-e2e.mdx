@@ -9,9 +9,9 @@ context: Capstone Design Project
 period: 2026 – Ongoing
 role: System & Experiment Design
 status: design
-summary: Designing a comparison of camera-only and V2I-assisted end-to-end driving in a pedestrian blind-spot scenario with parked-car occlusion.
-outcome: System and experiment design is the current phase. Implementation and closed-loop validation are planned; there are no measured driving results yet.
-teamScope: The capstone investigates camera-based infrastructure support for end-to-end driving. The scope presented here covers system and experiment design, not a completed cooperative-driving system.
+summary: "A research design comparing camera-only and V2I-assisted E2E driving when pedestrians are occluded by parked vehicles."
+outcome: "Current output: sensing concept, occlusion scenario, and comparison design. Model selection, implementation, and closed-loop trials remain planned."
+teamScope: "The capstone explores infrastructure-camera support for learning-based driving. My current work covers the sensing concept, occlusion scenario, object-state interface, and comparison design."
 contributions:
   - Compared smartphone, radar, LiDAR, and camera options for infrastructure sensing and selected a camera-based V2I concept.
   - Designed a blind-spot child/pedestrian scenario involving parked-car occlusion.
@@ -22,65 +22,53 @@ featured: true
 ---
 
 import MediaSlot from '../../../components/MediaSlot.astro';
-import StageTimeline from '../../../components/StageTimeline.astro';
-import Decision from '../../../components/Decision.astro';
+import SystemFlow from '../../../components/SystemFlow.astro';
 
 ## Research question
 
-**How much additional safe-response distance can V2I provide in a blind-spot scenario?**
+**How much additional safe-response distance can infrastructure-camera information provide when a pedestrian emerges from behind a parked vehicle?**
 
-The study is designed around a pedestrian emerging from behind parked vehicles. Vehicle-mounted cameras may encounter the pedestrian only after the occlusion clears; the proposed infrastructure sensing is intended to provide an additional source of pedestrian information. Whether that information improves the response is a question for the planned experiments.
+The working hypothesis is that earlier pedestrian information may allow an E2E driving model to brake sooner. The comparison must also examine whether communication delay or uncertain detections reduce that benefit. This project is currently a system and experiment design; implementation and closed-loop trials are the next stages.
 
 <MediaSlot id="v2i-scenario" />
 
-## Development stages
+## Proposed system
 
-<StageTimeline stages={[
-  { label: 'System & experiment design', state: 'current', detail: 'Sensor choice, scenario, comparison, object state, and metrics.' },
-  { label: 'Implementation', state: 'planned', detail: 'Implement the proposed camera-based V2I system.' },
-  { label: 'Closed-loop validation', state: 'planned', detail: 'Run the comparison and measure driving outcomes.' },
-]} />
+<SystemFlow title="Proposed V2I-assisted driving experiment" steps={[
+  { label: 'Occluded road scene', detail: 'A parked vehicle blocks the ego camera view of a pedestrian.' },
+  { label: 'Infrastructure observation', detail: 'A roadside camera estimates pedestrian position, velocity, and confidence.' },
+  { label: 'Information fusion', detail: 'Time-aligned pedestrian state is supplied alongside the ego-camera input. The model and fusion method remain to be selected.' },
+  { label: 'Closed-loop comparison', detail: 'Vehicle behavior is evaluated with and without infrastructure information in matched scenarios.' },
+]} caption="Proposed architecture; the diagram describes the experiment design." />
 
-## Infrastructure sensor decision
+Camera sensing was selected after considering smartphone, radar, LiDAR, and camera options, with deployment feasibility and semantic information as design considerations.
 
-<Decision title="Camera-based V2I" considered="Smartphone, radar, LiDAR, and camera options for external sensing." choice="Camera was selected for the proposed infrastructure sensing architecture." reason="The design considered deployment feasibility, use of existing road infrastructure, and semantic information." />
+## Comparison and controls
 
-This is a system-design decision. It is not evidence of a deployed infrastructure sensor or validated perception system.
-
-## Planned object-state interface
-
-The proposed infrastructure message describes pedestrian object state using the following fields:
-
-| Fields | Intended information |
+| Experiment element | Planned choice |
 | --- | --- |
-| `x`, `y` | Pedestrian position |
-| `vx`, `vy` | Pedestrian velocity |
-| `confidence` | Confidence associated with the object state |
-| `timestamp` | Time associated with the state |
+| Baseline | Camera-only E2E driving |
+| Comparison | The same driving setup augmented with infrastructure pedestrian state |
+| Primary variable | Distance to the hazard when the scenario begins |
+| Matched conditions | Road geometry, ego speed, pedestrian motion, occlusion, and stopping criteria |
+| Follow-up sensitivity checks | Message delay, missing messages, and object-state uncertainty |
 
-These are **planned fields**. A message definition, coordinate-frame convention, synchronization method, or implemented communication interface is not claimed here.
+The base model, fusion architecture, trial counts, and parameter ranges will be fixed before data collection. Matching the driving setup makes the contribution of infrastructure information the focus of the comparison.
 
-## Experiment design
+## Planned interface and evaluation
 
-The planned comparison uses the same blind-spot scenario for two configurations:
+The proposed message contains pedestrian `x`, `y`, `vx`, `vy`, `confidence`, and `timestamp`. Coordinate-frame conventions and synchronization must be defined before integration.
 
-1. **Camera-only E2E:** the vehicle-side camera-based driving configuration.
-2. **V2I-assisted E2E:** the configuration augmented with the proposed infrastructure pedestrian state.
-
-Distance to hazard, **d**, is the primary experimental variable. The design asks how the available distance affects safe response in the parked-car occlusion scenario.
-
-## Planned evaluation
-
-| Metric | Role in the comparison |
+| Measure | Interpretation |
 | --- | --- |
-| Collision Rate | Compare collision outcomes across trials |
-| Minimum TTC | Examine the closest time-to-collision condition |
-| Braking Onset | Compare when braking begins |
-| Stopping Distance | Compare distance associated with stopping |
-| Success Rate | Compare successful scenario outcomes |
+| Collision rate | Fraction of matched trials ending in a collision |
+| Minimum time to collision | Closest estimated time-to-collision condition during the encounter |
+| Braking onset | When the vehicle begins braking relative to the hazard |
+| Stopping distance | Distance traveled from braking onset to stopping |
+| Scenario success rate | Fraction meeting the predefined safety and completion criteria |
 
-These are evaluation measures selected for the experiment, **not measured results**. Trial counts, operating conditions, and success criteria must be documented with the eventual experiment record.
+These are planned measurements. Results will include operating conditions and trial counts so that changes in response can be interpreted alongside failure cases.
 
-## Current outcome
+## Next milestone
 
-The current output is the system and experiment design. Implementation and closed-loop validation remain planned, and the research question remains open.
+Build one reproducible occlusion scenario and run the camera-only baseline before adding the infrastructure input. The first comparison should establish the information timing and braking response in a controlled setting, followed by the delay and uncertainty checks.

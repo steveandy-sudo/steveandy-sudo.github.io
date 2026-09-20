@@ -2,16 +2,16 @@
 slug: vmodel-neuro-symbolic
 lang: en
 order: 5
-title: V-Model Neuro-Symbolic Driving
-titleEn: V-Model Neuro-Symbolic Driving
-titleKo: V-Model Neuro-Symbolic Driving
+title: "Dream Semester: ROS 2 / CARLA Decision and Control"
+titleEn: "Dream Semester: ROS 2 / CARLA Decision and Control"
+titleKo: "드림학기제: ROS 2 / CARLA 판단·제어"
 context: Dream Semester Project
 period: Mar 2026 – Jun 2026
 team: 3 members
 role: Decision-Making / Control Integration
 status: ended
-summary: A Dream Semester project on ROS 2 / CARLA decision and control integration. The driving objective was not achieved; the work is recorded through implementation and debugging.
-outcome: The project failed to achieve its autonomous-driving objective. The final code did not lead to an actual vehicle run.
+summary: "Pure Pursuit and decision/control integration in ROS 2 / CARLA, with an investigation of unstable tracking and vehicle-command interfaces."
+outcome: "The autonomous-driving objective was not achieved. The project ended with unresolved tracking instability and no actual vehicle run."
 teamScope: A three-member Dream Semester team worked on the driving platform. My development focus was decision-making, path tracking, and control integration.
 contributions:
   - Implemented ROS 2 decision-making, waypoint following, Pure Pursuit, and longitudinal speed control, and integrated the components with CARLA.
@@ -22,43 +22,40 @@ github: https://github.com/steveandy-sudo/vmodel-driving-portfolio
 featured: true
 ---
 
-import MediaSlot from '../../../components/MediaSlot.astro';
-import Investigation from '../../../components/Investigation.astro';
+import SystemFlow from '../../../components/SystemFlow.astro';
 
-## Project goal
+## Project question and implementation
 
-The project combined ROS 2 decision-making and waypoint-following components with CARLA. My implementation covered Pure Pursuit for path tracking and longitudinal speed control, alongside the integration work required to connect these components to the simulation.
+This Dream Semester project, originally titled **V-Model Neuro-Symbolic Driving**, aimed to connect ROS 2 driving decisions and waypoint following to a working autonomous-driving loop. My implementation focused on Pure Pursuit, longitudinal speed control, CARLA integration, and later adaptation of the vehicle-command interface.
 
-The Dream Semester project aimed to establish a working autonomous-driving loop. The implementation covered both the simulation interface and later adaptation toward a vehicle command interface.
+<SystemFlow title="Decision and control responsibilities" steps={[
+  { label: 'Target and behavior state', detail: 'Behavior logic supplies a target point, target speed, and driving state.' },
+  { label: 'Path tracking', detail: 'Pure Pursuit maps target geometry to a steering request.' },
+  { label: 'Command shaping', detail: 'Bounds, smoothing, and rate limits shape the requested command.' },
+  { label: 'Execution interface', detail: 'Earlier code targets CARLA; later packages separate steering and the MCU serial bridge.' },
+]} caption="The archive contains successive integration stages; the CARLA and MCU paths are distinct implementations." />
 
-## Outcome
+## Debugging record
 
-**The autonomous-driving objective was not achieved, and the final code did not lead to an actual vehicle run.** Earlier closed-loop simulation work exposed unstable path tracking that persisted through the project's adjustments.
+**Observation:** closed-loop simulation showed unstable path tracking. I investigated steering direction, lookahead, target smoothing, rate limiting, and command bounds. The project ended before a single root cause was conclusively isolated.
 
-The project ended with the Dream Semester period. The repository preserves the final implementation and the investigation record.
+| Area investigated | Work carried out | Evidence needed to isolate its effect |
+| --- | --- | --- |
+| Steering direction and units | Checked and adjusted steering response | A fixed target with requested and observed turn direction |
+| Lookahead and target geometry | Adjusted target-following parameters | Identical routes with target-point and trajectory overlays |
+| Smoothing and rate limiting | Adjusted command filtering and change limits | Time-aligned steering before and after each change |
+| Command bounds and interface | Adjusted output limits and adapted the command bridge | Input/output traces with units, saturation, and timestamps |
 
-## Debugging work
+The last column describes the records needed for a controlled diagnosis. The available history establishes the investigation areas, but does not support a numerical improvement claim for each adjustment.
 
-<Investigation problem="Unstable path tracking in simulation" observation="The vehicle response remained unstable during the closed-loop simulation work." investigation="I iteratively adjusted steering direction, lookahead, target smoothing, rate limiting, and command bounds." status="Unresolved at the end of the project; a single root cause was not conclusively isolated." />
+## What the code preserves
 
-| Area investigated | Work performed |
-| --- | --- |
-| Steering direction | Debugged the direction of steering response |
-| Lookahead | Adjusted the target-following lookahead |
-| Smoothing | Adjusted target smoothing |
-| Rate limiting | Investigated limits on command changes |
-| Command bounds | Adjusted allowable command ranges |
+The [project repository](https://github.com/steveandy-sudo/vmodel-driving-portfolio) separates earlier CARLA implementations under `src/neuro_decision/archive` from later behavior, steering, and MCU bridge packages. The later steering node contains target-geometry handling, smoothing, bounds, and per-cycle steering limits. The bridge translates desired speed, steering angle, and state into the serial command format.
 
-The investigation connected observed tracking behavior with target selection, command filtering, and output limits.
+These files provide concrete entry points for examining the integration decisions and the software inspection path.
 
-<MediaSlot id="vmodel-debug" />
+## Lessons and a better experiment
 
-## Integration work
+The main lesson was to make **target coordinates, steering units, timestamps, and command ownership** explicit before tuning the controller. Without matched trajectory and command records, the effect of individual adjustments remains difficult to establish.
 
-The code retains two stages: earlier CARLA control implementations under `src/neuro_decision/archive`, and the later behavior, steering, and MCU bridge packages. The latter separate desired speed and steering angle from the vehicle-specific serial command format and include a mock inspection path.
-
-## What I learned
-
-The work made interface consistency a concrete debugging concern: target coordinates, steering units, input timing, and actuator commands all need to agree.
-
-It also motivated more systematic experiment records: keeping input conditions fixed, changing one control setting at a time, and recording the resulting trajectory and commands together.
+For a future reconstruction, I would start with a straight path and one constant-radius turn, verify steering sign and units, and then vary one setting at a time. The record would pair target and actual trajectories with time-aligned commands, so each conclusion could be traced to a specific experiment.

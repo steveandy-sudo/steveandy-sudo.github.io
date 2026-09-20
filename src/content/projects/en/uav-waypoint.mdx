@@ -10,9 +10,9 @@ period: May 2026 – Jun 2026
 team: 4 members
 role: UAV Waypoint Development
 status: completed
-summary: A ROS 2 waypoint-mission package that advances through 3D targets and integrates with an existing PX4 offboard controller.
-outcome: The final course demonstration used my package, followed all waypoints, and completed the final landing.
-teamScope: A four-member course team integrated the autonomous-system platform. My responsibility was UAV waypoint mission development; other team members worked on UGV tracking, ArUco, precision landing, and the broader mission manager.
+summary: "A ROS 2 waypoint-mission package with TF2 arrival checks and PX4 offboard integration, demonstrated in SITL/Gazebo."
+outcome: "Sequential waypoint tracking and final landing were completed in the PX4 SITL / Gazebo course demonstration using my waypoint package."
+teamScope: "A four-member course team integrated the autonomous-system platform. My focus was the UAV waypoint package and its interface to the existing offboard controller."
 contributions:
   - Developed uav_waypoint_mission with CSV x/y/z/yaw waypoints, optional gimbal pitch, TF2 pose tracking, 3D goal distance, and arrival tolerance.
   - Implemented sequential target advancement and integrated PoseStamped commands on /command/pose with an existing PX4 offboard controller.
@@ -24,55 +24,50 @@ featured: true
 ---
 
 import MediaSlot from '../../../components/MediaSlot.astro';
-import Result from '../../../components/Result.astro';
+import SystemFlow from '../../../components/SystemFlow.astro';
 
-## Team system & package integration
+## Mission architecture
 
-The course environment included ROS 2 Humble, PX4 SITL, Gazebo, QGroundControl, TF, and Micro XRCE-DDS. My package, `uav_waypoint_mission`, handled waypoint progression and mission-level commands. It integrated with an **existing PX4 offboard controller**.
+<SystemFlow title="Waypoint mission in PX4 SITL / Gazebo" steps={[
+  { label: 'Waypoint sequence', detail: 'CSV targets specify x, y, z, and yaw, with optional gimbal pitch.' },
+  { label: 'Pose and arrival check', detail: 'TF2 pose and three-dimensional goal distance determine arrival at the current target.' },
+  { label: 'Mission progression', detail: 'The mission node advances the target and publishes PoseStamped on /command/pose.' },
+  { label: 'Offboard execution', detail: 'The existing PX4 offboard controller and simulation stack execute the pose command.' },
+]} />
 
-## Waypoint inputs & outputs
+The course environment combined ROS 2 Humble, PX4 SITL, Gazebo, QGroundControl, and Micro XRCE-DDS. I developed the waypoint-mission package and integrated it with the existing offboard controller.
 
-| Interface | Role in the waypoint package |
+## Design choices
+
+| Choice | Engineering purpose |
 | --- | --- |
-| CSV `x`, `y`, `z`, `yaw` | Define sequential 3D waypoint targets |
-| Optional gimbal pitch | Additional waypoint information supported by the package |
-| TF2 pose | Track pose for evaluating goal distance |
-| 3D goal distance / arrival tolerance | Determine when to advance to the next target |
-| `/command/pose` — `PoseStamped` | Deliver pose targets to the existing offboard controller |
-| Mission status / current goal | Expose mission progress |
+| Three-dimensional arrival distance | Advance targets using both horizontal and vertical position |
+| Start, stop, and reset controls | Make the mission lifecycle explicit during integration and testing |
+| Current-goal and mission-status reporting | Make target progression observable while debugging |
+| Explicit ENU / local-NED modes | Handle the coordinate boundary between ROS poses and PX4 commands |
+| Altitude checks before disarm | Gate the implemented land-then-disarm finish path on the reported vehicle state |
 
-The package advanced targets sequentially after the configured arrival condition was met. This makes the waypoint sequence and the low-level flight-controller responsibilities distinct.
+The archived configuration contains **nine waypoints** and a default **1.0 m arrival tolerance**. These describe the source configuration; measured tracking error and the exact demonstration settings require the corresponding run record.
 
-## Mission lifecycle
+## Demonstration and evidence
 
-Mission controls included **start**, **stop**, and **reset**. The package tracked mission status and the current goal while advancing through the waypoint list.
-
-Supported finish options were `hold`, `land`, `disarm`, and `land_then_disarm`. These are implemented options; the reported final demonstration specifically establishes sequential waypoint tracking and final landing, not a separate validation result for every option.
-
-## Coordinate handling
-
-The package supported map/ENU and PX4 local-NED coordinate modes when connecting ROS 2 mission targets with the existing offboard controller. Coordinate handling was part of the integration responsibility.
-
-The collected source includes the mission node, offboard controller, PX4 message definitions, and Gazebo integration package. The repository's setup guide records their coordinate conventions and runtime connections.
-
-## Safety logic
-
-In the `land_then_disarm` path, the mission node checks altitude relative to its initial pose before requesting disarm. The collected offboard controller also includes an altitude guard. These checks connect mission completion with the vehicle's current state and depend on the runtime TF configuration.
-
-## Simulation & integration
-
-Integration took place in the PX4 SITL / Gazebo course environment using ROS 2 and the existing offboard controller. The package supplied mission-level pose targets while the integrated controller and flight stack handled their respective responsibilities.
-
-## Final demonstration
-
-<Result label="Course demonstration" value="Waypoints + landing completed" context="PX4 SITL / Gazebo project demonstration; my waypoint package was used" />
-
-All waypoints were successfully followed and the final landing was completed in the PX4 SITL / Gazebo course demonstration using my waypoint package with the existing offboard controller.
+| Item | Record |
+| --- | --- |
+| Environment | PX4 SITL / Gazebo course simulation |
+| Demonstrated outcome | Sequential waypoint tracking and final landing completed using the waypoint package |
+| Source archive | Final course workspace supplied after the demonstration |
+| Quantitative tracking result | Repeat-trial counts and measured position-error statistics have not been consolidated |
 
 <MediaSlot id="uav-demo" />
 
-## Lessons & scope
+## Coordinate and finish-state integration
 
-The project provided implementation experience at the boundary between a mission package and an existing controller: target representation, coordinate conventions, progress tracking, and finish behavior all mattered to integration.
+The mission node supplies pose targets while the offboard controller performs vehicle-side conversion and command publication. During reproduction, **coordinate conversion must have one clearly defined owner**: the collected controller already converts ENU to NED, so the mission output mode and origin must be checked together.
 
-The waypoint tracking and landing demonstration showed the package operating within the integrated team system.
+The package implements `hold`, `land`, `disarm`, and `land_then_disarm` finish options. The final simulation demonstrated landing, while the exact launch configuration and landing-command receiver still need to be matched to that run. The [repository setup notes](https://github.com/steveandy-sudo/uav-waypoint-portfolio) document these integration points.
+
+## What I learned
+
+A waypoint list becomes a dependable mission only when arrival conditions, coordinate frames, command ownership, and finish states agree across the stack. This project gave me experience making those interfaces explicit and exposing mission state for debugging.
+
+A follow-up evaluation would record the target sequence, measured trajectory, arrival times, and landing event over repeated runs. That would connect the demonstrated mission to measurable tracking and completion behavior.

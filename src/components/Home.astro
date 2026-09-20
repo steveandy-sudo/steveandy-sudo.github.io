@@ -6,18 +6,18 @@ interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === 'ko';
 const research = ko ? {
-  summary: '자율주행의 인지와 판단에 관심이 있으며, 딥러닝과 학습 기반 방법을 중심으로 연구하고 싶습니다. 센서 데이터에서 주변 환경을 이해하는 과정이 상황에 맞는 주행 행동으로 어떻게 이어지는지 탐구하고자 합니다. 특히 학습 기반 주행 모델을 직접 개발하고 평가하면서 End-to-End(E2E) 자율주행에 대한 이해를 넓히고 싶습니다. 다양한 교통 상황에서 모델의 행동을 분석하고, 주행 환경이 달라졌을 때 나타나는 성능 변화와 한계를 살펴보며 더 신뢰할 수 있는 자율주행을 위한 개선 방향을 찾고자 합니다.',
+  summary: '자율주행의 인지·판단과 딥러닝 기반 주행을 연구하고 싶습니다. 모방학습 파이프라인과 ROS 2 판단·제어를 구현하고 실차 통합을 경험하면서, 센서 입력에서 나온 예측이 실제 차량의 행동으로 이어지는 과정에 관심을 갖게 되었습니다. 특히 End-to-End(E2E) 모델을 직접 구현하고, 가림이나 입력 지연이 있는 상황에서 모델의 행동과 한계를 실험으로 살펴보고 싶습니다. 현재는 주정차 차량에 가려진 보행자 상황에서 인프라 카메라 정보가 주행 판단과 제동 시점에 주는 영향을 비교하는 실험을 설계하고 있습니다.',
   topics: [
-    { title: '자율주행 인지', description: '센서 데이터를 통해 주변 객체와 도로 상황을 이해하는 방법에 관심이 있습니다.' },
-    { title: '자율주행 판단', description: '인지한 정보를 바탕으로 교통 상황에 맞는 주행 행동을 결정하는 방법을 연구하고 싶습니다.' },
-    { title: '딥러닝과 E2E 자율주행', description: '센서 입력에서 주행 행동까지 연결하는 학습 기반 모델을 구현하고, 다양한 주행 상황에서 그 성능과 한계를 탐구하고 싶습니다.' },
+    { title: '인지와 가림', description: '가려진 객체와 불확실한 인지 정보가 주행 행동에 미치는 영향을 살펴보고 싶습니다.' },
+    { title: '판단과 차량 응답', description: '인지·판단의 출력이 조향과 제동으로 이어지는 과정과 시간 지연의 영향을 연구하고 싶습니다.' },
+    { title: '학습 기반·E2E 주행', description: '동일한 시나리오에서 모델과 입력 조건을 비교하고, 궤적·제동 시점·실패 사례로 행동을 평가하고자 합니다.' },
   ],
 } : {
-  summary: 'I am interested in perception and decision-making for autonomous driving, with a focus on deep learning and learning-based approaches. I want to understand how models connect scene understanding from sensor data with appropriate driving actions. I am particularly interested in exploring end-to-end (E2E) autonomous driving by developing and evaluating learning-based driving models. Through experiments across different traffic scenarios, I hope to examine how these models behave, understand their limitations under changing driving conditions, and identify ways to make their behavior more reliable.',
+  summary: 'I want to study perception and decision-making for autonomous driving, with a focus on deep learning. My experience building an imitation-learning pipeline and integrating ROS 2 decision and control software motivates an interest in how sensor-based predictions become vehicle behavior. I am particularly interested in implementing end-to-end (E2E) driving models and examining their behavior under occlusion and input delay. My current experiment design compares camera-only driving with infrastructure-camera assistance when a pedestrian is hidden by a parked vehicle.',
   topics: [
-    { title: 'Perception', description: 'Understanding surrounding objects and road scenes through sensor data.' },
-    { title: 'Decision-making', description: 'Using perception to select driving actions that respond to traffic conditions.' },
-    { title: 'Deep learning & E2E driving', description: 'I want to build learning-based models that map sensor inputs to driving actions and investigate their performance and limitations across driving scenarios.' },
+    { title: 'Perception under occlusion', description: 'How hidden objects and uncertain perception affect driving behavior.' },
+    { title: 'Decisions and vehicle response', description: 'How perception and decisions become steering and braking, including the effects of delay.' },
+    { title: 'Learning-based & E2E driving', description: 'Comparing models and inputs in matched scenarios through trajectories, braking response, and failure cases.' },
   ],
 };
 const entries = await allProjects();
@@ -28,6 +28,13 @@ const koSummaries: Record<string,string> = {
   'camera-v2i-e2e':'사각지대 보행자 시나리오의 Camera-only E2E와 V2I-assisted E2E 비교 실험 설계.',
   'uav-waypoint':'3D waypoint 순차 추종 패키지 개발과 기존 PX4 offboard controller 연동.',
   'vmodel-neuro-symbolic':'드림학기제 ROS 2·CARLA 판단·제어 프로젝트. 실제 차량 주행에 이르지 못한 구현 및 디버깅 과정을 기록.',
+};
+const highlights: Record<string, { en: string; ko: string }> = {
+  'kookmin-ai-edge': { en: 'Preliminary 2nd · Finals completed · Parking Special Award', ko: '팀 성과: 예선 2위 · 본선 완주 · 주차 특별상' },
+  'ai-sw-mobility': { en: 'Initial vehicle trials ~7 km/h · Integrated retest pending', ko: '약 7 km/h 초기 실차 시험 · 통합 재시험 대기' },
+  'camera-v2i-e2e': { en: 'Research design · Matched camera-only / V2I comparison planned', ko: '연구 설계 · Camera-only / V2I 비교 실험 계획' },
+  'uav-waypoint': { en: 'SITL/Gazebo demonstration · Waypoints and landing completed', ko: 'SITL/Gazebo 시연 · waypoint 추종 및 착륙 완료' },
+  'vmodel-neuro-symbolic': { en: 'Implementation and debugging record · Driving objective unmet', ko: '구현·디버깅 기록 · 실제 차량 주행 목표 미달' },
 };
 const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA, Gazebo, PX4 SITL'],['AI / computer vision','PyTorch, YOLO, OpenCV, Roboflow'],['Tools / environment','Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2, QGroundControl']];
 ---
@@ -52,7 +59,7 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
     </section>
     <ResearchInterests lang={lang} {...research} />
     <section id="projects" class="home-section" aria-labelledby="projects-title"><div class="section-heading"><h2 id="projects-title">{ko ? '주요 프로젝트' : 'Selected projects'}</h2><span class="eyebrow">01—05 / Technical case studies</span></div>
-      <ol class="project-list">{projects.map(({data}) => { const translated = entries.find(e => e.data.slug === data.slug && e.data.lang === lang); const target = translated?.data ?? data; return <li class:list={{ "has-thumbnail": !!data.thumbnail }}><span class="project-index" aria-hidden="true">{String(data.order).padStart(2,'0')}</span><div class="project-summary"><p class="project-context">{data.context}</p><h3><a href={projectUrl(target)}>{ko ? data.titleKo ?? data.title : data.title}</a></h3><p>{ko ? koSummaries[data.slug] : data.summary}</p><div class="technology-tags">{data.technologies.map(tech => <span>{tech}</span>)}</div><a class="case-link" href={projectUrl(target)}>{ko ? `기술 문서 보기${target.lang === 'en' ? ' (English)' : ''}` : 'View technical case study'} <span aria-hidden="true">→</span></a></div><div class="project-side">{data.thumbnail && <a class="project-preview" href={projectUrl(target)}><img src={data.thumbnail.src} alt={ko ? "국민대 대회 코스 위의 Team KAI 차량" : data.thumbnail.alt} width="1576" height="884" loading="lazy" decoding="async" /></a>}<span class={`status ${data.status}`}>{statusLabel[lang][data.status]}</span><p>{data.period}</p><p>{data.role}</p></div></li>; })}</ol>
+      <ol class="project-list">{projects.map(({data}) => { const translated = entries.find(e => e.data.slug === data.slug && e.data.lang === lang); const target = translated?.data ?? data; return <li class:list={{ "has-thumbnail": !!data.thumbnail }}><span class="project-index" aria-hidden="true">{String(data.order).padStart(2,'0')}</span><div class="project-summary"><p class="project-context">{data.context}</p><h3><a href={projectUrl(target)}>{ko ? data.titleKo ?? data.title : data.title}</a></h3><p>{ko ? koSummaries[data.slug] : data.summary}</p><p class="project-result">{highlights[data.slug]?.[lang]}</p><div class="technology-tags">{data.technologies.map(tech => <span>{tech}</span>)}</div><a class="case-link" href={projectUrl(target)}>{ko ? `기술 문서 보기${target.lang === 'en' ? ' (English)' : ''}` : 'View technical case study'} <span aria-hidden="true">→</span></a>{data.github && data.githubVisibility === 'public' && <a class="project-code-link" href={data.github}>GitHub <span aria-hidden="true">↗</span></a>}</div><div class="project-side">{data.thumbnail && <a class="project-preview" href={projectUrl(target)}><img src={data.thumbnail.src} alt={ko ? "국민대 대회 코스 위의 Team KAI 차량" : data.thumbnail.alt} width="1576" height="884" loading="lazy" decoding="async" /></a>}<span class={`status ${data.status}`}>{statusLabel[lang][data.status]}</span><p>{data.period}</p><p>{data.role}</p></div></li>; })}</ol>
     </section>
     <section id="awards" class="home-section" aria-labelledby="awards-title"><div class="section-heading"><h2 id="awards-title">{ko ? '수상 및 경진대회' : 'Awards & competitions'}</h2></div><div class="award-row"><span class="year">2026</span><div><h3>{ko ? '국민대 자율주행 경진대회 AI-엣지 챌린지' : 'Kookmin AI-Edge Challenge'}</h3><p>{ko ? '예선 2위 · 본선 완주 13위 · 주차경기 특별상' : 'Preliminary 2nd · Finals 13th, course completed · Parking Special Award'}</p><span class="small-muted">{ko ? '팀 성과' : 'Team result'}</span></div></div><div class="award-row"><span class="year">2022</span><div><h3>Drone Clash</h3><p>{ko ? '일반부 3위' : 'General Division — 3rd Place'}</p></div></div></section>
     <section id="skills" class="home-section" aria-labelledby="skills-title"><div class="section-heading"><h2 id="skills-title">{ko ? '기술 역량' : 'Technical skills'}</h2></div><dl class="skills-list">{skills.map(([label,tools]) => <div><dt>{label}</dt><dd>{tools}</dd></div>)}</dl></section>
@@ -60,6 +67,8 @@ const skills = [['Languages','Python, C++'],['Autonomous systems','ROS 2, CARLA,
 </BaseLayout>
 
 <style>
+  .project-summary > .project-result { font-size: .8125rem; color: var(--accent); margin: 14px 0; font-weight: 600; }
+  .project-code-link { display: inline-block; margin-left: 22px; font-size: .875rem; }
   .project-list > li.has-thumbnail { grid-template-columns: 38px minmax(0, 1fr) 280px; }
   .project-preview { display: block; margin-bottom: 16px; }
   .project-preview img { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 4px; }

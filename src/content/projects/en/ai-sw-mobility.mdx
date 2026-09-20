@@ -10,9 +10,9 @@ period: Mar 2026 – Ongoing
 team: 27 members / decision team of 5
 role: Decision-Making / AEB Development
 status: ongoing
-summary: ROS 2 AEB development, Stanley path tracking, and validation from Gazebo simulation to initial vehicle trials, with integrated retesting planned after a control-side steering-delay correction.
+summary: "ROS 2 AEB and constrained Stanley tracking, developed in Gazebo and initial vehicle trials at approximately 7 km/h."
 outcome: Initial vehicle tests were conducted at approximately 7 km/h. The control team has corrected an identified steering-motor delay issue; the decision stack has not yet been rerun with that correction.
-teamScope: A 27-member competition team is developing the vehicle system. I work in the five-member decision-making team on the connection between driving decisions, path tracking, and vehicle integration.
+teamScope: "I work in the five-member decision-making group of a 27-member vehicle team, connecting driving decisions, path tracking, and vehicle integration."
 contributions:
   - Worked on the ROS 2 AEB pipeline, including cone-boundary center-path generation, a red-entry stop latch, and stateful fail-safe behavior.
   - Implemented Stanley tracking with steering limits, steering-rate limits, and motion preview.
@@ -24,54 +24,58 @@ featured: true
 ---
 
 import MediaSlot from '../../../components/MediaSlot.astro';
-import StageTimeline from '../../../components/StageTimeline.astro';
-import Result from '../../../components/Result.astro';
-import Investigation from '../../../components/Investigation.astro';
+import SystemFlow from '../../../components/SystemFlow.astro';
 
-## Development progression
+## Engineering question
 
-<StageTimeline stages={[
-  { label: 'Simulation & initial trials', state: 'complete', detail: 'Gazebo validation and approximately 7 km/h vehicle testing; steering oscillation observed on the vehicle.' },
-  { label: 'Control-side correction', state: 'complete', detail: 'The control team identified and corrected a steering-motor delay issue.' },
-  { label: 'Decision-stack retest', state: 'planned', detail: 'Run the decision code with the correction and evaluate integrated vehicle behavior.' },
-]} />
+How can a perceived cone corridor become a trackable path and a reliable stop command when perception and vehicle feedback arrive at different times? My work connects the AEB path and stop logic with constrained steering and integration tests.
 
-The project remains ongoing. The next step is to evaluate the decision stack together with the updated vehicle control.
+## Decision and control architecture
 
-## AEB pipeline
+<SystemFlow title="Decision-to-vehicle command path" steps={[
+  { label: 'Route and perception', detail: 'Route zones, cone boundaries, traffic state, and vehicle feedback provide the driving context.' },
+  { label: 'Behavior and target selection', detail: 'The planning engine selects a driving state, target path, and desired speed.' },
+  { label: 'Tracking and stop logic', detail: 'Path tracking applies steering constraints; AEB logic can request zero speed and braking.' },
+  { label: 'Command gate and vehicle control', detail: 'The test workflow passes the selected command through a gate to the external vehicle-control stack.' },
+]} caption="Interfaces represented by the collected packages. Route driving and cone-course AEB retain separate trial workflows." />
 
-The ROS 2 AEB work included generating a center path from cone boundaries, latching a stop at the red entry, and maintaining stateful fail-safe behavior. These functions connect the perceived cone corridor to tracking and braking commands.
+## AEB and steering design
 
-## Stanley tracking
+| Design choice | Purpose | Implementation evidence |
+| --- | --- | --- |
+| Cone-boundary center path | Turn corridor geometry into a tracking target | AEB path generation and tracking |
+| Red-entry stop latch | Preserve the stop decision after the vehicle reaches the gate | Confirmed red-pair handling and latched braking state |
+| Steering and steering-rate limits | Bound command magnitude and abrupt changes | Stanley tracking and command limiting |
+| Stale-input checks | Request a stop when required path or state data is unavailable | Offline AEB tests and fail-safe branches |
 
-I implemented Stanley-based path tracking for cone-corridor driving. The work included steering constraints, steering-rate limits, and motion-preview compensation.
+The [AEB implementation and tests](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) expose behavior at these boundaries. Motion preview was also implemented as part of the path-tracking work. Its effect on vehicle tracking needs to be evaluated together with the corrected steering response.
 
-The next integrated trial will examine tracking behavior with the control team's steering-delay correction in place.
+## Evidence and current result
 
-## Simulation & debugging
+| Environment | Available evidence | Current finding |
+| --- | --- | --- |
+| Offline software checks | 29 collected AEB tests covering geometry, stop behavior, input validity, and trial profiles | Inspectable checks of software behavior |
+| Gazebo | Closed-loop AEB development and validation | The pipeline was exercised in simulation |
+| Real vehicle | Initial trials at approximately 7 km/h | Steering oscillation was observed |
+| Updated vehicle control | Steering-motor delay correction reported by the control team | Integrated decision-stack retest pending |
 
-Gazebo provided the closed-loop environment used to validate the AEB pipeline. Foxglove was used to visualize and debug the generated path, steering behavior, and stop state.
-
-The simulation work and vehicle tests are reported separately because they exercise different conditions. No simulation speed or tracking-error metric is presented as a real-vehicle result.
-
+<MediaSlot id="mobility-monitor" />
 <MediaSlot id="mobility-simulation" />
-
-## Initial vehicle testing
-
-<Result label="Initial real-vehicle testing" value="Approximately 7 km/h" context="Early track tests, not competition-speed validation or a final performance result" />
-
-Steering oscillation was observed during the track tests. The control team subsequently identified and corrected a steering-motor delay issue. The decision code has not yet been run with the correction, so the resulting path-tracking behavior remains to be evaluated.
-
 <MediaSlot id="mobility-vehicle" />
 
-## Steering response & next validation
+## Next experiment: steering response
 
-<Investigation problem="Steering response during vehicle trials" observation="Steering oscillation appeared during initial real-vehicle testing." investigation="The control team identified and corrected a steering-motor delay issue." status="Decision-stack retesting is pending. Target versus actual steering and path-tracking behavior will be checked in the next integrated trial." />
+The next comparison will keep the route, speed, controller settings, and input conditions fixed while recording steering response with the control-side correction. A matched earlier recording is needed for a before/after comparison.
 
-## Current record
+| Record | Question it answers |
+| --- | --- |
+| Time-aligned target and measured steering | Does the actuator follow the requested angle, and with what delay? |
+| Target path and vehicle trajectory | How large are lateral tracking errors along the route? |
+| Braking request, measured speed, and stop position | Does the vehicle stop at the intended location? |
+| Trial count and individual outcomes | Does the behavior repeat under the same conditions? |
 
-The current record consists of Gazebo closed-loop validation, Foxglove debugging, initial vehicle trials, and the reported control-side correction. The next trial will record the software versions, controller settings, speed, steering response, and observed path-tracking behavior.
+Path-error summaries and stop outcomes will be reported with the operating conditions after the integrated trial.
 
-My development work connects AEB, path tracking, and integration testing within the vehicle system.
+## Code and reproduction
 
-The project repository collects the selected decision-making, motion-control, AEB, and Foxglove packages with English and Korean documentation. Start with the repository README for the system overview and links to the key implementations.
+The [repository README](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) provides the architecture, focused code links, offline test instructions, and ROS 2 integration requirements. The source snapshot comes from the `hwj` development branch.
