@@ -10,9 +10,9 @@ period: Apr 2026 – Aug 2026
 team: 5 members
 role: Team Lead
 status: completed
-summary: ROS 2 learning-based driving, unified object detection, and mission-level vehicle integration for a five-member autonomous-driving competition team.
+summary: "Learning-pipeline development, unified YOLO perception, and mission-level vehicle integration for the Kookmin AI-Edge Challenge."
 outcome: "Team result: preliminary 2nd place; finals 13th place with course completion; Special Award in the parking event."
-teamScope: The competition vehicle combined lane perception, driving controllers, mission logic, obstacle and cone handling, and parking. The complete autonomous-driving stack was a team effort.
+teamScope: "A five-member team developed the XYCAR driving and parking system. I led the team and worked across learning, perception, mission integration, and parking logic."
 contributions:
   - Built the ROS 2 imitation-learning pipeline, from driving-data collection and model training to TorchScript deployment and real-time inference.
   - Implemented learning/rule hybrid driving and traffic-light and mission-state handling.
@@ -29,96 +29,86 @@ featured: true
 ---
 
 import MediaSlot from '../../../components/MediaSlot.astro';
+import SystemFlow from '../../../components/SystemFlow.astro';
 import Result from '../../../components/Result.astro';
-import Decision from '../../../components/Decision.astro';
-import Investigation from '../../../components/Investigation.astro';
 
-## Competition context
+## System architecture
 
-The project brought together perception, driving decisions, control integration, and parking on a real competition vehicle. As team lead in a five-member team, I worked on the learning pipeline, object-detection workflow, mission integration, and vehicle tuning.
+The XYCAR project connected camera perception, mission decisions, control, and map-based parking. My work spanned the learning pipeline, unified detector, Mission Manager / Final Driver integration, and parking waypoints with reverse recovery.
 
-Preliminary and final rankings describe the **team's competition performance**.
+<SystemFlow title="Competition driving: from sensing to vehicle commands" steps={[
+  { label: 'Sensing and perception', detail: 'Camera and LiDAR inputs support lane, object, and course interpretation.' },
+  { label: 'Mission context', detail: 'Traffic-light and mission state determine the active driving behavior.' },
+  { label: 'Driving integration', detail: 'Mission Manager / Final Driver connects the selected behavior with the vehicle command path.' },
+  { label: 'Vehicle operation', detail: 'Drive gating and controller integration connect decisions to the XYCAR platform.' },
+]} caption="Race driving and map-based parking retain separate launch paths in the collected source." />
 
-<MediaSlot id="kookmin-vehicle" />
+## Learning pipeline and evaluation
 
-## System scope
+I built the workflow from driving-data collection to model training, TorchScript export, and ROS 2 inference. Development included switching between learning-based driving and deterministic traffic-light or mission handling. **The final competition strategy used rule-based driving after steering oscillation remained in the learning-based approach.**
 
-My work crossed three parts of the team system:
+The archived [model definition](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/src/il_data_tools/scripts/policy_models.py) includes an image-and-LiDAR policy:
 
-| Workstream | My implementation or integration | System context |
+<SystemFlow title="Learning implementation preserved in the source" steps={[
+  { label: 'Image features', detail: 'A ResNet18 encoder extracts features from the processed road image, using a canonical bird\'s-eye-view input in this pipeline.' },
+  { label: 'LiDAR features', detail: 'A one-dimensional encoder processes range and validity information.' },
+  { label: 'Feature fusion', detail: 'The image and LiDAR features are concatenated for steering prediction.' },
+  { label: 'Runtime integration', detail: 'A normalized steering output is converted to a vehicle command with runtime limits and smoothing.' },
+]} />
+
+| Evaluation choice | Why it matters | Source evidence |
 | --- | --- | --- |
-| Learning-based driving | Driving-data collection, training, TorchScript export, inference, and learning/rule switching | One driving approach evaluated during development |
-| Object detection | Roboflow dataset preparation and unified YOLO training | Traffic lights, vehicles, obstacles, and cones; the lane model was separate |
-| Vehicle and mission integration | Mission Manager, Final Driver, mission-state handling, and parameter tuning | Integration into the shared competition stack |
+| Split by driving session | Keeps related frames from one session together during data partitioning | Dataset-building tools preserve session identity |
+| Keep transformed samples with their source session | Avoids treating transformed versions of the same source as independent sessions | Canonical dataset converter |
+| Report steering-command MAE and RMSE | Summarizes prediction error against recorded commands | Evaluation script and archived report |
+| Inspect per-session and steering-range errors | Reveals behavior hidden by one aggregate score | Evaluation breakdowns in the archived report |
 
-These contributions connected model development and mission logic with the team's perception and control modules.
+The [evaluation note](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/docs/EVALUATION.md) links the relevant implementations and explains the command units. Matching the archived checkpoint and data split is still required before presenting a single numerical result: the model README and metrics file refer to different model hashes and records. Offline prediction error and closed-loop driving behavior are separate evaluation questions.
 
-## Find the code
+## Perception and dataset workflow
 
-The [project repository](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio) brings the selected driving and parking packages together. Start with the [driving integration code](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_map_nav) or the [parking package](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_parking_nav). The [Korean README](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/README.ko.md) introduces the project and my contributions.
-
-The packages include shared team code. Driving and parking retain separate launch paths; collecting them here does not imply an automatic transition between the two systems.
-
-## Learning pipeline
-
-The ROS 2 imitation-learning workflow covered driving-data collection, model training, TorchScript export, and real-time inference for XYCAR. I implemented hybrid logic to switch between learning-based driving and deterministic traffic-light and mission handling.
-
-Learning-based driving was explored and implemented, but steering oscillation remained. The final competition driving strategy used rule-based driving; the existence of the learning pipeline should not be read as evidence that it was the final deployed driving method.
-
-## YOLO & Roboflow
-
-I managed the dataset workflow from upload through annotation, annotation review, class organization, augmentation, train/validation/test splits, and export. I directly trained one unified YOLO object-detection model for traffic lights, vehicles, obstacles, and cones.
+I managed Roboflow annotation, class organization, data splits, augmentation, and export, and trained the unified YOLO object detector. The detector covered traffic lights, vehicles, obstacles, and cones; lane perception was handled separately.
 
 <MediaSlot id="kookmin-annotation" />
-
 <MediaSlot id="kookmin-yolo" />
+
+The annotation example comes from the preliminary simulation dataset. The rosbag clip shows offline detector behavior on recorded camera frames. A held-out detection evaluation would add per-class precision/recall, missed-object examples, and inference timing on the deployment device.
 
 ## Mission Manager & Final Driver
 
-I implemented Mission Manager / Final Driver integration and applied it to the real competition vehicle. This work included traffic-light and mission-state handling, connecting modules in the team stack, and participating in real-vehicle parameter tuning.
+I connected mission-state handling to the final vehicle command path and participated in integration and parameter tuning. The [driving integration code](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_map_nav) shows the interfaces for lane following, traffic lights, and course missions.
 
 <MediaSlot id="kookmin-driving" />
 
-## Engineering decisions
-
-<Decision title="Competition driving strategy" considered="Learning-based driving and rule-based driving were explored." observation="Steering oscillation remained in learning-based driving." choice="Rule-based driving was selected for competition deployment." reason="The deployment decision reflected the unresolved behavior observed during development." />
-
-<Decision title="SLAM / IMU constraints" considered="Localization and mapping approaches involving SLAM / IMU." observation="Hardware limitations and reflected-light issues constrained the approach." choice="The final driving strategy used rule-based driving." reason="These constraints informed the competition strategy; no claim is made that all localization issues were resolved." />
-
-<Decision title="Lane strategy" considered="The initial lane strategy used both white and yellow markings." observation="Perception and hardware constraints affected the usable lane information." choice="The final strategy focused on yellow markings." />
-
-These **team deployment decisions** guided the vehicle integration and tuning work.
-
 ## Parking event
 
-My parking contribution included defining waypoints on a SLAM map and implementing reverse recovery logic. The team received the parking event Special Award.
+My parking work focused on SLAM-map waypoints and reverse recovery. The [parking package](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_parking_nav) contains route configuration, mission execution, and command adaptation. The team received the parking event Special Award.
 
 <MediaSlot id="kookmin-parking" />
 
-## Vehicle integration & validation
+## Validation and competition results
 
-Mission Manager / Final Driver integration was applied to the competition vehicle. I participated in connecting the team modules and tuning real-vehicle parameters. The reported competition outcomes provide event context, but they are not a controlled evaluation of individual subsystems.
-
-Separate claims about perception accuracy, tracking error, maximum speed, or recovery success rate require additional recorded evidence.
+| Setting | Available record | What it establishes |
+| --- | --- | --- |
+| Learning development | Training, export, inference, and evaluation source | An implemented learning workflow with archived evaluation artifacts |
+| Offline rosbag replay | YOLO detections on recorded frames | Inspectable perception behavior in a recorded scene |
+| Vehicle practice | Track practice and parameter tuning | Integration work on the competition vehicle |
+| Competition | Broadcast excerpts and reported team rankings | Team event outcomes |
 
 <MediaSlot id="kookmin-practice" />
 
-## Results
-
 <div className="results-grid">
-  <Result label="Preliminary round" value="2nd place" context="2026 Kookmin AI-Edge Challenge · team ranking" />
+  <Result label="Preliminary round" value="2nd place" context="Team ranking" />
   <Result label="Final round" value="13th place" context="Course completed · team ranking" />
-  <Result label="Parking event" value="Special Award" context="Team outcome; personal parking work covered map waypoints and reverse recovery" />
+  <Result label="Parking event" value="Special Award" context="Team outcome" />
 </div>
 
 <MediaSlot id="kookmin-finish" />
 
-## Challenges & debugging
+## Engineering lessons and next measurements
 
-<Investigation problem="Unresolved learning-based steering oscillation" observation="Steering oscillation remained during learning-based driving development." investigation="The team considered available driving approaches alongside the perception and hardware constraints." status="Rule-based driving was selected for the competition. Resolution of the learning-based oscillation is not claimed." />
+The project required choosing a deployable driving strategy while continuing model development. Learning-based steering oscillation remained unresolved, so rule-based driving was selected for the event. Perception and hardware constraints also informed the shift from using both white and yellow lane markings to focusing on yellow markings.
 
-## Lessons & scope
+The next useful analysis is a time-aligned record of sensor input, predicted steering, issued command, and vehicle response. That would help distinguish model behavior from command filtering and actuator delay. Repeated runs on the same route would then connect offline model errors with actual trajectory stability.
 
-This project connected model development with mission logic and the practical constraints of a shared vehicle. The main engineering lesson is visible in the deployment record: an implemented approach may still need to be set aside when its behavior remains unresolved.
-
-The linked project repository records the source versions of the selected packages. This case study distinguishes development work, the final driving strategy, and team competition outcomes.
+For a guided source review, start with the [project README](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio) or its [Korean version](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/README.ko.md).
