@@ -10,14 +10,14 @@ period: Mar 2026 – Ongoing
 team: 27 members / decision team of 5
 role: Decision-Making / AEB Development
 status: ongoing
-summary: "ROS 2 AEB and constrained Stanley tracking, developed in Gazebo and initial vehicle trials at approximately 7 km/h."
-outcome: Initial vehicle tests were conducted at approximately 7 km/h. The control team has corrected an identified steering-motor delay issue; the decision stack has not yet been rerun with that correction.
+summary: "ROS 2 waypoint driving, constrained Stanley tracking, and AEB stop logic for autonomous competition courses."
+outcome: "During real-vehicle practice at the competition venue on September 19–20, 2026, waypoint driving succeeded on both preliminary and final courses at 10 m/s (36 km/h). AEB stops succeeded at speeds up to 50 km/h, compared with the competition requirement of 30 km/h."
 teamScope: "I work in the five-member decision-making group of a 27-member vehicle team, connecting driving decisions, path tracking, and vehicle integration."
 contributions:
   - Worked on the ROS 2 AEB pipeline, including cone-boundary center-path generation, a red-entry stop latch, and stateful fail-safe behavior.
   - Implemented Stanley tracking with steering limits, steering-rate limits, and motion preview.
   - Validated the AEB pipeline in Gazebo closed-loop simulation and used Foxglove for path, steering, and stop-state debugging.
-  - Conducted initial real-vehicle testing around 7 km/h and investigated observed steering oscillation.
+  - "Conducted real-vehicle venue practice on September 19–20: waypoint driving on both courses at 10 m/s (36 km/h), and AEB stopping at speeds up to 50 km/h."
 technologies: [ROS 2, Stanley, Gazebo, Foxglove, AEB]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
 featured: true
@@ -48,24 +48,31 @@ How can a perceived cone corridor become a trackable path and a reliable stop co
 | Steering and steering-rate limits | Bound command magnitude and abrupt changes | Stanley tracking and command limiting |
 | Stale-input checks | Request a stop when required path or state data is unavailable | Offline AEB tests and fail-safe branches |
 
-The [AEB implementation and tests](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) expose behavior at these boundaries. Motion preview was also implemented as part of the path-tracking work. Its effect on vehicle tracking needs to be evaluated together with the corrected steering response.
+The [AEB implementation and tests](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) expose behavior at these boundaries. Motion preview was also implemented as part of the path-tracking work. The latest course and stop trials establish successful operation at the reported speeds; isolating the effect of a specific control change requires matched logs.
 
 ## Evidence and current result
 
-| Environment | Available evidence | Current finding |
+| Test | Course or reference | Reported result |
 | --- | --- | --- |
-| Offline software checks | 29 collected AEB tests covering geometry, stop behavior, input validity, and trial profiles | Inspectable checks of software behavior |
-| Gazebo | Closed-loop AEB development and validation | The pipeline was exercised in simulation |
-| Real vehicle | Initial trials at approximately 7 km/h | Steering oscillation was observed |
-| Updated vehicle control | Steering-motor delay correction reported by the control team | Integrated decision-stack retest pending |
+| Waypoint driving | Preliminary course | Successful driving at **10 m/s (36 km/h)** |
+| Waypoint driving | Final course | Successful driving at **10 m/s (36 km/h)** |
+| AEB stop | Competition requirement: **30 km/h** | Successful stops at speeds up to **50 km/h** |
+
+These real-vehicle tests took place on **September 19–20, 2026**, during the organizer's open-practice period at the competition venue. Both courses and AEB were exercised repeatedly. They are practice results, not official preliminary/final competition results.
+
+**AEB success criterion:** detect the red cones, apply braking at the start of the red-cone zone, and come to a complete stop before the end of that zone. Successful stops were reported at speeds up to **50 km/h**, against the **30 km/h** competition requirement.
+
+Waypoint driving and AEB stopping are separate trials; the 50 km/h figure refers to AEB testing. Results were reported in the project update on September 22, 2026.
+
+Earlier development included Gazebo closed-loop validation, initial real-vehicle trials at approximately 7 km/h, investigation of steering oscillation, and a steering-motor delay correction by the control team. The repository also contains 29 AEB tests checked during source collection. These development records are retained separately from the latest course results.
 
 <MediaSlot id="mobility-monitor" />
-<MediaSlot id="mobility-simulation" />
-<MediaSlot id="mobility-vehicle" />
+<MediaSlot id="mobility-waypoint" />
+<MediaSlot id="mobility-aeb-stop" />
 
-## Next experiment: steering response
+## Follow-up measurements
 
-The next comparison will keep the route, speed, controller settings, and input conditions fixed while recording steering response with the control-side correction. A matched earlier recording is needed for a before/after comparison.
+The next analysis will quantify the successful course and stop trials using synchronized speed, steering, path, and brake records. A matched earlier recording is needed to isolate the effect of the steering correction.
 
 | Record | Question it answers |
 | --- | --- |
@@ -74,8 +81,8 @@ The next comparison will keep the route, speed, controller settings, and input c
 | Braking request, measured speed, and stop position | Does the vehicle stop at the intended location? |
 | Trial count and individual outcomes | Does the behavior repeat under the same conditions? |
 
-Path-error summaries and stop outcomes will be reported with the operating conditions after the integrated trial.
+Trial counts, stopping distances, and path-error statistics will be added with the corresponding records. No success rate or quantified reduction in steering oscillation is inferred from the reported successful runs.
 
 ## Code and reproduction
 
-The [repository README](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) provides the architecture, focused code links, offline test instructions, and ROS 2 integration requirements. The source snapshot comes from the `hwj` development branch.
+The [repository README](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) provides the architecture, focused code links, offline test instructions, and ROS 2 integration requirements. The source snapshot comes from the `hwj` development branch; the exact revisions used for the latest trials should be recorded alongside the trial logs.

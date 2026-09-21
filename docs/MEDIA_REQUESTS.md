@@ -2,13 +2,13 @@
 
 실제 프로젝트 자료를 받으면 아래 위치에 연결합니다. 공개 화면에는 용도와 `Video forthcoming` / `Image forthcoming`만 표시한 예약 영역을 둡니다. 자세한 요청 문구와 파일 경로는 개발 화면에서만 표시하며, 실제 자료를 추가하면 예약 영역이 사진·영상으로 교체됩니다.
 
-국민대 차량 스틸·주행/주차/연습 영상·YOLO 기록 재생·데이터셋 화면과 AI·SW Foxglove 기록 재생 화면은 이미 연결했습니다. 추가 자료는 **AI·SW 시뮬레이션 영상**, **UAV waypoint·착륙 시연 영상**을 우선합니다. 팀원 단체 사진은 사용하지 않습니다.
+국민대 차량 스틸·주행/주차/연습 영상·YOLO 기록 재생·데이터셋 화면과 AI·SW Foxglove 기록 재생 화면은 이미 연결했습니다. 추가 자료는 **9월 19–20일 AI·SW 대회장 실차 연습의 waypoint·AEB 영상**, **UAV waypoint·착륙 시연 영상**을 우선합니다. 팀원 단체 사진은 사용하지 않습니다.
 
 | 우선순위 | 프로젝트 / 본문 위치 | 요청 자료 | 예정 경로 (`public` 기준) |
 | --- | --- | --- | --- |
-| 1 | AI·SW / Evidence and current result | Gazebo/Foxglove에서 경로·차량 궤적·정지 상태가 보이는 영상. 신규 실행과 기록 재생 구분 | `media/projects/ai-sw-mobility/01_gazebo_foxglove.mp4` |
+| 1 | AI·SW / Evidence and current result | 예선·본선 코스별 10 m/s(36 km/h) waypoint 실차 주행 영상과 속도 로그 | `media/projects/ai-sw-mobility/03_waypoint_venue_practice.mp4` |
 | 1 | UAV / 메인 및 시연 결과 | waypoint 순차 추종과 최종 착륙이 보이는 실제 PX4 SITL/Gazebo 시연 영상 및 포스터 | `media/projects/uav-waypoint/01_waypoint_landing.mp4` |
-| 2 | AI·SW / Evidence and current result | 약 7 km/h 초기 실차 시험의 기존 영상. 조향 진동 구간과 속도 확인 방법 | `media/projects/ai-sw-mobility/02_initial_vehicle_test.mp4` |
+| 1 | AI·SW / Evidence and current result | 최대 50 km/h AEB 시험. 빨간 콘 시작점 제동·구간 끝 이전 정지가 보이는 영상과 실제 속도 기록 | `media/projects/ai-sw-mobility/04_aeb_stop_venue_practice.mp4` |
 | 2 | V2I / 메인 및 시나리오 설명 | 차량·주정차 차량·보행자·인프라 카메라 배치도. 설계안임을 표시 | `media/projects/camera-v2i/01_scenario_design.webp` |
 
 파일 이름과 형식은 예시입니다. PNG, JPG, WebP, GIF, MP4, YouTube 링크를 사용할 수 있습니다. 자료를 주실 때 **어느 프로젝트인지, 시뮬레이션인지 실차인지, 어떤 장면인지, 본인 기여가 어느 부분인지**를 함께 알려주세요. 실패나 진동이 보이는 장면도 기술 설명에 도움이 됩니다.
@@ -24,4 +24,4 @@
    홈페이지 대표 이미지는 `Home.astro`의 `projectCopy[slug].visual`에서 `src`·`alt`·`caption`으로 지정합니다. 영상이면 대표 포스터를 넣고, 영상 자체는 상세 페이지에서 재생하도록 연결합니다.
 5. `npm run check`, `npm run build`, `npm run verify`를 실행합니다. 지정한 파일이 없으면 빌드가 실패합니다.
 
-현재 상세 페이지의 공개 예약 슬롯 ID: `mobility-simulation`, `mobility-vehicle`, `uav-demo`. V2I는 홈페이지에 설계 배치도 자리를 예약합니다. 국민대 6초 주행 영상과 접촉 장면을 제외한 주차 영상은 현재 편집본을 유지합니다.
+현재 상세 페이지의 공개 예약 슬롯 ID: `mobility-waypoint`, `mobility-aeb-stop`, `uav-demo`. V2I는 홈페이지에 설계 배치도 자리를 예약합니다. 국민대 6초 주행 영상과 접촉 장면을 제외한 주차 영상은 현재 편집본을 유지합니다.
