@@ -11,18 +11,19 @@ team: 3 members
 role: Decision-Making / Control Integration
 status: ended
 summary: "Pure Pursuit and decision/control integration in ROS 2 / CARLA, with an investigation of unstable tracking and vehicle-command interfaces."
-outcome: "The autonomous-driving objective was not achieved. The project ended with unresolved tracking instability and no actual vehicle run."
+outcome: "The autonomous-driving objective was not achieved. The project ended with unresolved tracking instability and no real-vehicle driving run."
 teamScope: A three-member Dream Semester team worked on the driving platform. My development focus was decision-making, path tracking, and control integration.
 contributions:
   - Implemented ROS 2 decision-making, waypoint following, Pure Pursuit, and longitudinal speed control, and integrated the components with CARLA.
   - Conducted closed-loop simulation experiments and investigated steering direction, lookahead, smoothing, rate limiting, and command bounds.
-  - Worked on later MCU bridge adaptation.
+  - Worked on later MCU bridge adaptation and tested wheel actuation using separate control commands with the vehicle raised on supports.
 technologies: [ROS 2, CARLA, Pure Pursuit, Control Integration]
 github: https://github.com/steveandy-sudo/vmodel-driving-portfolio
 featured: true
 ---
 
 import SystemFlow from '../../../components/SystemFlow.astro';
+import MediaSlot from '../../../components/MediaSlot.astro';
 
 ## Project question and implementation
 
@@ -34,6 +35,16 @@ This Dream Semester project, originally titled **V-Model Neuro-Symbolic Driving*
   { label: 'Command shaping', detail: 'Bounds, smoothing, and rate limits shape the requested command.' },
   { label: 'Execution interface', detail: 'Earlier code targets CARLA; later packages separate steering and the MCU serial bridge.' },
 ]} caption="The archive contains successive integration stages; the CARLA and MCU paths are distinct implementations." />
+
+## Recorded tests
+
+### CARLA simulation
+
+<MediaSlot id="vmodel-simulation" />
+
+### Stationary wheel test
+
+<MediaSlot id="vmodel-wheel-test" />
 
 ## Debugging record
 

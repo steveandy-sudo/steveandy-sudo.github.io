@@ -11,7 +11,7 @@ if (!item) throw new Error(`Unknown media slot: ${Astro.props.id}`);
 {item.youtubeId || (item.src && item.kind === 'video') ? (
   <Video src={item.src} youtubeId={item.youtubeId} title={item.alt} caption={item.caption} poster={item.poster} gifSrc={item.gifSrc} portrait={item.portrait} />
 ) : item.src && item.gifSrc && item.poster ? (
-  <AnimatedFigure src={item.gifSrc} poster={item.poster} alt={item.alt} caption={item.caption} />
+  <AnimatedFigure src={item.gifSrc} poster={item.poster} alt={item.alt} caption={item.caption} width={item.width} height={item.height} />
 ) : item.src ? (
   <Figure src={item.src} alt={item.alt} caption={item.caption} />
 ) : item.reserve ? (

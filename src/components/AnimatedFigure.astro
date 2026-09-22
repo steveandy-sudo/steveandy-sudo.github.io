@@ -1,8 +1,8 @@
 ---
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-interface Props { src: string; poster: string; alt: string; caption: string; }
-const { src, poster, alt, caption } = Astro.props;
+interface Props { src: string; poster: string; alt: string; caption: string; width?: number; height?: number; }
+const { src, poster, alt, caption, width = 1280, height = 720 } = Astro.props;
 for (const path of [src, poster]) {
   if (!path.startsWith('/media/') || !existsSync(resolve('public', path.slice(1)))) {
     throw new Error(`Missing animation asset: ${path}`);
@@ -10,7 +10,7 @@ for (const path of [src, poster]) {
 }
 ---
 <figure class="animated-figure" data-animation={src} data-still={poster}>
-  <img src={poster} alt={alt} width="1280" height="720" loading="lazy" decoding="async" />
+  <img src={poster} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
   <div class="animation-controls">
     <button type="button" aria-label={`Play GIF: ${alt}`} aria-pressed="false" hidden>Play GIF</button>
     <a href={src} download>Download GIF ↓</a>
