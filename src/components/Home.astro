@@ -65,7 +65,13 @@ const projectCopy: Record<string, HomeProject> = {
     title: { en: 'UAV Waypoint Mission', ko: 'UAV Waypoint 미션' },
     summary: { en: 'A ROS 2 mission package for sequential 3D waypoints, TF2 arrival checks, and PX4 offboard integration.', ko: '3D waypoint를 순서대로 따라가고 TF2로 도착을 판정하는 ROS 2 미션 패키지를 개발해 PX4 offboard 제어기와 연결했습니다.' },
     result: { en: 'Waypoint tracking and final landing completed in the PX4 SITL/Gazebo demonstration.', ko: 'PX4 SITL/Gazebo 시뮬레이션에서 waypoint 추종과 최종 착륙을 완료했습니다.' },
-    visual: { title: { en: 'Waypoint tracking & landing', ko: 'Waypoint 추종·착륙 시연' }, kind: 'video' },
+    visual: {
+      src: '/media/projects/uav-waypoint/01-waypoint-flight-poster.jpg',
+      alt: { en: 'UAV flying past a building during a simulated waypoint test', ko: '시뮬레이션 waypoint 시험에서 건물 옆을 비행하는 드론' },
+      title: { en: 'UAV waypoint flight', ko: '드론 waypoint 비행' },
+      caption: { en: 'PX4 SITL / Gazebo · Waypoint flight', ko: 'PX4 SITL / Gazebo · Waypoint 비행 검증' },
+      kind: 'image',
+    },
   },
   'vmodel-neuro-symbolic': {
     title: { en: 'Dream Semester: Decision & Control', ko: '드림학기제: 판단·제어 개발' },
@@ -137,7 +143,7 @@ const skills = [
               </div>
               {visual && <div class="project-visual">
                 {visual.src ? <figure>
-                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></a>
+                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={data.slug === 'uav-waypoint' ? 960 : data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={data.slug === 'uav-waypoint' ? 540 : data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></a>
                   <figcaption>{visual.caption?.[lang]}</figcaption>
                 </figure> : <ReservedMedia title={visual.title[lang]} kind={visual.kind ?? 'image'} lang={lang} />}
               </div>}

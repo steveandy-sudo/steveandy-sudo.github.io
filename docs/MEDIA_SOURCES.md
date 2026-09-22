@@ -14,3 +14,13 @@ Posters are unaltered frames at 00:47 and 00:17, respectively. The home page use
 `05-aeb-foxglove-replay.gif` uses 00:00–00:15 of `KakaoTalk_20260920_203822583.mp4`, encoded at 960×540 and 10 fps. Its poster is the frame at 00:11. The Foxglove window displays an MCAP file and a 2× replay setting; the GIF preserves that recorded playback. The plotted labels are target speed and brake command. They are not measured-speed or stopping-distance evidence. Whether this is real-vehicle or simulation data, and whether it corresponds to the onboard AEB trial, is awaiting participant confirmation; no such association is claimed publicly.
 
 The stated trial speed and hardware condition come from the participant's report. A camera clip alone does not establish an exact speed, command timestamp, stopping distance, or hardware fault diagnosis. Raw time-aligned speed and command logs remain the next evidence to collect.
+
+# UAV waypoint-test recording
+
+The participant supplied `KakaoTalk_20260922_174025079.mp4` on September 22, 2026 as a record of UAV waypoint testing in PX4 SITL / Gazebo. The participant stated that marker recognition was not functioning during this recording.
+
+`01-waypoint-flight.gif` combines two excerpts in source order: 00:19.5–00:23.5 (takeoff) and 00:33.0–00:36.8 (waypoint flight). Each excerpt retains the original playback speed. The GIF is 7.8 seconds long, 768×432, and 10 fps. Labels distinguish the two excerpts.
+
+Both excerpts use the same crop: x=534, y=250, width=536, height=302 in the 1280×720 source. This shows the flight view and excludes the marker-recognition dashboard, desktop, and entity inspector. The poster is the cropped source frame at 00:36.0, exported at 960×540. The recording illustrates takeoff and waypoint flight; it does not provide tracking-error measurements or evidence of a completed landing.
+
+The home page uses the poster, and the UAV case study provides the GIF playback toggle and download. The original recording stays outside the public repository.
