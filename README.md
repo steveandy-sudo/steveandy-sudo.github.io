@@ -1,12 +1,14 @@
 # Junghun Hwang — Engineering Portfolio
 
-Astro, TypeScript, MDX 기반의 정적 포트폴리오입니다. 개인 홈페이지에서 5개 프로젝트의 기술 문서로 연결됩니다.
+Astro, TypeScript, MDX 기반의 영문 정적 포트폴리오입니다. 홈페이지에서 5개 프로젝트를 소개하고, 공개 코드가 있는 프로젝트는 각각의 GitHub 저장소로 연결합니다.
 
 사이트 주소: **https://steveandy-sudo.github.io/**
 
-홈페이지는 자기소개, 연구 관심 분야, 프로젝트, 수상, 기술 역량 순서입니다. 연구 관심 분야는 사용자에게 확인한 자율주행 인지·판단 및 딥러닝·학습 기반 방법이며, E2E 자율주행을 직접 구현하고 실험하려는 연구 의지를 포함합니다. `Home.astro`의 영문·국문 문구를 `ResearchInterests.astro`로 표시합니다. 연구 소개는 첫 문장을 강조하고 세 가지 질문을 나란히 보여주며, 프로젝트는 짧은 제목·역할·검증된 결과와 미디어를 함께 표시합니다.
+홈페이지는 자기소개, 연구 관심 분야, 프로젝트, 수상, 기술 역량 순서입니다. 연구 관심 분야는 사용자에게 확인한 자율주행 인지·판단 및 딥러닝·학습 기반 방법이며, E2E 자율주행을 직접 구현하고 실험하려는 연구 의지를 포함합니다. `Home.astro`의 영문 문구를 `ResearchInterests.astro`로 표시합니다. 연구 소개는 첫 문장을 강조하고 세 가지 질문을 나란히 보여주며, 프로젝트는 짧은 제목·역할·검증된 결과와 미디어를 함께 표시합니다.
 
-홈의 `projectCopy`에는 화면용 영문·국문 요약과 대표 미디어를 둡니다. 국민대와 AI·SW는 실제 이미지, V2I는 4주차 발표의 비교 구조 설계안, UAV는 시뮬레이션 영상 예약을 표시합니다. 새 대표 이미지나 영상 포스터를 받으면 해당 `visual.src`, `alt`, `caption`을 추가합니다. 실제 영상은 상세 페이지의 `media.ts` 슬롯에 연결하며, V2I 설계 자료를 실험 결과로 표현하지 않습니다. 드림학기제는 현재 미디어가 없어 텍스트 중심으로 표시합니다.
+`Home.astro`에는 화면용 영문 요약과 대표 미디어를 둡니다. 국민대와 AI·SW는 실제 이미지, V2I는 4주차 발표의 비교 구조 설계안, UAV와 드림학기제는 시뮬레이션 영상에서 추출한 이미지를 표시합니다. 새 대표 이미지나 영상 포스터를 받으면 해당 `visual.src`, `alt`, `caption`을 추가합니다. 실제 영상은 상세 페이지의 `media.ts` 슬롯에 연결하며, V2I 설계 자료를 실험 결과로 표현하지 않습니다.
+
+홈의 프로젝트 제목과 대표 이미지는 링크가 아닙니다. 국민대, UAV, 드림학기제에는 GitHub 링크를 하나씩 표시하고, AI·SW는 대회 진행 중 비공개라는 상태만 표시합니다. 저장소가 없는 졸업설계에는 GitHub 링크를 표시하지 않습니다. 상세 문서는 기존 직접 주소로 유지합니다.
 
 ## 개발과 검증
 
@@ -42,7 +44,7 @@ $env:BROWSER_PATH = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.ex
 npm run test:ui
 ```
 
-검사는 1440 / 768 / 390 / 320px 화면, 목차 이동과 현재 섹션 강조, 키보드 접근, 언어 전환, 프로젝트 저장소 링크, 200% 글자 확대를 확인합니다. 캡처는 무시되는 `test-results/`에 저장됩니다. HTML·앵커 검사는 실제 화면의 가독성이나 사실관계 검토를 대신하지 않습니다.
+검사는 1440 / 768 / 390 / 320px 화면, 목차 이동과 현재 섹션 강조, 키보드 접근, 영문 페이지와 언어 전환 메뉴 부재, 프로젝트별 GitHub 링크, 200% 글자 확대를 확인합니다. 캡처는 무시되는 `test-results/`에 저장됩니다. HTML·앵커 검사는 실제 화면의 가독성이나 사실관계 검토를 대신하지 않습니다.
 
 ## 구조
 
@@ -65,7 +67,7 @@ npm run test:ui
 │   ├── layouts/ProjectCaseStudy.astro
 │   ├── data/media.ts
 │   ├── lib/projects.ts
-│   ├── pages/index.astro / ko/index.astro / [...route].astro / 404.astro
+│   ├── pages/index.astro / [...route].astro / 404.astro
 │   └── styles/global.css
 ├── public/
 │   ├── cv/                          # 기존 PDF 직접 주소 유지; 홈페이지에는 표시하지 않음
@@ -83,7 +85,6 @@ npm run test:ui
 | 주소 | 내용 |
 | --- | --- |
 | `/` | 영어 홈페이지 |
-| `/ko/` | 제공된 한국어 CV 내용을 바탕으로 구성한 한국어 홈페이지 |
 | `/projects/kookmin-ai-edge/` | 국민대 AI-엣지 챌린지 |
 | `/projects/ai-sw-mobility/` | 대학생 AI·SW 모빌리티 |
 | `/projects/camera-v2i-e2e/` | Camera V2I E2E 졸업설계 |
@@ -91,7 +92,7 @@ npm run test:ui
 | `/projects/vmodel-neuro-symbolic/` | V-Model 드림학기제 |
 | `/404.html` | 없는 페이지 안내 |
 
-각 프로젝트의 기간·역할·팀·상태·결과를 위쪽에 표시합니다. `My contribution`에서 팀 시스템과 본인 작업을 구분합니다. 데스크톱 목차는 고정되며, 모바일에서는 펼칠 수 있는 목차로 전환됩니다. 목차는 실제 존재하는 2단계 제목(`##`)에서 만들어집니다.
+사이트는 영어로 제공하며 한국어 페이지와 언어 전환 메뉴는 없습니다. 각 상세 문서의 기간·역할·팀·상태·결과를 위쪽에 표시합니다. `My contribution`에서 팀 시스템과 본인 작업을 구분합니다. 데스크톱 목차는 고정되며, 모바일에서는 펼칠 수 있는 목차로 전환됩니다. 목차는 실제 존재하는 2단계 제목(`##`)에서 만들어집니다.
 
 ## 프로젝트 추가와 수정
 
@@ -101,18 +102,18 @@ npm run test:ui
 
 | 필드 | 용도 |
 | --- | --- |
-| `slug`, `lang`, `order` | 주소, 언어, 노출 순서. 같은 언어에서 slug 중복 금지 |
-| `title`, `titleEn`, `titleKo` | 표시 제목, 영어 제목, 선택적 한국어 제목 |
+| `slug`, `lang`, `order` | 주소, 콘텐츠 언어(`en`), 노출 순서. slug 중복 금지 |
+| `title`, `titleEn` | 표시 제목과 영어 제목 |
 | `context`, `period`, `team`, `role` | 프로젝트 맥락, 기간, 선택적 팀 정보, 개인 역할 |
-| `status` | `completed`, `ongoing`, `design` 중 하나 |
+| `status` | `completed`, `ended`, `ongoing`, `design` 중 하나 |
 | `summary`, `outcome` | 요약과 현재 결과. 계획을 완료로 서술하지 않음 |
 | `teamScope`, `contributions` | 팀 전체 범위와 개인 기여 목록. 모든 프로젝트에서 필수 |
 | `technologies` | 3–5개의 실제 사용 기술 |
-| `github`, `githubVisibility`, `githubPrivateReason`, `demo` | 선택적 링크. 비공개 저장소는 링크 대신 비공개 상태와 영문·국문 사유를 표시 |
+| `github`, `githubVisibility`, `githubPrivateReason`, `demo` | 선택적 링크. 비공개 저장소는 링크 대신 비공개 상태와 사유를 표시 |
 | `thumbnail` | 선택적 `src`, `alt`, `caption`. 실제 이미지가 있을 때만 지정 |
 | `featured` | 홈페이지 표시 여부 |
 
-새 프로젝트는 기존 문서를 복사한 뒤 실제 확인된 내용으로 바꾸고, `slug`와 `order`를 지정합니다. 새 영어 프로젝트의 한국어 요약을 준비했다면 `Home.astro`의 `koSummaries`에도 추가합니다. `##` 제목으로 필요한 문서 구간만 작성합니다. 내용이 없는 구간이나 빈 Gallery 제목은 만들지 않습니다. `overview`, `my-contribution`, `links`는 공통 레이아웃에서 사용하는 ID이므로 본문 제목으로 중복하지 않습니다.
+새 프로젝트는 기존 영문 문서를 복사한 뒤 실제 확인된 내용으로 바꾸고, `slug`와 `order`를 지정합니다. 홈에 사용할 요약과 대표 미디어는 `Home.astro`에 추가합니다. `##` 제목으로 필요한 문서 구간만 작성합니다. 내용이 없는 구간이나 빈 Gallery 제목은 만들지 않습니다. `overview`, `my-contribution`, `links`는 공통 레이아웃에서 사용하는 ID이므로 본문 제목으로 중복하지 않습니다.
 
 주간 업데이트는 해당 MDX의 `outcome`, 상태, 실험 내용부터 바꿉니다. 측정값은 환경·시험 조건·의미를 함께 기입하고, 추정 원인은 `hypothesis`로 유지합니다.
 
@@ -120,7 +121,7 @@ npm run test:ui
 
 - 국민대: 데이터·학습 파이프라인, 통합 YOLO 모델, 미션 통합, 주차 웨이포인트와 후진 복구 등 직접 맡은 역할을 구체적으로 설명합니다. 수상과 순위는 팀 결과로 표시합니다.
 - AI·SW: 2026년 9월 19–20일 대회장 개방 연습의 실차 결과는 예선·본선 코스 waypoint 주행 10 m/s(36 km/h), 50 km/h에서 AEB 정지 명령 확인입니다. 브레이크 4개 중 2개 작동 불가로 요구 구간 내 정지는 달성하지 못했습니다(대회 요구 30 km/h). AEB는 빨간 콘 시작점에서 제동해 구간 끝 이전에 완전히 정지하는 기준입니다. 공식 대회 결과와 구분하며 정확한 반복 횟수·성공률·조향 오차 개선량은 추가하지 않습니다.
-- V2I: 4주차 발표 기준 1/5 HENES 플랫폼의 사용자 요구·ODD 정의 완료, 시스템 요구·상위 설계 진행 중입니다. Homography, 직접 객체 상태 전송, 동일 조건의 E2E 비교, 최소 인지거리 식과 단계별 지연시간 평가 계획을 반영했습니다. 구현·실차 검증 및 수치 결과는 아직 없습니다.
+- V2I: 4주차 발표 기준 1/5 크기 실험 차량의 사용자 요구·ODD 정의 완료, 시스템 요구·상위 설계 진행 중입니다. Homography, 직접 객체 상태 전송, 동일 조건의 E2E 비교, 최소 인지거리 식과 단계별 지연시간 평가 계획을 반영했습니다. 구현·실차 검증 및 수치 결과는 아직 없습니다.
 - UAV: waypoint 패키지 개발과 기존 offboard controller 연동을 본인 역할로 설명하고, 시뮬레이션에서의 경로 추종·착륙 결과를 제시합니다.
 - V-Model: 안정적인 자율주행을 달성하지 못했다는 결과를 유지합니다.
 
@@ -143,9 +144,9 @@ public/media/projects/
 
 기존 슬롯은 `src/data/media.ts`에 `src`와 `kind`를 추가하면 연결됩니다. `target`은 제안 경로이며 링크가 아닙니다. 캡션은 반드시 받은 자료의 실제 장면과 맞춰 검토합니다. 존재하지 않는 경로를 지정하면 빌드를 실패시켜 깨진 이미지를 방지합니다.
 
-AI·SW의 `mobility-waypoint`·`mobility-aeb-stop`에는 클릭 재생 GIF와 포스터를 연결했습니다. `kind: image`에 `gifSrc`와 `poster`를 함께 지정하면 `AnimatedFigure`가 표시됩니다. 편집 구간은 [미디어 출처](docs/MEDIA_SOURCES.md)에 기록합니다. 현재 상세 페이지의 공개 예약 공간은 UAV의 `uav-demo`입니다. 자료를 받으면 해당 항목에 실제 `src`와 필요 시 `poster`를 추가하세요. 예약 상자는 자동으로 실제 사진·영상으로 교체됩니다. 공개 상자에는 파일명·업로드 버튼·재생 버튼을 표시하지 않습니다. V2I와 자료가 없는 드림학기제 상세 페이지에는 공개 예약 상자를 추가하지 않습니다.
+AI·SW의 `mobility-waypoint`·`mobility-aeb-stop`, UAV의 `uav-demo`, 드림학기제의 `vmodel-simulation`·`vmodel-wheel-test`에는 클릭 재생 GIF와 포스터를 연결했습니다. `kind: image`에 `gifSrc`와 `poster`를 함께 지정하면 `AnimatedFigure`가 표시됩니다. 편집 구간은 [미디어 출처](docs/MEDIA_SOURCES.md)에 기록합니다. 예약 슬롯에 자료를 추가할 때는 실제 `src`와 필요 시 `poster`를 지정합니다. 예약 상자는 자동으로 실제 사진·영상으로 교체됩니다. 공개 예약 상자에는 파일명·업로드 버튼·재생 버튼을 표시하지 않습니다.
 
-홈페이지 등에서 공간만 예약할 때는 `ReservedMedia.astro`에 `title`, `kind` (`image` 또는 `video`), `lang` (`en` 또는 `ko`)을 전달합니다. 이 컴포넌트는 영문·국문 상태 문구를 지원하며 실제 실험이나 자료가 존재한다고 주장하지 않습니다.
+홈페이지 등에서 공간만 예약할 때는 `ReservedMedia.astro`에 영문 `title`과 `kind` (`image` 또는 `video`)를 전달합니다. 상태 문구는 영어로 표시됩니다.
 
 직접 그림을 배치할 수도 있습니다. 아래는 **실제 파일을 준비한 뒤** 사용하는 예시이며, 이 경로에 가짜 그림을 생성하지 않습니다.
 
@@ -186,11 +187,9 @@ import Video from '../../../components/Video.astro';
 
 `Decision`은 `title`, `considered`, `observation`, `choice`, `reason`으로 선택의 근거를 설명합니다. `Investigation`은 `problem`, `observation`, `investigation`, `status`로 미해결 문제를 기록합니다. `StageTimeline`은 각 단계의 `state`를 `complete`, `current`, `planned`로 구분합니다. 미래 단계를 완료로 표시하지 않습니다.
 
-## 한국어·영어
+## 사이트 언어
 
-영어 상세 문서는 제공된 영어 프로젝트 기록으로 작성했습니다. 한국어 홈페이지는 기존 한국어 CV의 요약을 사용합니다. 아직 없는 상세 번역을 자동 생성하거나 빈 언어 페이지로 연결하지 않습니다. 한국어 홈페이지에서 영어 문서로 연결되는 링크에는 English를 표시합니다.
-
-검토한 한국어 상세 원고가 준비되면 `src/content/projects/ko/<slug>.mdx`를 추가하고 `lang: ko`, 동일한 `slug`를 사용합니다. `/ko/projects/<slug>/`가 자동 생성되며, 두 문서가 모두 존재할 때 언어 전환 링크와 `hreflang`이 나타납니다. 영어 번역 추가도 동일한 방식입니다. UI 번역은 `BaseLayout`, `Home`, `ProjectCaseStudy`, `ProjectToc`에서 관리합니다.
+홈페이지와 상세 문서는 영어로 관리합니다. 화면 문구, 이미지 대체 텍스트, 캡션도 영어로 작성합니다. 한국어 웹페이지와 언어 전환 메뉴는 제공하지 않습니다. 한국어 CV PDF는 별도 문서로 유지합니다.
 
 ## CV PDF
 
@@ -220,6 +219,6 @@ npm run verify -- --live https://steveandy-sudo.github.io
 
 ## 참고 범위
 
-[Avionics 기술 문서 사이트](https://graduationproject-team3-avionics.github.io/)의 개요·시스템·하위 모듈·검증으로 이어지는 문서 구조를 참고했습니다. 해당 사이트의 코드, CSS, 문장, 그림, 시각 정체성은 가져오지 않았습니다. 이 사이트의 구조는 개인 홈페이지에서 여러 프로젝트의 기술 문서로 분기하도록 작성했습니다.
+[Avionics 기술 문서 사이트](https://graduationproject-team3-avionics.github.io/)의 개요·시스템·하위 모듈·검증으로 이어지는 상세 문서 구조를 참고했습니다. 해당 사이트의 코드, CSS, 문장, 그림, 시각 정체성은 가져오지 않았습니다.
 
 기술 참고: [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/), [Astro GitHub Pages 배포](https://docs.astro.build/en/guides/deploy/github/).

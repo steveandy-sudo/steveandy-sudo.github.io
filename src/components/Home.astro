@@ -3,20 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ResearchInterests from './ResearchInterests.astro';
 import ReservedMedia from './ReservedMedia.astro';
 import RepositoryAccess from './RepositoryAccess.astro';
-import { allProjects, projectUrl, statusLabel, type Language } from '../lib/projects';
+import { allProjects, statusLabel } from '../lib/projects';
 
-interface Props { lang: Language; }
-const { lang } = Astro.props;
-const ko = lang === 'ko';
-const research = ko ? {
-  lead: '자율주행 인지와 판단, 딥러닝 기반 주행을 연구하고 싶습니다.',
-  summary: '모방학습 파이프라인과 ROS 2 판단 및 제어 코드를 차량에 적용하면서, 센서 정보로 내린 판단이 실제 움직임으로 이어지는 과정에 관심을 갖게 되었습니다. 앞으로 End-to-End(E2E) 주행 모델을 직접 구현하고, 시야가 가려지거나 입력이 늦게 들어올 때 모델이 어떻게 반응하는지 실험하고 싶습니다. 졸업프로젝트에서는 주정차 차량에 가려진 보행자를 인프라 카메라가 먼저 관측했을 때, 차량의 인지와 감속 시점이 얼마나 빨라지는지 비교하는 실험을 설계하고 있습니다.',
-  topics: [
-    { title: '인지와 가림', description: '보이지 않는 객체에 어떻게 대응할 수 있을까?' },
-    { title: '판단과 차량 응답', description: '센서 입력과 조향 응답이 늦어지면 주행은 어떻게 달라질까?' },
-    { title: '학습 기반 주행과 E2E', description: '학습한 행동의 한계를 어떻게 실험으로 확인할까?' },
-  ],
-} : {
+const research = {
   lead: 'I want to study perception and decision-making for autonomous driving, with a focus on deep learning.',
   summary: 'Building an imitation-learning pipeline and integrating ROS 2 decision and control software led me to study how sensor-based predictions affect vehicle behavior. I am particularly interested in implementing end-to-end (E2E) driving models and examining their behavior under occlusion and input delay. My current experiment design compares camera-only driving with infrastructure-camera assistance when a pedestrian is hidden by a parked vehicle.',
   topics: [
@@ -27,133 +16,127 @@ const research = ko ? {
 };
 const entries = await allProjects();
 const projects = entries.filter(({data}) => data.lang === 'en' && data.featured);
-type Copy = { en: string; ko: string };
 type HomeProject = {
-  title: Copy; summary: Copy; result: Copy;
-  visual?: { src?: string; alt?: Copy; title: Copy; caption?: Copy; kind?: 'image' | 'video' };
+  title: string; summary: string; result: string;
+  visual?: { src?: string; alt?: string; title: string; caption?: string; kind?: 'image' | 'video' };
 };
 const projectCopy: Record<string, HomeProject> = {
   'kookmin-ai-edge': {
-    title: { en: 'Kookmin AI-Edge Challenge', ko: '국민대 AI-엣지 챌린지' },
-    summary: { en: 'Built an imitation-learning pipeline, trained a YOLO detector, and integrated mission logic on the competition vehicle.', ko: '모방학습 파이프라인과 YOLO 검출 모델을 개발하고, Mission Manager / Final Driver를 대회 차량에 적용했습니다.' },
-    result: { en: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award.', ko: '팀은 예선 2위, 본선 완주 13위를 기록하고 주차경기 특별상을 받았습니다.' },
+    title: 'Kookmin AI-Edge Challenge',
+    summary: 'Built an imitation-learning pipeline, trained a YOLO detector, and integrated mission logic on the competition vehicle.',
+    result: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award.',
     visual: {
       src: '/media/projects/kookmin-ai-edge/01-competition-vehicle.jpg',
-      alt: { en: 'Team KAI competition vehicle on the Kookmin course', ko: '국민대 대회 코스 위의 Team KAI 차량' },
-      title: { en: 'Competition vehicle', ko: '대회 차량' },
-      caption: { en: 'Competition broadcast · Team KAI vehicle', ko: '대회 중계 · Team KAI 차량' },
+      alt: 'Team KAI competition vehicle on the Kookmin course',
+      title: 'Competition vehicle',
+      caption: 'Competition broadcast · Team KAI vehicle',
     },
   },
   'ai-sw-mobility': {
-    title: { en: 'AI·SW Mobility: Decision-Making & AEB', ko: 'AI·SW 모빌리티: 주행 판단과 AEB' },
-    summary: { en: 'Developed cone-boundary path generation, red-cone-triggered stop commands, and Pure Pursuit + Stanley tracking with steering limits; tested the pipeline in Gazebo and on the vehicle.', ko: '콘 경계로 주행 경로를 만들고 빨간 콘에서 정지 명령을 내리는 로직과 Pure Pursuit + Stanley 경로 추종을 개발해 Gazebo와 실차에서 시험했습니다.' },
-    result: { en: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop commands at 50 km/h.', ko: '9월 19–20일 대회장 연습에서 예선과 본선 코스를 모두 10 m/s(36 km/h)로 주행했습니다. AEB는 50 km/h에서 정지 명령을 내렸습니다.' },
+    title: 'AI·SW Mobility: Decision-Making & AEB',
+    summary: 'Developed cone-boundary path generation, red-cone-triggered stop commands, and Pure Pursuit + Stanley tracking with steering limits; tested the pipeline in Gazebo and on the vehicle.',
+    result: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop commands at 50 km/h.',
     visual: {
       src: '/media/projects/ai-sw-mobility/03-final-course-waypoint-poster.jpg',
-      alt: { en: 'Onboard view of final-course waypoint driving', ko: '실차 본선 코스 waypoint 주행 장면' },
-      title: { en: 'Final-course venue practice', ko: '본선 코스 대회장 연습' },
-      caption: { en: 'Final-course waypoint driving · Venue practice', ko: '본선 코스 waypoint 주행 · 대회장 연습' },
+      alt: 'Onboard view of final-course waypoint driving',
+      title: 'Final-course venue practice',
+      caption: 'Final-course waypoint driving · Venue practice',
     },
   },
   'camera-v2i-e2e': {
-    title: { en: 'Camera-Based V2I & End-to-End Driving', ko: 'Camera 기반 V2I·End-to-End 주행' },
-    summary: { en: 'Designing camera-only and V2I-assisted E2E driving for a 1/5-scale test vehicle in an occluded-pedestrian scenario.', ko: '1/5 크기 실험 차량에서 카메라만 사용하는 E2E 주행과 인프라 카메라 정보를 더한 주행을 비교하는 실험을 설계하고 있습니다.' },
-    result: { en: 'Week 4: operating domain defined; system requirements, homography, latency and stopping-distance budgets in design. Implementation is planned.', ko: '4주차에는 운행 조건을 정하고 시스템 요구사항과 상위 설계를 진행했습니다. Homography로 보행자 위치를 구하는 방법과 지연시간, 최소 인지거리를 평가할 기준을 정리했습니다.' },
-    visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: { en: 'Week-4 camera-only and V2I-assisted E2E comparison design', ko: '4주차 발표의 Camera-only·V2I-assisted E2E 비교 구조' }, title: { en: 'E2E comparison design', ko: 'E2E 비교 설계' }, caption: { en: 'Week 4 · Proposed comparison architecture', ko: '4주차 발표 · 비교 구조 설계안' }, kind: 'image' },
+    title: 'Camera-Based V2I & End-to-End Driving',
+    summary: 'Designing camera-only and V2I-assisted E2E driving for a 1/5-scale test vehicle in an occluded-pedestrian scenario.',
+    result: 'Week 4: operating domain defined; system requirements, homography, latency and stopping-distance budgets in design. Implementation is planned.',
+    visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: 'Week-4 camera-only and V2I-assisted E2E comparison design', title: 'E2E comparison design', caption: 'Week 4 · Proposed comparison architecture', kind: 'image' },
   },
   'uav-waypoint': {
-    title: { en: 'UAV Waypoint Mission', ko: 'UAV Waypoint 미션' },
-    summary: { en: 'A ROS 2 mission package for sequential 3D waypoints, TF2 arrival checks, and PX4 offboard integration.', ko: '3D waypoint를 순서대로 따라가고 TF2로 도착을 판정하는 ROS 2 미션 패키지를 개발해 PX4 offboard 제어기와 연결했습니다.' },
-    result: { en: 'Waypoint tracking and final landing completed in the PX4 SITL/Gazebo demonstration.', ko: 'PX4 SITL/Gazebo 시뮬레이션에서 waypoint 추종과 최종 착륙을 완료했습니다.' },
+    title: 'UAV Waypoint Mission',
+    summary: 'A ROS 2 mission package for sequential 3D waypoints, TF2 arrival checks, and PX4 offboard integration.',
+    result: 'Waypoint tracking and final landing completed in the PX4 SITL/Gazebo demonstration.',
     visual: {
       src: '/media/projects/uav-waypoint/01-waypoint-flight-poster.jpg',
-      alt: { en: 'UAV flying past a building during a simulated waypoint test', ko: '시뮬레이션 waypoint 시험에서 건물 옆을 비행하는 드론' },
-      title: { en: 'UAV waypoint flight', ko: '드론 waypoint 비행' },
-      caption: { en: 'PX4 SITL / Gazebo · Waypoint flight', ko: 'PX4 SITL / Gazebo · Waypoint 비행 검증' },
+      alt: 'UAV flying past a building during a simulated waypoint test',
+      title: 'UAV waypoint flight',
+      caption: 'PX4 SITL / Gazebo · Waypoint flight',
       kind: 'image',
     },
   },
   'vmodel-neuro-symbolic': {
-    title: { en: 'Dream Semester: Decision & Control', ko: '드림학기제: 판단·제어 개발' },
-    summary: { en: 'An early ROS 2 / CARLA project exploring Pure Pursuit, longitudinal control, and vehicle-command integration.', ko: 'ROS 2와 CARLA에서 Pure Pursuit 경로 추종과 속도 제어를 구현하고 차량 명령 인터페이스를 연결했습니다.' },
-    result: { en: 'Path tracking remained unstable in simulation. The project ended without achieving stable autonomous driving or a real-vehicle run.', ko: '시뮬레이션에서 경로 추종이 불안정했고, 원인을 해결하지 못한 채 프로젝트를 마쳤습니다. 실제 차량 주행은 하지 못했습니다.' },
+    title: 'Dream Semester: Decision & Control',
+    summary: 'An early ROS 2 / CARLA project exploring Pure Pursuit, longitudinal control, and vehicle-command integration.',
+    result: 'Path tracking remained unstable in simulation. The project ended without achieving stable autonomous driving or a real-vehicle run.',
     visual: {
       src: '/media/projects/vmodel-neuro-symbolic/01-carla-simulation-poster.jpg',
-      alt: { en: 'Dream Semester CARLA simulation with ROS 2 control terminals', ko: 'ROS 2 제어 터미널과 함께 기록한 드림학기제 CARLA 시뮬레이션' },
-      title: { en: 'CARLA simulation test', ko: 'CARLA 시뮬레이션 시험' },
-      caption: { en: 'Dream Semester · CARLA simulation test', ko: '드림학기제 · CARLA 시뮬레이션 시험' },
+      alt: 'Dream Semester CARLA simulation with ROS 2 control terminals',
+      title: 'CARLA simulation test',
+      caption: 'Dream Semester · CARLA simulation test',
       kind: 'image',
     },
   },
 };
 const skills = [
-  { label: ko ? '프로그래밍' : 'Programming', tools: 'Python, C++' },
-  { label: ko ? '자율시스템' : 'Autonomous systems', tools: 'ROS 2, CARLA, Gazebo, PX4 SITL' },
-  { label: ko ? 'AI 및 컴퓨터 비전' : 'AI & computer vision', tools: 'PyTorch, YOLO, OpenCV, Roboflow' },
-  { label: ko ? '개발 및 분석 도구' : 'Development & inspection', tools: 'Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2, QGroundControl' },
+  { label: 'Programming', tools: 'Python, C++' },
+  { label: 'Autonomous systems', tools: 'ROS 2, CARLA, Gazebo, PX4 SITL' },
+  { label: 'AI & computer vision', tools: 'PyTorch, YOLO, OpenCV, Roboflow' },
+  { label: 'Development & inspection', tools: 'Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2, QGroundControl' },
 ];
 ---
-<BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={ko ? '황정헌의 자율주행과 AI 프로젝트. 개발 내용, 실험 결과와 연구 계획을 소개합니다.' : 'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'} lang={lang} alternate={{ lang: ko ? 'en' : 'ko', href: ko ? '/' : '/ko/' }}>
+<BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'}>
   <main id="main" class="container home-page">
     <section class="intro" aria-labelledby="intro-title">
       <figure class="intro-profile">
-        <img src="/media/profile/junghun-hwang.jpg" alt={ko ? '벚꽃나무 앞에 서 있는 황정헌' : 'Junghun Hwang standing beneath cherry blossoms'} width="1843" height="2458" fetchpriority="high" />
-        <figcaption>{ko ? '2027년 2월 학사 졸업 예정' : 'B.S. expected February 2027'}</figcaption>
+        <img src="/media/profile/junghun-hwang.jpg" alt={'Junghun Hwang standing beneath cherry blossoms'} width="1843" height="2458" fetchpriority="high" />
+        <figcaption>{'B.S. expected February 2027'}</figcaption>
       </figure>
       <div class="intro-copy">
-        <p class="eyebrow">{ko ? '건국대학교 / 스마트운행체공학과' : 'Konkuk University / Smart Mobility Engineering'}</p>
+        <p class="eyebrow">{'Konkuk University / Smart Mobility Engineering'}</p>
         <h1 id="intro-title">Junghun Hwang <span lang="ko">황정헌</span></h1>
         <p class="intro-field">Autonomous Driving · Perception · Learning</p>
-        <p class="intro-summary">{ko ? '건국대학교 스마트운행체공학과 학부생입니다. ROS 2로 주행 판단과 제어를 구현하고, AI 인지 모델을 차량에 적용해 시뮬레이션과 실차에서 시험해 왔습니다.' : 'I study Smart Mobility Engineering at Konkuk University. I develop ROS 2 decision and control software, train perception models, and test their integration in simulation and on autonomous vehicles.'}</p>
+        <p class="intro-summary">{'I study Smart Mobility Engineering at Konkuk University. I develop ROS 2 decision and control software, train perception models, and test their integration in simulation and on autonomous vehicles.'}</p>
         <dl class="intro-details">
-          <div><dt>{ko ? '생년월일' : 'Born'}</dt><dd><time datetime="2001-12-10">2001.12.10</time></dd></div>
-          <div><dt>{ko ? '거주지' : 'Based in'}</dt><dd>Seoul, Korea</dd></div>
+          <div><dt>{'Born'}</dt><dd><time datetime="2001-12-10">2001.12.10</time></dd></div>
+          <div><dt>{'Based in'}</dt><dd>Seoul, Korea</dd></div>
         </dl>
         <div class="intro-links">
-          <a class="primary-link" href="#projects">{ko ? '프로젝트 살펴보기' : 'Explore projects'} <span aria-hidden="true">↓</span></a>
+          <a class="primary-link" href="#projects">{'Explore projects'} <span aria-hidden="true">↓</span></a>
           <a class="email-link" href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
-    <ResearchInterests lang={lang} {...research} />
+    <ResearchInterests {...research} />
     <section id="projects" class="home-section projects-section" aria-labelledby="projects-title">
       <div class="section-heading">
-        <div><h2 id="projects-title">{ko ? '프로젝트' : 'Projects'}</h2></div>
+        <div><h2 id="projects-title">{'Projects'}</h2></div>
       </div>
       <ol class="project-list">
         {projects.map(({ data }) => {
-          const translated = entries.find(e => e.data.slug === data.slug && e.data.lang === lang);
-          if (!translated) throw new Error(`Missing ${lang} project: ${data.slug}`);
-          const target = translated.data;
           const copy = projectCopy[data.slug];
           const visual = copy?.visual;
-          const url = projectUrl(target);
           return (
             <li class:list={['project-entry', { 'has-media': !!visual }]}>
               <div class="project-heading">
                 <span class="project-index" aria-hidden="true">{String(data.order).padStart(2, '0')}</span>
-                <p class="project-context">{target.context}</p>
-                <span class={`status ${data.status}`}>{statusLabel[lang][data.status]}</span>
+                <p class="project-context">{data.context}</p>
+                <span class={`status ${data.status}`}>{statusLabel.en[data.status]}</span>
               </div>
               <div class="project-summary">
-                <h3><a href={url}>{copy?.title[lang] ?? (ko ? data.titleKo ?? data.title : data.title)}</a></h3>
-                <p class="project-description">{copy?.summary[lang] ?? data.summary}</p>
+                <h3>{copy?.title ?? data.title}</h3>
+                <p class="project-description">{copy?.summary ?? data.summary}</p>
                 <dl class="project-facts">
-                  <div><dt>{ko ? '기간' : 'Period'}</dt><dd>{target.period}</dd></div>
-                  <div><dt>{ko ? '역할' : 'Role'}</dt><dd>{target.role}</dd></div>
+                  <div><dt>{'Period'}</dt><dd>{data.period}</dd></div>
+                  <div><dt>{'Role'}</dt><dd>{data.role}</dd></div>
                 </dl>
-                <div class="project-evidence"><span>{ko ? '결과 / 현재 단계' : 'Outcome / current stage'}</span><p>{copy?.result[lang] ?? data.outcome}</p></div>
-                <ul class="project-tech" aria-label={ko ? '사용 기술' : 'Technologies'}>{data.technologies.map(tech => <li>{tech}</li>)}</ul>
-                <div class="project-links">
-                  <a class="case-link" href={url}>{ko ? '기술 문서 보기' : 'Read case study'} <span aria-hidden="true">→</span></a>
-                  {data.github && <RepositoryAccess href={data.github} visibility={data.githubVisibility} privateReason={data.githubPrivateReason} lang={lang} label="GitHub" accessibleName={`${copy?.title[lang] ?? data.title} — GitHub`} />}
-                </div>
+                <div class="project-evidence"><span>{'Outcome / current stage'}</span><p>{copy?.result ?? data.outcome}</p></div>
+                <ul class="project-tech" aria-label={'Technologies'}>{data.technologies.map(tech => <li>{tech}</li>)}</ul>
+                {data.github && <div class="project-links">
+                  <RepositoryAccess href={data.github} visibility={data.githubVisibility} privateReason={data.githubPrivateReason} label="GitHub" accessibleName={`${copy?.title ?? data.title} — GitHub`} />
+                </div>}
               </div>
               {visual && <div class="project-visual">
                 {visual.src ? <figure>
-                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 960 : data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 540 : data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></a>
-                  <figcaption>{visual.caption?.[lang]}</figcaption>
-                </figure> : <ReservedMedia title={visual.title[lang]} kind={visual.kind ?? 'image'} lang={lang} />}
+                  <div class="project-preview"><img src={visual.src} alt={visual.alt ?? visual.title} width={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 960 : data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 540 : data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></div>
+                  <figcaption>{visual.caption}</figcaption>
+                </figure> : <ReservedMedia title={visual.title} kind={visual.kind ?? 'image'} />}
               </div>}
             </li>
           );
@@ -162,12 +145,12 @@ const skills = [
     </section>
     <div class="background-sections">
       <section id="awards" class="home-section" aria-labelledby="awards-title">
-        <div class="section-heading"><div><p class="eyebrow">{ko ? '대회 경험' : 'Competition record'}</p><h2 id="awards-title">{ko ? '수상 및 경진대회' : 'Awards & competitions'}</h2></div></div>
-        <div class="award-row"><span class="year">2026</span><div><h3>{ko ? '국민대 AI-엣지 챌린지' : 'Kookmin AI-Edge Challenge'}</h3><p>{ko ? '주차경기 특별상 · 예선 2위' : 'Parking Special Award · Preliminary 2nd'}</p><p class="small-muted">{ko ? '본선 완주 13위 · 팀 성과' : 'Finals 13th, course completed · Team result'}</p></div></div>
-        <div class="award-row"><span class="year">2022</span><div><h3>Drone Clash</h3><p>{ko ? '일반부 3위' : 'General Division · 3rd Place'}</p></div></div>
+        <div class="section-heading"><div><p class="eyebrow">{'Competition record'}</p><h2 id="awards-title">{'Awards & competitions'}</h2></div></div>
+        <div class="award-row"><span class="year">2026</span><div><h3>{'Kookmin AI-Edge Challenge'}</h3><p>{'Parking Special Award · Preliminary 2nd'}</p><p class="small-muted">{'Finals 13th, course completed · Team result'}</p></div></div>
+        <div class="award-row"><span class="year">2022</span><div><h3>Drone Clash</h3><p>{'General Division · 3rd Place'}</p></div></div>
       </section>
       <section id="skills" class="home-section" aria-labelledby="skills-title">
-        <div class="section-heading"><div><p class="eyebrow">{ko ? '프로젝트에서 사용한 도구' : 'Tools used in projects'}</p><h2 id="skills-title">{ko ? '기술 역량' : 'Technical skills'}</h2></div></div>
+        <div class="section-heading"><div><p class="eyebrow">{'Tools used in projects'}</p><h2 id="skills-title">{'Technical skills'}</h2></div></div>
         <dl class="skills-list">{skills.map(({label,tools}) => <div><dt>{label}</dt><dd>{tools}</dd></div>)}</dl>
       </section>
     </div>
