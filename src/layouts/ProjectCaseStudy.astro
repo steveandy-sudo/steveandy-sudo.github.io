@@ -1,18 +1,18 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import ProjectToc from '../components/ProjectToc.astro';
+import RepositoryAccess from '../components/RepositoryAccess.astro';
 import { allProjects, projectUrl, statusLabel } from '../lib/projects';
 import type { CollectionEntry } from 'astro:content';
 import type { MarkdownHeading } from 'astro';
 interface Props { project: CollectionEntry<'projects'>; headings: MarkdownHeading[]; }
 const { project, headings } = Astro.props;
 const d = project.data;
-const publicGithub = d.githubVisibility === 'public' ? d.github : undefined;
 const entries = await allProjects();
 const counterpart = entries.find(({data}) => data.slug === d.slug && data.lang !== d.lang);
 const others = entries.filter(({data}) => data.lang === d.lang && data.slug !== d.slug);
 const toc = [{slug:'overview',text:d.lang === 'ko' ? '개요' : 'Overview'}, {slug:'my-contribution',text:d.lang === 'ko' ? '본인 기여' : 'My contribution'}, ...headings.filter(h => h.depth === 2)];
-if (publicGithub || d.demo) toc.push({ slug:'links', text: d.lang === 'ko' ? '코드 및 데모' : 'Code & links' });
+if (d.github || d.demo) toc.push({ slug:'links', text: d.lang === 'ko' ? '코드 및 데모' : 'Code & links' });
 ---
 <BaseLayout title={`${d.title} | Junghun Hwang`} description={d.summary} lang={d.lang} alternate={counterpart ? {lang: counterpart.data.lang, href: projectUrl(counterpart.data)} : undefined}>
   <main id="main" class="case-page container">
@@ -21,13 +21,13 @@ if (publicGithub || d.demo) toc.push({ slug:'links', text: d.lang === 'ko' ? '�
       <p class="eyebrow">Project {String(d.order).padStart(2,'0')} / {d.context}</p>
       <h1>{d.title}</h1>{d.titleKo && d.lang === 'en' && <p class="title-ko" lang="ko">{d.titleKo}</p>}
       <dl class="project-meta"><div><dt>Period</dt><dd>{d.period}</dd></div>{d.team && <div><dt>Team</dt><dd>{d.team}</dd></div>}<div><dt>Role</dt><dd>{d.role}</dd></div><div><dt>Status</dt><dd><span class={`status ${d.status}`}>{statusLabel[d.lang][d.status]}</span></dd></div></dl>
-      {publicGithub && <a class="case-link" href={publicGithub}>{d.lang === 'ko' ? 'GitHub 저장소' : 'GitHub repository'} <span aria-hidden="true">↗</span></a>}
+      {d.github && <RepositoryAccess href={d.github} visibility={d.githubVisibility} privateReason={d.githubPrivateReason} lang={d.lang} label={d.lang === 'ko' ? 'GitHub 저장소' : 'GitHub repository'} />}
     </header>
     <div class="case-grid"><ProjectToc items={toc} lang={d.lang} /><article class="case-content">
       <section aria-labelledby="overview"><h2 id="overview">{d.lang === 'ko' ? '개요' : 'Overview'}</h2><p class="lead">{d.summary}</p><p class="outcome"><strong>{d.lang === 'ko' ? '결과' : 'Outcome'}</strong> {d.outcome}</p></section>
       <section class="contribution-section" aria-labelledby="my-contribution"><h2 id="my-contribution">{d.lang === 'ko' ? '본인 기여' : 'My contribution'}</h2><p class="scope-label">Team scope</p><p>{d.teamScope}</p><p class="scope-label">My work</p><ul>{d.contributions.map(item => <li>{item}</li>)}</ul></section>
       <slot />
-      {(publicGithub || d.demo) && <section aria-labelledby="links"><h2 id="links">{d.lang === 'ko' ? '코드 및 데모' : 'Code & links'}</h2><ul class="resource-links">{publicGithub && <li><a href={publicGithub}>Project code on GitHub <span aria-hidden="true">↗</span></a></li>}{d.demo && <li><a href={d.demo}>Project demonstration <span aria-hidden="true">↗</span></a></li>}</ul></section>}
+      {(d.github || d.demo) && <section aria-labelledby="links"><h2 id="links">{d.lang === 'ko' ? '코드 및 데모' : 'Code & links'}</h2><ul class="resource-links">{d.github && <li><RepositoryAccess href={d.github} visibility={d.githubVisibility} privateReason={d.githubPrivateReason} lang={d.lang} label="Project code on GitHub" /></li>}{d.demo && <li><a href={d.demo}>Project demonstration <span aria-hidden="true">↗</span></a></li>}</ul></section>}
       <nav class="other-projects" aria-label="Other project case studies"><p class="eyebrow">Other projects</p>{others.map(({data}) => <a href={projectUrl(data)}>{data.context} <span aria-hidden="true">→</span></a>)}</nav>
     </article></div>
   </main>

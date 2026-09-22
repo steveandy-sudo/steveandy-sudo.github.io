@@ -1,0 +1,25 @@
+---
+interface Props {
+  href: string;
+  visibility: 'public' | 'private';
+  lang: 'en' | 'ko';
+  label: string;
+  accessibleName?: string;
+  privateReason?: { en: string; ko: string };
+}
+const { href, visibility, lang, label, accessibleName, privateReason } = Astro.props;
+---
+{visibility === 'public' ? (
+  <a class="repository-link" href={href} aria-label={accessibleName}>{label} <span aria-hidden="true">↗</span></a>
+) : (
+  <span class="repository-private" data-repository-visibility="private">
+    <span class="repository-status">GitHub · {lang === 'ko' ? '비공개' : 'Private'}</span>
+    {privateReason && <span class="repository-note">{privateReason[lang]}</span>}
+  </span>
+)}
+<style>
+  .repository-link { font-size: .8125rem; }
+  .repository-private { display: inline-flex; flex-direction: column; gap: 3px; max-width: 100%; color: var(--muted); }
+  .repository-status { font-size: .8125rem; font-weight: 600; }
+  .repository-note { font-size: .75rem; line-height: 1.6; }
+</style>

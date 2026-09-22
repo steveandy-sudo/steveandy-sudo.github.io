@@ -108,7 +108,7 @@ npm run test:ui
 | `summary`, `outcome` | 요약과 현재 결과. 계획을 완료로 서술하지 않음 |
 | `teamScope`, `contributions` | 팀 전체 범위와 개인 기여 목록. 모든 프로젝트에서 필수 |
 | `technologies` | 3–5개의 실제 사용 기술 |
-| `github`, `githubVisibility`, `demo` | 선택적 링크. 비공개 저장소는 `githubVisibility: private`로 숨김 |
+| `github`, `githubVisibility`, `githubPrivateReason`, `demo` | 선택적 링크. 비공개 저장소는 링크 대신 비공개 상태와 영문·국문 사유를 표시 |
 | `thumbnail` | 선택적 `src`, `alt`, `caption`. 실제 이미지가 있을 때만 지정 |
 | `featured` | 홈페이지 표시 여부 |
 
@@ -201,7 +201,7 @@ import Video from '../../../components/Video.astro';
 - `Junghun_Hwang_CV_V2_EN.pdf` — 영어, 학점 미표기
 - `Junghun_Hwang_CV_V2_KO.pdf` — 한국어, 학점 미표기
 
-홈페이지의 CV 섹션과 상단 CV 메뉴는 제거했습니다. 기존 V2 PDF 2종은 직접 주소로 접근할 수 있도록 유지합니다. V1은 학점 미확정 때문에 포함하지 않았습니다. 홈페이지의 공통 GitHub 링크도 제거했으며, 확인된 공개 저장소 링크는 해당 프로젝트 상세 페이지 상단과 Code & links 섹션에만 표시합니다.
+홈페이지의 CV 섹션과 상단 CV 메뉴는 제거했습니다. V2 PDF 2종은 직접 주소로 접근할 수 있도록 유지합니다. V1은 학점 미확정 때문에 포함하지 않았습니다. 공통 GitHub 링크 대신 프로젝트별 저장소를 홈과 상세 페이지에서 안내합니다. AI·SW 저장소는 대회 진행 중 비공개이므로 `githubVisibility: private`와 `githubPrivateReason`으로 사유를 표시하며, 공개 페이지에 접근 불가능한 저장소 링크를 만들지 않습니다. 상태 표시는 `RepositoryAccess.astro`에서 공통으로 관리합니다.
 
 ## GitHub Pages 배포
 

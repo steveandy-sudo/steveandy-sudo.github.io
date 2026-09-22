@@ -16,10 +16,15 @@ teamScope: "I work in the five-member decision-making group of a 27-member vehic
 contributions:
   - Worked on the ROS 2 AEB pipeline, including cone-boundary center-path generation, a red-entry stop latch, and stateful fail-safe behavior.
   - Implemented Stanley tracking with steering limits, steering-rate limits, and motion preview.
-  - Validated the AEB pipeline in Gazebo closed-loop simulation and used Foxglove for path, steering, and stop-state debugging.
-  - "Conducted real-vehicle venue practice on September 19–20: waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop-command trials at 50 km/h; stopping-zone compliance was not achieved due to a brake hardware fault."
+  - Tested the AEB pipeline in Gazebo closed-loop simulation and used Foxglove for path, steering, and stop-state debugging.
+  - "Completed real-vehicle waypoint runs on both preliminary and final courses at 10 m/s (36 km/h) during venue practice on September 19–20, 2026."
+  - "Confirmed AEB stop-command issuance at the red cones in a 50 km/h trial; a brake hardware fault prevented stopping within the required zone."
 technologies: [ROS 2, Stanley, Gazebo, Foxglove, AEB]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
+githubVisibility: private
+githubPrivateReason:
+  en: Source code is private while the competition is ongoing.
+  ko: 대회 진행 중으로 코드를 비공개로 유지하고 있습니다.
 featured: true
 ---
 
@@ -48,7 +53,7 @@ The AEB pipeline uses perceived cone boundaries to generate a path and identify 
 | Steering and steering-rate limits | Bound command magnitude and abrupt changes | Stanley tracking and command limiting |
 | Stale-input checks | Request a stop when required path or state data is unavailable | Offline AEB tests and fail-safe branches |
 
-The [AEB implementation and tests](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) cover these input and state checks. The path-tracking implementation also includes motion preview.
+The AEB logic checks input freshness and preserves the stop state after the red-cone trigger. The path-tracking implementation also includes motion preview.
 
 ## Evidence and current result
 
@@ -62,7 +67,7 @@ These real-vehicle trials took place on **September 19–20, 2026**, during the 
 
 **AEB success criterion:** detect the red cones, apply braking at the zone entrance, and stop before the zone ends. In the **50 km/h** trial, the stop command was issued at the red cones. With **two of the four brakes reported inoperative**, the vehicle passed the stopping-zone end.
 
-Earlier development included Gazebo closed-loop validation, initial real-vehicle trials at approximately 7 km/h, investigation of steering oscillation, and a steering-motor delay correction by the control team. The repository also contains 29 AEB tests checked during source collection.
+Earlier development included Gazebo closed-loop testing, initial real-vehicle trials at approximately 7 km/h, investigation of steering oscillation, and a steering-motor delay correction by the control team.
 
 <MediaSlot id="mobility-waypoint" />
 <MediaSlot id="mobility-aeb-stop" />
@@ -81,7 +86,3 @@ The next analysis needs synchronized speed, steering, path, and brake records to
 | Trial count and individual outcomes | Does the behavior repeat under the same conditions? |
 
 Per-trial counts, stopping distances, and path-error statistics are not available in the current record.
-
-## Code and reproduction
-
-The [repository README](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) provides the architecture, focused code links, offline test instructions, and ROS 2 integration requirements. The source snapshot comes from the `hwj` development branch; the exact revisions used for the September 19–20 trials have yet to be matched to the archived code.
