@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ResearchInterests from './ResearchInterests.astro';
 import ReservedMedia from './ReservedMedia.astro';
 import RepositoryAccess from './RepositoryAccess.astro';
-import { allProjects, statusLabel } from '../lib/projects';
+import { allProjects, projectUrl, statusLabel } from '../lib/projects';
 
 const research = {
   lead: 'I want to study perception and decision-making for autonomous driving, with a focus on deep learning.',
@@ -112,6 +112,7 @@ const skills = [
         {projects.map(({ data }) => {
           const copy = projectCopy[data.slug];
           const visual = copy?.visual;
+          const url = projectUrl(data);
           return (
             <li class:list={['project-entry', { 'has-media': !!visual }]}>
               <div class="project-heading">
@@ -120,7 +121,7 @@ const skills = [
                 <span class={`status ${data.status}`}>{statusLabel.en[data.status]}</span>
               </div>
               <div class="project-summary">
-                <h3>{copy?.title ?? data.title}</h3>
+                <h3><a href={url}>{copy?.title ?? data.title}</a></h3>
                 <p class="project-description">{copy?.summary ?? data.summary}</p>
                 <dl class="project-facts">
                   <div><dt>{'Period'}</dt><dd>{data.period}</dd></div>
@@ -134,7 +135,7 @@ const skills = [
               </div>
               {visual && <div class="project-visual">
                 {visual.src ? <figure>
-                  <div class="project-preview"><img src={visual.src} alt={visual.alt ?? visual.title} width={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 960 : data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 540 : data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></div>
+                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt ?? visual.title} width={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 960 : data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 540 : data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></a>
                   <figcaption>{visual.caption}</figcaption>
                 </figure> : <ReservedMedia title={visual.title} kind={visual.kind ?? 'image'} />}
               </div>}
