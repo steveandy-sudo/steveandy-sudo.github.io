@@ -56,9 +56,9 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'camera-v2i-e2e': {
     title: { en: 'Camera-Based V2I & End-to-End Driving', ko: 'Camera 기반 V2I·End-to-End 주행' },
-    summary: { en: 'Designing a matched comparison of camera-only and infrastructure-assisted E2E driving under pedestrian occlusion.', ko: '가려진 보행자 상황에서 Camera-only와 인프라 카메라 기반 E2E 주행을 비교하는 실험 설계.' },
-    result: { en: 'System and experiment design. Implementation and closed-loop trials are planned.', ko: '시스템·실험 설계 단계. 구현 및 폐루프 실험은 계획 중.' },
-    visual: { title: { en: 'Proposed occlusion scenario', ko: '사각지대 실험 배치도' }, kind: 'image' },
+    summary: { en: 'Designing camera-only and V2I-assisted E2E driving for a 1/5-scale HENES vehicle in an occluded-pedestrian scenario.', ko: '1/5 HENES 차량의 보행자 사각지대 대응을 위한 Camera-only·V2I-assisted E2E 비교 설계.' },
+    result: { en: 'Week 4: operating domain defined; system requirements, homography, latency and stopping-distance budgets in design. Implementation is planned.', ko: '4주차: 운행 조건 정의 완료. 시스템 요구·상위 설계 진행 중이며 Homography, 지연시간·최소 인지거리 평가 방법을 구체화했습니다.' },
+    visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: { en: 'Week-4 camera-only and V2I-assisted E2E comparison design', ko: '4주차 발표의 Camera-only·V2I-assisted E2E 비교 구조' }, title: { en: 'E2E comparison design', ko: 'E2E 비교 설계' }, caption: { en: 'Week 4 · Proposed comparison architecture', ko: '4주차 발표 · 비교 구조 설계안' }, kind: 'image' },
   },
   'uav-waypoint': {
     title: { en: 'UAV Waypoint Mission', ko: 'UAV Waypoint 미션' },
@@ -137,7 +137,7 @@ const skills = [
               </div>
               {visual && <div class="project-visual">
                 {visual.src ? <figure>
-                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={data.slug === 'ai-sw-mobility' ? 1280 : 1576} height={data.slug === 'ai-sw-mobility' ? 720 : 884} loading="lazy" decoding="async" /></a>
+                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></a>
                   <figcaption>{visual.caption?.[lang]}</figcaption>
                 </figure> : <ReservedMedia title={visual.title[lang]} kind={visual.kind ?? 'image'} lang={lang} />}
               </div>}
