@@ -37,12 +37,18 @@ test('keyboard, language links, project repositories and development slot visibi
   await expect(page.locator('.global-nav a[href$="#cv"], a[href="https://github.com/steveandy-sudo"]')).toHaveCount(0);
   for (const [slug, repository] of [
     ['kookmin-ai-edge', 'https://github.com/steveandy-sudo/kookmin-autonomous-portfolio'],
-    ['ai-sw-mobility', 'https://github.com/steveandy-sudo/ai-sw-mobility-portfolio'],
     ['uav-waypoint', 'https://github.com/steveandy-sudo/uav-waypoint-portfolio'],
     ['vmodel-neuro-symbolic', 'https://github.com/steveandy-sudo/vmodel-driving-portfolio'],
   ]) {
     await page.goto(`/projects/${slug}/`);
     await expect(page.locator('.case-header').getByRole('link', { name: 'GitHub repository' })).toHaveAttribute('href', repository);
+  }
+  for (const route of ['/', '/ko/', '/projects/ai-sw-mobility/']) {
+    await page.goto(route);
+    await expect(page.locator('a[href*="github.com/steveandy-sudo/ai-sw-mobility-portfolio"]')).toHaveCount(0);
+    const notice = page.locator('[data-repository-visibility="private"]').first();
+    await expect(notice).toBeVisible();
+    await expect(notice).toContainText(route === '/ko/' ? '대회 진행 중' : 'competition is ongoing');
   }
   await page.goto('/projects/kookmin-ai-edge/');
   await expect(page.getByRole('link', { name: 'driving integration code' })).toHaveAttribute('href', 'https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_map_nav');

@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ResearchInterests from './ResearchInterests.astro';
 import ReservedMedia from './ReservedMedia.astro';
+import RepositoryAccess from './RepositoryAccess.astro';
 import { allProjects, projectUrl, statusLabel, type Language } from '../lib/projects';
 
 interface Props { lang: Language; }
@@ -45,7 +46,7 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'ai-sw-mobility': {
     title: { en: 'AI·SW Mobility: Decision-Making & AEB', ko: 'AI·SW 모빌리티: 주행 판단과 AEB' },
-    summary: { en: 'Developed ROS 2 stop logic and Stanley path tracking with steering limits, then tested them in Gazebo and on the vehicle.', ko: 'ROS 2 정지 판단과 조향 제한을 적용한 Stanley 경로 추종을 개발하고, Gazebo와 실차에서 시험했습니다.' },
+    summary: { en: 'Developed cone-boundary path generation, red-cone-triggered stop commands, and Stanley tracking with steering limits; tested the pipeline in Gazebo and on the vehicle.', ko: '콘 경계로 주행 경로를 만들고 빨간 콘에서 정지 명령을 내리는 로직과 Stanley 경로 추종을 개발해 Gazebo와 실차에서 시험했습니다.' },
     result: { en: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop commands at 50 km/h; a brake hardware fault prevented stopping within the zone.', ko: '9월 19–20일 대회장 연습에서 예선과 본선 코스를 모두 10 m/s(36 km/h)로 주행했습니다. AEB는 50 km/h에서 정지 명령을 내렸지만, 브레이크 고장으로 지정 구간 안에 멈추지 못했습니다.' },
     visual: {
       src: '/media/projects/ai-sw-mobility/03-final-course-waypoint-poster.jpg',
@@ -131,7 +132,7 @@ const skills = [
                 <ul class="project-tech" aria-label={ko ? '사용 기술' : 'Technologies'}>{data.technologies.map(tech => <li>{tech}</li>)}</ul>
                 <div class="project-links">
                   <a class="case-link" href={url}>{ko ? `기술 문서 보기${target.lang === 'en' ? ' (English)' : ''}` : 'Read case study'} <span aria-hidden="true">→</span></a>
-                  {data.github && data.githubVisibility === 'public' && <a class="project-code-link" href={data.github} aria-label={`${copy?.title[lang] ?? data.title} — GitHub`}>GitHub <span aria-hidden="true">↗</span></a>}
+                  {data.github && <RepositoryAccess href={data.github} visibility={data.githubVisibility} privateReason={data.githubPrivateReason} lang={lang} label="GitHub" accessibleName={`${copy?.title[lang] ?? data.title} — GitHub`} />}
                 </div>
               </div>
               {visual && <div class="project-visual">

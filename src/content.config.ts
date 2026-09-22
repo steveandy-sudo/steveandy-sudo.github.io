@@ -12,6 +12,7 @@ const projects = defineCollection({
     summary: z.string().min(1), outcome: z.string().min(1), teamScope: z.string().min(1),
     contributions: z.array(z.string().min(1)).min(1), technologies: z.array(z.string()).min(3).max(5),
     github: z.url().optional(), githubVisibility: z.enum(['public','private']).default('public'), demo: z.url().optional(),
+    githubPrivateReason: z.object({ en: z.string().min(1), ko: z.string().min(1) }).strict().optional(),
     thumbnail: z.object({ src: z.string().startsWith('/media/'), alt: z.string().min(1), caption: z.string().optional() }).strict().optional(),
     featured: z.boolean().default(true),
   }).strict(),
