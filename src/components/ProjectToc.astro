@@ -3,8 +3,8 @@ interface Props { items: { slug: string; text: string }[]; lang: 'en' | 'ko'; }
 const { items, lang } = Astro.props;
 ---
 <aside class="project-toc">
-  <nav class="toc-desktop" aria-label="Project sections"><p class="eyebrow">{lang === 'ko' ? '이 프로젝트' : 'In this project'}</p><ol>{items.map((item,i) => <li><a href={`#${item.slug}`} data-section={item.slug}><span>{String(i+1).padStart(2,'0')}</span>{item.text}</a></li>)}</ol></nav>
-  <details class="toc-mobile"><summary>{lang === 'ko' ? '프로젝트 목차' : 'On this page'}</summary><nav aria-label="Project sections"><ol>{items.map(item => <li><a href={`#${item.slug}`}>{item.text}</a></li>)}</ol></nav></details>
+  <nav class="toc-desktop" aria-label={lang === 'ko' ? '프로젝트 목차' : 'Project sections'}><p class="eyebrow">{lang === 'ko' ? '이 프로젝트' : 'In this project'}</p><ol>{items.map((item,i) => <li><a href={`#${item.slug}`} data-section={item.slug}><span>{String(i+1).padStart(2,'0')}</span>{item.text}</a></li>)}</ol></nav>
+  <details class="toc-mobile"><summary>{lang === 'ko' ? '프로젝트 목차' : 'On this page'}</summary><nav aria-label={lang === 'ko' ? '프로젝트 목차' : 'Project sections'}><ol>{items.map(item => <li><a href={`#${item.slug}`}>{item.text}</a></li>)}</ol></nav></details>
 </aside>
 <script>
   const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-section]')];

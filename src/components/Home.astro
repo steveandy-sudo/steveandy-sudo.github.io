@@ -46,8 +46,8 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'ai-sw-mobility': {
     title: { en: 'AI·SW Mobility: Decision-Making & AEB', ko: 'AI·SW 모빌리티: 주행 판단과 AEB' },
-    summary: { en: 'Developed cone-boundary path generation, red-cone-triggered stop commands, and Stanley tracking with steering limits; tested the pipeline in Gazebo and on the vehicle.', ko: '콘 경계로 주행 경로를 만들고 빨간 콘에서 정지 명령을 내리는 로직과 Stanley 경로 추종을 개발해 Gazebo와 실차에서 시험했습니다.' },
-    result: { en: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop commands at 50 km/h; a brake hardware fault prevented stopping within the zone.', ko: '9월 19–20일 대회장 연습에서 예선과 본선 코스를 모두 10 m/s(36 km/h)로 주행했습니다. AEB는 50 km/h에서 정지 명령을 내렸지만, 브레이크 고장으로 지정 구간 안에 멈추지 못했습니다.' },
+    summary: { en: 'Developed cone-boundary path generation, red-cone-triggered stop commands, and Pure Pursuit + Stanley tracking with steering limits; tested the pipeline in Gazebo and on the vehicle.', ko: '콘 경계로 주행 경로를 만들고 빨간 콘에서 정지 명령을 내리는 로직과 Pure Pursuit + Stanley 경로 추종을 개발해 Gazebo와 실차에서 시험했습니다.' },
+    result: { en: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop commands at 50 km/h.', ko: '9월 19–20일 대회장 연습에서 예선과 본선 코스를 모두 10 m/s(36 km/h)로 주행했습니다. AEB는 50 km/h에서 정지 명령을 내렸습니다.' },
     visual: {
       src: '/media/projects/ai-sw-mobility/03-final-course-waypoint-poster.jpg',
       alt: { en: 'Onboard view of final-course waypoint driving', ko: '실차 본선 코스 waypoint 주행 장면' },
@@ -57,7 +57,7 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'camera-v2i-e2e': {
     title: { en: 'Camera-Based V2I & End-to-End Driving', ko: 'Camera 기반 V2I·End-to-End 주행' },
-    summary: { en: 'Designing camera-only and V2I-assisted E2E driving for a 1/5-scale HENES vehicle in an occluded-pedestrian scenario.', ko: '1/5 HENES 차량에서 카메라만 사용하는 E2E 주행과 인프라 카메라 정보를 더한 주행을 비교하는 실험을 설계하고 있습니다.' },
+    summary: { en: 'Designing camera-only and V2I-assisted E2E driving for a 1/5-scale test vehicle in an occluded-pedestrian scenario.', ko: '1/5 크기 실험 차량에서 카메라만 사용하는 E2E 주행과 인프라 카메라 정보를 더한 주행을 비교하는 실험을 설계하고 있습니다.' },
     result: { en: 'Week 4: operating domain defined; system requirements, homography, latency and stopping-distance budgets in design. Implementation is planned.', ko: '4주차에는 운행 조건을 정하고 시스템 요구사항과 상위 설계를 진행했습니다. Homography로 보행자 위치를 구하는 방법과 지연시간, 최소 인지거리를 평가할 기준을 정리했습니다.' },
     visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: { en: 'Week-4 camera-only and V2I-assisted E2E comparison design', ko: '4주차 발표의 Camera-only·V2I-assisted E2E 비교 구조' }, title: { en: 'E2E comparison design', ko: 'E2E 비교 설계' }, caption: { en: 'Week 4 · Proposed comparison architecture', ko: '4주차 발표 · 비교 구조 설계안' }, kind: 'image' },
   },
@@ -118,12 +118,13 @@ const skills = [
     <ResearchInterests lang={lang} {...research} />
     <section id="projects" class="home-section projects-section" aria-labelledby="projects-title">
       <div class="section-heading">
-        <div><p class="eyebrow">{ko ? '구현과 실험 기록' : 'Implementation & experiments'}</p><h2 id="projects-title">{ko ? '주요 프로젝트' : 'Selected projects'}</h2></div>
+        <div><h2 id="projects-title">{ko ? '프로젝트' : 'Projects'}</h2></div>
       </div>
       <ol class="project-list">
         {projects.map(({ data }) => {
           const translated = entries.find(e => e.data.slug === data.slug && e.data.lang === lang);
-          const target = translated?.data ?? data;
+          if (!translated) throw new Error(`Missing ${lang} project: ${data.slug}`);
+          const target = translated.data;
           const copy = projectCopy[data.slug];
           const visual = copy?.visual;
           const url = projectUrl(target);
@@ -131,20 +132,20 @@ const skills = [
             <li class:list={['project-entry', { 'has-media': !!visual }]}>
               <div class="project-heading">
                 <span class="project-index" aria-hidden="true">{String(data.order).padStart(2, '0')}</span>
-                <p class="project-context">{data.context}</p>
+                <p class="project-context">{target.context}</p>
                 <span class={`status ${data.status}`}>{statusLabel[lang][data.status]}</span>
               </div>
               <div class="project-summary">
                 <h3><a href={url}>{copy?.title[lang] ?? (ko ? data.titleKo ?? data.title : data.title)}</a></h3>
                 <p class="project-description">{copy?.summary[lang] ?? data.summary}</p>
                 <dl class="project-facts">
-                  <div><dt>{ko ? '기간' : 'Period'}</dt><dd>{data.period}</dd></div>
-                  <div><dt>{ko ? '역할' : 'Role'}</dt><dd>{data.role}</dd></div>
+                  <div><dt>{ko ? '기간' : 'Period'}</dt><dd>{target.period}</dd></div>
+                  <div><dt>{ko ? '역할' : 'Role'}</dt><dd>{target.role}</dd></div>
                 </dl>
                 <div class="project-evidence"><span>{ko ? '결과 / 현재 단계' : 'Outcome / current stage'}</span><p>{copy?.result[lang] ?? data.outcome}</p></div>
                 <ul class="project-tech" aria-label={ko ? '사용 기술' : 'Technologies'}>{data.technologies.map(tech => <li>{tech}</li>)}</ul>
                 <div class="project-links">
-                  <a class="case-link" href={url}>{ko ? `기술 문서 보기${target.lang === 'en' ? ' (English)' : ''}` : 'Read case study'} <span aria-hidden="true">→</span></a>
+                  <a class="case-link" href={url}>{ko ? '기술 문서 보기' : 'Read case study'} <span aria-hidden="true">→</span></a>
                   {data.github && <RepositoryAccess href={data.github} visibility={data.githubVisibility} privateReason={data.githubPrivateReason} lang={lang} label="GitHub" accessibleName={`${copy?.title[lang] ?? data.title} — GitHub`} />}
                 </div>
               </div>

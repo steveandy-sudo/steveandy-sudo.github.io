@@ -15,7 +15,7 @@ const { lang, lead, summary, topics } = Astro.props;
     <div class="research-statement">
       <p class="research-lead">{lead}</p>
       <p class="research-summary">{summary}</p>
-      <a class="research-link" href="/projects/camera-v2i-e2e/">{lang === 'ko' ? '현재 V2I·E2E 실험 설계 보기 (English)' : 'Current V2I / E2E research design'} <span aria-hidden="true">→</span></a>
+      <a class="research-link" href={`${lang === 'ko' ? '/ko' : ''}/projects/camera-v2i-e2e/`}>{lang === 'ko' ? '현재 V2I·E2E 실험 설계 보기' : 'Current V2I / E2E research design'} <span aria-hidden="true">→</span></a>
     </div>
     <ul class="research-topics">
       {topics.map((topic, index) => <li><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><div><h3>{topic.title}</h3><p>{topic.description}</p></div></li>)}

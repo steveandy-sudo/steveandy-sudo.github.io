@@ -10,16 +10,16 @@ period: Mar 2026 – Ongoing
 team: 27 members / decision team of 5
 role: Decision-Making / AEB Development
 status: ongoing
-summary: "ROS 2 waypoint driving, constrained Stanley tracking, and AEB stop logic for autonomous competition courses."
+summary: "ROS 2 waypoint driving, Pure Pursuit and Stanley tracking with steering constraints, and AEB stop logic for autonomous competition courses."
 outcome: "During real-vehicle practice at the competition venue on September 19–20, 2026, waypoint driving succeeded on both preliminary and final courses at 10 m/s (36 km/h). At 50 km/h, the AEB stop command was issued at the red cones, but a brake hardware fault prevented a stop within the zone."
 teamScope: "I work in the five-member decision-making group of a 27-member vehicle team, connecting driving decisions, path tracking, and vehicle integration."
 contributions:
   - Worked on the ROS 2 AEB pipeline, including cone-boundary center-path generation, a red-entry stop latch, and stateful fail-safe behavior.
-  - Implemented Stanley tracking with steering limits, steering-rate limits, and motion preview.
+  - Implemented Pure Pursuit and Stanley tracking with steering limits, steering-rate limits, and motion preview.
   - Tested the AEB pipeline in Gazebo closed-loop simulation and used Foxglove for path, steering, and stop-state debugging.
   - "Completed real-vehicle waypoint runs on both preliminary and final courses at 10 m/s (36 km/h) during venue practice on September 19–20, 2026."
   - "Confirmed AEB stop-command issuance at the red cones in a 50 km/h trial; a brake hardware fault prevented stopping within the required zone."
-technologies: [ROS 2, Stanley, Gazebo, Foxglove, AEB]
+technologies: [ROS 2, Pure Pursuit + Stanley, Gazebo, Foxglove, AEB]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
 githubVisibility: private
 githubPrivateReason:
@@ -40,7 +40,7 @@ The AEB pipeline uses perceived cone boundaries to generate a path and identify 
 <SystemFlow title="Decision-to-vehicle command path" steps={[
   { label: 'Route and perception', detail: 'Route zones, cone boundaries, traffic state, and vehicle feedback provide the driving context.' },
   { label: 'Behavior and target selection', detail: 'The planning engine selects a driving state, target path, and desired speed.' },
-  { label: 'Tracking and stop logic', detail: 'Path tracking applies steering constraints; AEB logic can request zero speed and braking.' },
+  { label: 'Tracking and stop logic', detail: 'Pure Pursuit and Stanley tracking apply steering constraints; AEB logic can request zero speed and braking.' },
   { label: 'Command gate and vehicle control', detail: 'The test workflow passes the selected command through a gate to the external vehicle-control stack.' },
 ]} caption="Route driving and cone-course AEB use separate trial workflows." />
 
@@ -50,10 +50,10 @@ The AEB pipeline uses perceived cone boundaries to generate a path and identify 
 | --- | --- | --- |
 | Cone-boundary center path | Turn corridor geometry into a tracking target | AEB path generation and tracking |
 | Red-entry stop latch | Preserve the stop decision after the vehicle reaches the gate | Confirmed red-pair handling and latched braking state |
-| Steering and steering-rate limits | Bound command magnitude and abrupt changes | Stanley tracking and command limiting |
+| Steering and steering-rate limits | Bound command magnitude and abrupt changes | Pure Pursuit and Stanley tracking, and command limiting |
 | Stale-input checks | Request a stop when required path or state data is unavailable | Offline AEB tests and fail-safe branches |
 
-The AEB logic checks input freshness and preserves the stop state after the red-cone trigger. The path-tracking implementation also includes motion preview.
+The AEB logic checks input freshness and preserves the stop state after the red-cone trigger. The path-tracking implementation uses Pure Pursuit and Stanley and also includes motion preview.
 
 ## Evidence and current result
 

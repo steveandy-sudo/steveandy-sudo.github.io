@@ -6,5 +6,12 @@ export async function allProjects() {
   const entries = await getCollection('projects');
   const keys = entries.map(({ data }) => `${data.lang}/${data.slug}`);
   if (new Set(keys).size !== keys.length) throw new Error('Duplicate project slug / language pair.');
+  for (const { data } of entries) {
+    const counterpart = entries.find(entry => entry.data.slug === data.slug && entry.data.lang !== data.lang)?.data;
+    if (!counterpart) throw new Error(`Missing translation for project: ${data.slug}`);
+    for (const field of ['order', 'status', 'github', 'githubVisibility', 'githubPrivateReason', 'demo', 'technologies', 'featured'] as const) {
+      if (JSON.stringify(data[field]) !== JSON.stringify(counterpart[field])) throw new Error(`Project translations differ: ${data.slug}.${field}`);
+    }
+  }
   return entries.sort((a, b) => a.data.order - b.data.order);
 }

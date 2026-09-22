@@ -9,15 +9,15 @@ context: Capstone Design Project
 period: 2026 – Ongoing
 role: Requirements & System Design
 status: design
-summary: "A proposed camera-based V2I system for a 1/5-scale HENES vehicle, comparing E2E driving with and without infrastructure information in an occluded-pedestrian scenario."
+summary: "A proposed camera-based V2I system for a 1/5-scale test vehicle, comparing E2E driving with and without infrastructure information in an occluded-pedestrian scenario."
 outcome: "Week 4: user needs and the initial operational design domain are defined. System requirements and high-level architecture are in progress, with preliminary geometry, latency, and stopping-distance requirements outlined. Implementation and vehicle validation remain planned."
 teamScope: "The capstone uses the V-model to develop a camera-based V2I driving system. My design work focuses on the occlusion scenario, infrastructure-to-vehicle information flow, and a controlled comparison of perception and braking response."
 contributions:
-  - Defined a school-zone pedestrian-occlusion scenario and an initial daytime, dry-road, low-speed operating domain for the HENES platform.
+  - Defined a school-zone pedestrian-occlusion scenario and an initial daytime, dry-road, low-speed operating domain for the test vehicle.
   - Specified roadside pedestrian detection, road-plane homography, and direct transmission of position, confidence, and timestamps to the vehicle.
   - Designed a matched camera-only and V2I-assisted E2E comparison with the same platform, operating domain, speed, training conditions, and low-level controller.
   - Formulated a minimum detection-distance budget and a stagewise latency measurement plan, alongside perception lead, deceleration lead, minimum TTC, and collision evaluation.
-technologies: [Camera V2I, E2E Driving, Homography, HENES, V-Model]
+technologies: [Camera V2I, E2E Driving, Homography, V-Model]
 featured: true
 ---
 
@@ -28,7 +28,7 @@ import SystemFlow from '../../../components/SystemFlow.astro';
 
 **How much earlier can infrastructure-camera information enable pedestrian detection and deceleration when parked vehicles block the ego camera?**
 
-The proposed system uses a **1/5-scale HENES vehicle**. A roadside camera observes the occluded area and sends pedestrian state to the vehicle, where an E2E planner combines it with the ego-camera input. The current work defines the requirements and comparison structure; implementation, training, and vehicle trials are planned.
+The proposed system uses a **1/5-scale test vehicle**. A roadside camera observes the occluded area and sends pedestrian state to the vehicle, where an E2E planner combines it with the ego-camera input. The current work defines the requirements and comparison structure; implementation, training, and vehicle trials are planned.
 
 ## Week 4 design status
 
@@ -39,7 +39,7 @@ The proposed system uses a **1/5-scale HENES vehicle**. A roadside camera observ
 | L3: preliminary design | Homography approach, detection-distance budget, and latency measurement boundaries | Initial definition |
 | L4: detailed design and implementation | Computing hardware, MCU, message details, power, mounting, and proof of concept | Planned |
 
-The design semester focuses on requirements, high-level architecture, and preliminary design. The subsequent implementation semester will measure the HENES platform's actual speed, braking distance, and system latency and use them to evaluate stopping performance.
+The design semester focuses on requirements, high-level architecture, and preliminary design. The subsequent implementation semester will measure the test vehicle's actual speed, braking distance, and system latency and use them to evaluate stopping performance.
 
 ## Occlusion scenario and operating domain
 
@@ -63,7 +63,7 @@ The **operational design domain (ODD)** specifies the conditions in which the sy
   { label: 'Infrastructure camera and edge perception', detail: 'Detect a pedestrian and project the bounding-box bottom center onto the road plane.' },
   { label: 'Direct V2I communication', detail: 'Send pedestrian x, y, confidence, and timestamp from the edge device to the vehicle, without a central server.' },
   { label: 'E2E fusion and planning', detail: 'Combine ego images and vehicle state with encoded V2I object state through lightweight fusion.' },
-  { label: 'HENES control', detail: 'Generate waypoints and target speed for a low-level controller that produces drive and steering commands.' },
+  { label: 'Vehicle control', detail: 'Generate waypoints and target speed for a low-level controller that produces drive and steering commands.' },
 ]} caption="Week-4 high-level design. Component selection and implementation are still in progress." />
 
 The current message scope is **`x`, `y`, `confidence`, and `timestamp`**. The edge device sends these object-state fields directly to the vehicle. The exact message format, coordinate conventions, synchronization, and communication protocol remain to be finalized.
@@ -85,7 +85,7 @@ Calibration pairs image reference points with road-plane reference points to est
 | Inputs | Ego camera and vehicle state | Ego camera, vehicle state, and infrastructure object state |
 | Planning structure | Visual encoder and E2E planner | Visual encoder, object-state encoder, lightweight fusion, and E2E planner |
 | Outputs | Waypoints and target speed | Waypoints and target speed |
-| Controlled conditions | Same HENES platform, ODD, speed, training conditions, and controller | Same conditions |
+| Controlled conditions | Same test vehicle, ODD, speed, training conditions, and controller | Same conditions |
 
 The comparison isolates the effect of adding infrastructure object state. The base model, training recipe, trial counts, and numerical operating limits will be specified before experiments.
 
@@ -98,7 +98,7 @@ The preliminary design links available response distance to system latency, brak
 | Term | Meaning in the design budget |
 | --- | --- |
 | `v · T_system` | Distance traveled during the end-to-end system delay |
-| `D_brake(v)` | Braking distance at the selected speed, to be measured on HENES |
+| `D_brake(v)` | Braking distance at the selected speed, to be measured on the test vehicle |
 | `M` | Required safety clearance from the pedestrian |
 | `d_req` | Minimum distance budget for timely pedestrian information and stopping |
 

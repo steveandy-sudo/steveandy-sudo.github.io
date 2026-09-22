@@ -1,19 +1,21 @@
 ---
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-interface Props { src: string; poster: string; alt: string; caption: string; width?: number; height?: number; }
-const { src, poster, alt, caption, width = 1280, height = 720 } = Astro.props;
+interface Props { src: string; poster: string; alt: string; caption: string; width?: number; height?: number; lang?: 'en' | 'ko'; }
+const { src, poster, alt, caption, width = 1280, height = 720, lang = 'en' } = Astro.props;
+const playLabel = lang === 'ko' ? 'GIF 재생' : 'Play GIF';
+const stillLabel = lang === 'ko' ? '정지 이미지 보기' : 'Show still';
 for (const path of [src, poster]) {
   if (!path.startsWith('/media/') || !existsSync(resolve('public', path.slice(1)))) {
     throw new Error(`Missing animation asset: ${path}`);
   }
 }
 ---
-<figure class="animated-figure" data-animation={src} data-still={poster}>
+<figure class="animated-figure" data-animation={src} data-still={poster} data-play-label={playLabel} data-still-label={stillLabel}>
   <img src={poster} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
   <div class="animation-controls">
-    <button type="button" aria-label={`Play GIF: ${alt}`} aria-pressed="false" hidden>Play GIF</button>
-    <a href={src} download>Download GIF ↓</a>
+    <button type="button" aria-label={`${playLabel}: ${alt}`} aria-pressed="false" hidden>{playLabel}</button>
+    <a href={src} download>{lang === 'ko' ? 'GIF 다운로드' : 'Download GIF'} ↓</a>
   </div>
   <figcaption>{caption}</figcaption>
 </figure>
@@ -28,8 +30,9 @@ for (const path of [src, poster]) {
       const playing = button.getAttribute('aria-pressed') !== 'true';
       img.src = (playing ? figure.dataset.animation : figure.dataset.still)!;
       button.setAttribute('aria-pressed', String(playing));
-      button.textContent = playing ? 'Show still' : 'Play GIF';
-      button.setAttribute('aria-label', `${playing ? 'Show still' : 'Play GIF'}: ${img.alt}`);
+      const label = (playing ? figure.dataset.stillLabel : figure.dataset.playLabel)!;
+      button.textContent = label;
+      button.setAttribute('aria-label', `${label}: ${img.alt}`);
     });
   });
 </script>
