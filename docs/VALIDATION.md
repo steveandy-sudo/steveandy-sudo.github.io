@@ -1,18 +1,33 @@
-# Implementation validation — 2026-09-17
+# Website validation
 
-- Installed the locked npm dependencies; installation audit reported zero vulnerabilities.
-- `npm run check`: 0 errors, 0 warnings, 0 hints.
-- `npm run build`: successful static generation of 8 HTML pages (two homepages, five case studies, and the 404 page).
-- `npm run verify`: 228 local links, assets, and anchors passed. Canonical/OG metadata, single headings, project contribution sections, responsive TOC markup, CV files, and hidden empty media slots were checked.
-- `npm run test:ui`: all 6 Playwright tests passed using Microsoft Edge. All seven content routes were checked at 1440, 768, 390, and 320 pixels; keyboard skip navigation, language links, CV availability, section highlighting, mobile navigation, and 200% text enlargement were checked.
-- Desktop and mobile screenshots were visually inspected, including home, project, technical-body, CV, and footer layouts.
-- Development pages rendered exactly 8 media requests (3 Kookmin, 2 Mobility, 1 each V2I/UAV/V-Model). Production pages rendered none of the empty request boxes.
-- No generated project photography, experimental imagery, architecture diagrams, or invented performance measurements are included.
-- The Kookmin project page links to `steveandy-sudo/kookmin-autonomous-portfolio`, including its driving and parking packages and Korean README. Checks reject obsolete links to the original team repository on this page.
+## Current scope
+
+The website is English-only: one homepage, five existing case-study routes, and the 404 page. Korean website routes and language-switch links are removed. English and Korean CV PDFs remain separate downloadable artifacts at their existing direct URLs.
+
+The homepage presents each public project's GitHub link once. Kookmin, UAV, and Dream Semester have public links; AI·SW shows its private status and competition-related reason; the capstone has no repository link. Project titles and preview images do not link to case studies. Existing case-study URLs remain available directly.
+
+## Checks for each release
+
+- `npm run check`: validate TypeScript, Astro components, and MDX metadata.
+- `npm run build`: generate the seven HTML pages and referenced assets.
+- `npm run verify`: check local links, assets, anchors, metadata, contribution sections, and CV files. Check that no Korean website route or language-switch link is generated.
+- Browser checks: inspect the six content routes at 1440, 768, 390, and 320 pixels; confirm no horizontal overflow, keyboard skip navigation, section highlighting, mobile TOC behavior, and 200% text enlargement.
+- Homepage navigation: confirm exactly one GitHub link for each public project, a non-link private notice for AI·SW, and no repository link for the capstone. Confirm no case-study links remain in project titles, images, or actions.
+- Media: inspect posters, GIF playback and pause controls, aspect ratios, and captions against the source recordings. Confirm no empty development request boxes appear in production.
+- After deployment: check the live homepage, retained case-study URLs, linked media, and both V2 CV PDFs.
+
+`tests/site.spec.ts` records the browser assertions. Browser tests and visual inspection must be reported from an actual run; editing the assertions does not establish that they pass.
+
+## Content checks
+
+- Kookmin links point to `steveandy-sudo/kookmin-autonomous-portfolio`, including driving and parking packages and its Korean README. Obsolete links to the original team repository are rejected.
+- AI·SW records 10 m/s waypoint driving on both courses during venue practice and a 50 km/h AEB stop command. Detailed trial descriptions retain the brake fault and stopping-zone overrun.
+- Capstone material describes a design-stage project; slide diagrams do not establish completed implementation or vehicle validation.
+- UAV footage shows simulated waypoint flight. Dream Semester footage separates CARLA simulation from supported-wheel testing with separate control commands.
 - V2 English/Korean CVs are included. V1 files are not included while the GPA remains unconfirmed.
 
 ## Tooling note
 
-Astro/MDX emits Vite `MODULE_LEVEL_DIRECTIVE` warnings concerning its generated `use astro:head-inject` directive. The warnings are not suppressed. Static generation, rendered styles, metadata, and browser interactions passed the checks above. This is distinct from the type checker, which reports no diagnostics.
+Astro/MDX can emit Vite `MODULE_LEVEL_DIRECTIVE` warnings concerning its generated `use astro:head-inject` directive. These warnings are not suppressed. They are separate from type-checker diagnostics; any build or browser failure still needs investigation.
 
-These checks do not establish new experimental results, validate every future media file, or certify accessibility. Actual images, videos, and translated project documents still require content review when added.
+Checks do not establish new experimental results or certify accessibility. New media and factual changes require content review alongside the technical checks.

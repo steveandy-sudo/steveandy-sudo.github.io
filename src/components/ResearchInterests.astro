@@ -1,21 +1,20 @@
 ---
 interface Props {
-  lang: 'en' | 'ko';
   lead: string;
   summary: string;
   topics: { title: string; description: string }[];
 }
-const { lang, lead, summary, topics } = Astro.props;
+const { lead, summary, topics } = Astro.props;
 ---
 <section id="research" class="home-section" aria-labelledby="research-title">
   <div class="section-heading">
-    <div><p class="eyebrow">{lang === 'ko' ? '앞으로 탐구하고 싶은 질문' : 'Questions I want to explore'}</p><h2 id="research-title">{lang === 'ko' ? '연구 관심 분야' : 'Research interests'}</h2></div>
+    <div><p class="eyebrow">{'Questions I want to explore'}</p><h2 id="research-title">{'Research interests'}</h2></div>
   </div>
   <div class="research-grid">
     <div class="research-statement">
       <p class="research-lead">{lead}</p>
       <p class="research-summary">{summary}</p>
-      <a class="research-link" href={`${lang === 'ko' ? '/ko' : ''}/projects/camera-v2i-e2e/`}>{lang === 'ko' ? '현재 V2I·E2E 실험 설계 보기' : 'Current V2I / E2E research design'} <span aria-hidden="true">→</span></a>
+
     </div>
     <ul class="research-topics">
       {topics.map((topic, index) => <li><span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span><div><h3>{topic.title}</h3><p>{topic.description}</p></div></li>)}

@@ -2,13 +2,11 @@
 interface Props {
   title: string;
   kind?: 'image' | 'video';
-  lang?: 'en' | 'ko';
+  lang?: 'en';
   slotId?: string;
 }
-const { title, kind = 'video', lang = 'en', slotId } = Astro.props;
-const status = lang === 'ko'
-  ? (kind === 'video' ? '영상 추가 예정' : '이미지 추가 예정')
-  : (kind === 'video' ? 'Video forthcoming' : 'Image forthcoming');
+const { title, kind = 'video', slotId } = Astro.props;
+const status = kind === 'video' ? 'Video forthcoming' : 'Image forthcoming';
 ---
 
 <aside class="reserved-media" data-media-reserved={slotId ?? 'true'}>

@@ -4,7 +4,6 @@ lang: en
 order: 4
 title: ROS 2 UAV Waypoint Mission on PX4 SITL/Gazebo
 titleEn: ROS 2 UAV Waypoint Mission on PX4 SITL/Gazebo
-titleKo: ROS 2 기반 PX4 SITL/Gazebo UAV Waypoint Mission
 context: Autonomous System Platform
 period: May 2026 – Jun 2026
 team: 4 members
@@ -65,7 +64,7 @@ The archived configuration contains **nine waypoints** and a default **1.0 m arr
 
 The mission node supplies pose targets while the offboard controller performs vehicle-side conversion and command publication. During reproduction, **coordinate conversion must have one clearly defined owner**: the collected controller already converts ENU to NED, so the mission output mode and origin must be checked together.
 
-The package implements `hold`, `land`, `disarm`, and `land_then_disarm` finish options. The final simulation demonstrated landing, while the exact launch configuration and landing-command receiver still need to be matched to that run. The [repository setup notes](https://github.com/steveandy-sudo/uav-waypoint-portfolio) document these integration points.
+The package implements `hold`, `land`, `disarm`, and `land_then_disarm` finish options. The final simulation demonstrated landing, while the exact launch configuration and landing-command receiver still need to be matched to that run. The repository setup notes document these integration points.
 
 ## What I learned
 

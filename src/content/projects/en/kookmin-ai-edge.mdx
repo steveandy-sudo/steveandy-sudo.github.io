@@ -4,7 +4,6 @@ lang: en
 order: 1
 title: 2026 9th Kookmin University Autonomous Driving Competition — AI-Edge Challenge
 titleEn: 2026 9th Kookmin University Autonomous Driving Competition — AI-Edge Challenge
-titleKo: 2026년 제9회 국민대 자율주행 경진대회 AI-엣지 챌린지
 context: Kookmin AI-Edge Challenge
 period: Apr 2026 – Aug 2026
 team: 5 members
@@ -47,7 +46,7 @@ The XYCAR system combined camera perception, mission decisions, vehicle control,
 
 I built the workflow from driving-data collection to model training, TorchScript export, and ROS 2 inference. Development included switching between learning-based driving and deterministic traffic-light or mission handling. **The final competition strategy used rule-based driving after steering oscillation remained in the learning-based approach.**
 
-The archived [model definition](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/src/il_data_tools/scripts/policy_models.py) includes an image-and-LiDAR policy:
+The archived model definition includes an image-and-LiDAR policy:
 
 <SystemFlow title="Learning implementation preserved in the source" steps={[
   { label: 'Image features', detail: 'A ResNet18 encoder extracts features from the processed road image, using a canonical bird\'s-eye-view input in this pipeline.' },
@@ -63,7 +62,7 @@ The archived [model definition](https://github.com/steveandy-sudo/kookmin-autono
 | Report steering-command MAE and RMSE | Summarizes prediction error against recorded commands | Evaluation script and archived report |
 | Inspect per-session and steering-range errors | Reveals behavior hidden by one aggregate score | Evaluation breakdowns in the archived report |
 
-The [evaluation note](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/docs/EVALUATION.md) links the relevant implementations and explains the command units. The model README and metrics file refer to different checkpoint hashes and evaluation records. The checkpoint and data split associated with the reported errors still need to be matched. The evaluation script measures steering prediction error against recorded commands; vehicle trials test whether those commands produce stable driving.
+The evaluation note links the relevant implementations and explains the command units. The model README and metrics file refer to different checkpoint hashes and evaluation records. The checkpoint and data split associated with the reported errors still need to be matched. The evaluation script measures steering prediction error against recorded commands; vehicle trials test whether those commands produce stable driving.
 
 ## Perception and dataset workflow
 
@@ -76,13 +75,13 @@ The annotation example comes from the preliminary simulation dataset. The rosbag
 
 ## Mission Manager & Final Driver
 
-I connected mission-state handling to the final vehicle command path and participated in integration and parameter tuning. The [driving integration code](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_map_nav) shows the interfaces for lane following, traffic lights, and course missions.
+I connected mission-state handling to the final vehicle command path and participated in integration and parameter tuning. The driving integration code shows the interfaces for lane following, traffic lights, and course missions.
 
 <MediaSlot id="kookmin-driving" />
 
 ## Parking event
 
-My parking work focused on SLAM-map waypoints and reverse recovery. The [parking package](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_parking_nav) contains route configuration, mission execution, and command adaptation. The team received the parking event Special Award.
+My parking work focused on SLAM-map waypoints and reverse recovery. The parking package contains route configuration, mission execution, and command adaptation. The team received the parking event Special Award.
 
 <MediaSlot id="kookmin-parking" />
 
@@ -110,5 +109,3 @@ My parking work focused on SLAM-map waypoints and reverse recovery. The [parking
 The team used rule-based driving in the event because learned steering continued to oscillate. Perception and hardware constraints also informed the shift from using both white and yellow lane markings to focusing on yellow markings.
 
 The next useful analysis is a time-aligned record of sensor input, predicted steering, issued command, and vehicle response. That would help distinguish model behavior from command filtering and actuator delay. Repeated runs on the same route would then connect offline model errors with actual trajectory stability.
-
-For a guided source review, start with the [project README](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio) or its [Korean version](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/README.ko.md).
