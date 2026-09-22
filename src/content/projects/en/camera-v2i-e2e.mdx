@@ -28,7 +28,7 @@ import SystemFlow from '../../../components/SystemFlow.astro';
 
 **How much earlier can infrastructure-camera information enable pedestrian detection and deceleration when parked vehicles block the ego camera?**
 
-The proposed system uses a **1/5-scale HENES vehicle**. A roadside camera observes the occluded area and sends pedestrian state to the vehicle, where an E2E planner combines it with the ego-camera input. The week-4 presentation defines the requirements and comparison structure. Implementation, training, and closed-loop validation remain future work.
+The proposed system uses a **1/5-scale HENES vehicle**. A roadside camera observes the occluded area and sends pedestrian state to the vehicle, where an E2E planner combines it with the ego-camera input. The current work defines the requirements and comparison structure; implementation, training, and vehicle trials are planned.
 
 ## Week 4 design status
 
@@ -53,7 +53,7 @@ A stopped or parked vehicle hides a pedestrian from the ego camera near a school
 | Vehicle motion | Low-speed driving on a straight section |
 | Outside the initial scope | Night, adverse weather, intersections, and mixed traffic |
 
-These conditions form the initial **operational design domain (ODD)**: the conditions in which the proposed system is intended to operate.
+The **operational design domain (ODD)** specifies the conditions in which the system is intended to operate.
 
 <MediaSlot id="v2i-scenario" />
 
@@ -66,7 +66,7 @@ These conditions form the initial **operational design domain (ODD)**: the condi
   { label: 'HENES control', detail: 'Generate waypoints and target speed for a low-level controller that produces drive and steering commands.' },
 ]} caption="Week-4 high-level design. Component selection and implementation are still in progress." />
 
-The current message scope is **`x`, `y`, `confidence`, and `timestamp`**. It transmits object state rather than the infrastructure video stream. The exact message format, coordinate conventions, synchronization, and communication protocol remain to be finalized.
+The current message scope is **`x`, `y`, `confidence`, and `timestamp`**. The edge device sends these object-state fields directly to the vehicle. The exact message format, coordinate conventions, synchronization, and communication protocol remain to be finalized.
 
 ## Pedestrian position from homography
 
@@ -102,7 +102,7 @@ The preliminary design links available response distance to system latency, brak
 | `M` | Required safety clearance from the pedestrian |
 | `d_req` | Minimum distance budget for timely pedestrian information and stopping |
 
-The design semester will define speed and latency criteria and the measurement methods for braking distance and clearance. The implementation semester will supply measured values to evaluate this requirement. The presentation does not yet provide a numerical stopping-distance result.
+The design semester will define speed and latency criteria and the measurement methods for braking distance and clearance. The implementation semester will supply measured values to evaluate this requirement.
 
 ## Latency and evaluation plan
 
@@ -115,12 +115,10 @@ The timing plan follows **camera acquisition → pedestrian detection → homogr
 | Response lead | Difference in deceleration-onset distance and time between the two systems |
 | Safety outcome | Minimum time to collision (TTC) and collision occurrence |
 
-These are evaluation definitions. No measured improvement or safety-performance result is claimed at this stage.
-
 ## Vehicle integration and next milestone
 
-The proposed vehicle interfaces are front-camera input, a V2I object-state receiver, and waypoint/target-speed outputs. Safety requirements include **E-stop, command timeout, zero default output, and a watchdog**. These are requirements to implement and verify.
+The proposed vehicle interfaces are front-camera input, a V2I object-state receiver, and waypoint/target-speed outputs. Safety requirements include **E-stop, command timeout, zero default output, and a watchdog**. These safety functions are planned for implementation and testing.
 
 Next, complete the system requirements and subsystem allocation, define the camera calibration and timestamp conventions, and specify the numerical test conditions. Computing hardware, the MCU, control interfaces, power, and mounting belong to detailed design. A proof of concept and matched driving trials follow those decisions.
 
-Source: the capstone team's week-4 design presentation, supplied September 22, 2026. The scenario and comparison figures are direct slide exports; the surrounding text summarizes their design scope.
+Design reference: the capstone team's week-4 presentation, supplied September 22, 2026.

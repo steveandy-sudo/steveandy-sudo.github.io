@@ -47,7 +47,7 @@ The course environment combined ROS 2 Humble, PX4 SITL, Gazebo, QGroundControl, 
 | Explicit ENU / local-NED modes | Handle the coordinate boundary between ROS poses and PX4 commands |
 | Altitude checks before disarm | Gate the implemented land-then-disarm finish path on the reported vehicle state |
 
-The archived configuration contains **nine waypoints** and a default **1.0 m arrival tolerance**. These describe the source configuration; measured tracking error and the exact demonstration settings require the corresponding run record.
+The archived configuration contains **nine waypoints** and a default **1.0 m arrival tolerance**. The exact configuration used in the demonstration has yet to be matched to a run record, and measured tracking-error statistics are unavailable.
 
 ## Demonstration and evidence
 
@@ -68,6 +68,6 @@ The package implements `hold`, `land`, `disarm`, and `land_then_disarm` finish o
 
 ## What I learned
 
-A waypoint list becomes a dependable mission only when arrival conditions, coordinate frames, command ownership, and finish states agree across the stack. This project gave me experience making those interfaces explicit and exposing mission state for debugging.
+I learned to check arrival conditions and coordinate conversion alongside the mission logic. Reporting the current goal and mission state made the progression between waypoints visible during debugging.
 
-A follow-up evaluation would record the target sequence, measured trajectory, arrival times, and landing event over repeated runs. That would connect the demonstrated mission to measurable tracking and completion behavior.
+A follow-up evaluation would record the target sequence, measured trajectory, arrival times, and landing event over repeated runs. Those records would allow calculation of tracking error, time to reach each waypoint, and completion rate.
