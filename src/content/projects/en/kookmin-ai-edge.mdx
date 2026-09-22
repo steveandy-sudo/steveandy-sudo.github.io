@@ -34,7 +34,7 @@ import Result from '../../../components/Result.astro';
 
 ## System architecture
 
-The XYCAR project connected camera perception, mission decisions, control, and map-based parking. My work spanned the learning pipeline, unified detector, Mission Manager / Final Driver integration, and parking waypoints with reverse recovery.
+The XYCAR system combined camera perception, mission decisions, vehicle control, and map-based parking.
 
 <SystemFlow title="Competition driving: from sensing to vehicle commands" steps={[
   { label: 'Sensing and perception', detail: 'Camera and LiDAR inputs support lane, object, and course interpretation.' },
@@ -63,7 +63,7 @@ The archived [model definition](https://github.com/steveandy-sudo/kookmin-autono
 | Report steering-command MAE and RMSE | Summarizes prediction error against recorded commands | Evaluation script and archived report |
 | Inspect per-session and steering-range errors | Reveals behavior hidden by one aggregate score | Evaluation breakdowns in the archived report |
 
-The [evaluation note](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/docs/EVALUATION.md) links the relevant implementations and explains the command units. Matching the archived checkpoint and data split is still required before presenting a single numerical result: the model README and metrics file refer to different model hashes and records. Offline prediction error and closed-loop driving behavior are separate evaluation questions.
+The [evaluation note](https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/blob/main/docs/EVALUATION.md) links the relevant implementations and explains the command units. The model README and metrics file refer to different checkpoint hashes and evaluation records. The checkpoint and data split associated with the reported errors still need to be matched. The evaluation script measures steering prediction error against recorded commands; vehicle trials test whether those commands produce stable driving.
 
 ## Perception and dataset workflow
 
@@ -88,10 +88,10 @@ My parking work focused on SLAM-map waypoints and reverse recovery. The [parking
 
 ## Validation and competition results
 
-| Setting | Available record | What it establishes |
+| Setting | Record | Outcome |
 | --- | --- | --- |
 | Learning development | Training, export, inference, and evaluation source | An implemented learning workflow with archived evaluation artifacts |
-| Offline rosbag replay | YOLO detections on recorded frames | Inspectable perception behavior in a recorded scene |
+| Offline rosbag replay | YOLO detections on recorded frames | Cone detections during offline replay |
 | Vehicle practice | Track practice and parameter tuning | Integration work on the competition vehicle |
 | Competition | Broadcast excerpts and reported team rankings | Team event outcomes |
 
@@ -107,7 +107,7 @@ My parking work focused on SLAM-map waypoints and reverse recovery. The [parking
 
 ## Engineering lessons and next measurements
 
-The project required choosing a deployable driving strategy while continuing model development. Learning-based steering oscillation remained unresolved, so rule-based driving was selected for the event. Perception and hardware constraints also informed the shift from using both white and yellow lane markings to focusing on yellow markings.
+The team used rule-based driving in the event because learned steering continued to oscillate. Perception and hardware constraints also informed the shift from using both white and yellow lane markings to focusing on yellow markings.
 
 The next useful analysis is a time-aligned record of sensor input, predicted steering, issued command, and vehicle response. That would help distinguish model behavior from command filtering and actuator delay. Repeated runs on the same route would then connect offline model errors with actual trajectory stability.
 

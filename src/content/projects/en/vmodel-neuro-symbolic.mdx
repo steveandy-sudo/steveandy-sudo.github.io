@@ -46,16 +46,14 @@ This Dream Semester project, originally titled **V-Model Neuro-Symbolic Driving*
 | Smoothing and rate limiting | Adjusted command filtering and change limits | Time-aligned steering before and after each change |
 | Command bounds and interface | Adjusted output limits and adapted the command bridge | Input/output traces with units, saturation, and timestamps |
 
-The last column describes the records needed for a controlled diagnosis. The available history establishes the investigation areas, but does not support a numerical improvement claim for each adjustment.
+The available records do not isolate the effect of each adjustment on tracking error.
 
 ## What the code preserves
 
 The [project repository](https://github.com/steveandy-sudo/vmodel-driving-portfolio) separates earlier CARLA implementations under `src/neuro_decision/archive` from later behavior, steering, and MCU bridge packages. The later steering node contains target-geometry handling, smoothing, bounds, and per-cycle steering limits. The bridge translates desired speed, steering angle, and state into the serial command format.
 
-These files provide concrete entry points for examining the integration decisions and the software inspection path.
-
 ## Lessons and a better experiment
 
 The main lesson was to make **target coordinates, steering units, timestamps, and command ownership** explicit before tuning the controller. Without matched trajectory and command records, the effect of individual adjustments remains difficult to establish.
 
-For a future reconstruction, I would start with a straight path and one constant-radius turn, verify steering sign and units, and then vary one setting at a time. The record would pair target and actual trajectories with time-aligned commands, so each conclusion could be traced to a specific experiment.
+For a future reconstruction, I would start with a straight path and one constant-radius turn, verify steering sign and units, and then vary one setting at a time. The record would pair target and actual trajectories with time-aligned commands, to measure how each setting affects tracking.

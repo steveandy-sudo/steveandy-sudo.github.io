@@ -8,16 +8,16 @@ interface Props { lang: Language; }
 const { lang } = Astro.props;
 const ko = lang === 'ko';
 const research = ko ? {
-  lead: '자율주행의 인지·판단과 딥러닝 기반 주행을 연구하고 싶습니다.',
-  summary: '모방학습 파이프라인과 ROS 2 판단·제어를 구현하고 실차 통합을 경험하면서, 센서 입력에서 나온 예측이 실제 차량의 행동으로 이어지는 과정에 관심을 갖게 되었습니다. 특히 End-to-End(E2E) 모델을 직접 구현하고, 가림이나 입력 지연이 있는 상황에서 모델의 행동과 한계를 실험으로 살펴보고 싶습니다. 현재는 주정차 차량에 가려진 보행자 상황에서 인프라 카메라 정보가 주행 판단과 제동 시점에 주는 영향을 비교하는 실험을 설계하고 있습니다.',
+  lead: '자율주행 인지와 판단, 딥러닝 기반 주행을 연구하고 싶습니다.',
+  summary: '모방학습 파이프라인과 ROS 2 판단 및 제어 코드를 차량에 적용하면서, 센서 정보로 내린 판단이 실제 움직임으로 이어지는 과정에 관심을 갖게 되었습니다. 앞으로 End-to-End(E2E) 주행 모델을 직접 구현하고, 시야가 가려지거나 입력이 늦게 들어올 때 모델이 어떻게 반응하는지 실험하고 싶습니다. 졸업프로젝트에서는 주정차 차량에 가려진 보행자를 인프라 카메라가 먼저 관측했을 때, 차량의 인지와 감속 시점이 얼마나 빨라지는지 비교하는 실험을 설계하고 있습니다.',
   topics: [
     { title: '인지와 가림', description: '보이지 않는 객체에 어떻게 대응할 수 있을까?' },
-    { title: '판단과 차량 응답', description: '입력·조향 지연은 주행 행동을 어떻게 바꿀까?' },
-    { title: '학습 기반·E2E 주행', description: '학습한 행동의 한계를 어떻게 실험으로 확인할까?' },
+    { title: '판단과 차량 응답', description: '센서 입력과 조향 응답이 늦어지면 주행은 어떻게 달라질까?' },
+    { title: '학습 기반 주행과 E2E', description: '학습한 행동의 한계를 어떻게 실험으로 확인할까?' },
   ],
 } : {
   lead: 'I want to study perception and decision-making for autonomous driving, with a focus on deep learning.',
-  summary: 'My experience building an imitation-learning pipeline and integrating ROS 2 decision and control software motivates an interest in how sensor-based predictions become vehicle behavior. I am particularly interested in implementing end-to-end (E2E) driving models and examining their behavior under occlusion and input delay. My current experiment design compares camera-only driving with infrastructure-camera assistance when a pedestrian is hidden by a parked vehicle.',
+  summary: 'Building an imitation-learning pipeline and integrating ROS 2 decision and control software led me to study how sensor-based predictions affect vehicle behavior. I am particularly interested in implementing end-to-end (E2E) driving models and examining their behavior under occlusion and input delay. My current experiment design compares camera-only driving with infrastructure-camera assistance when a pedestrian is hidden by a parked vehicle.',
   topics: [
     { title: 'Perception under occlusion', description: 'How can a vehicle respond to what it cannot yet see?' },
     { title: 'Decisions and vehicle response', description: 'How do input and steering delays change driving behavior?' },
@@ -34,8 +34,8 @@ type HomeProject = {
 const projectCopy: Record<string, HomeProject> = {
   'kookmin-ai-edge': {
     title: { en: 'Kookmin AI-Edge Challenge', ko: '국민대 AI-엣지 챌린지' },
-    summary: { en: 'From imitation-learning and YOLO pipelines to mission-level integration on a competition vehicle.', ko: '모방학습·YOLO 파이프라인부터 Mission Manager / Final Driver의 실차 통합까지.' },
-    result: { en: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award.', ko: '팀 성과: 예선 2위, 본선 완주 13위, 주차경기 특별상.' },
+    summary: { en: 'Built an imitation-learning pipeline, trained a YOLO detector, and integrated mission logic on the competition vehicle.', ko: '모방학습 파이프라인과 YOLO 검출 모델을 개발하고, Mission Manager / Final Driver를 대회 차량에 적용했습니다.' },
+    result: { en: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award.', ko: '팀은 예선 2위, 본선 완주 13위를 기록하고 주차경기 특별상을 받았습니다.' },
     visual: {
       src: '/media/projects/kookmin-ai-edge/01-competition-vehicle.jpg',
       alt: { en: 'Team KAI competition vehicle on the Kookmin course', ko: '국민대 대회 코스 위의 Team KAI 차량' },
@@ -45,8 +45,8 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'ai-sw-mobility': {
     title: { en: 'AI·SW Mobility: Decision-Making & AEB', ko: 'AI·SW 모빌리티: 주행 판단과 AEB' },
-    summary: { en: 'ROS 2 stop logic and constrained Stanley tracking, connected through Gazebo and vehicle integration.', ko: 'ROS 2 정지 판단과 조향 제약을 적용한 Stanley 추종, Gazebo 검증 및 실차 통합.' },
-    result: { en: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop commands at 50 km/h; a brake hardware fault prevented stopping within the zone.', ko: '9월 19–20일 대회장 연습: 예선·본선 코스 모두 실차 waypoint 주행 10 m/s(36 km/h) 성공, 50 km/h AEB 정지 명령 확인. 브레이크 하드웨어 이상으로 구간 내 정지는 미달성.' },
+    summary: { en: 'Developed ROS 2 stop logic and Stanley path tracking with steering limits, then tested them in Gazebo and on the vehicle.', ko: 'ROS 2 정지 판단과 조향 제한을 적용한 Stanley 경로 추종을 개발하고, Gazebo와 실차에서 시험했습니다.' },
+    result: { en: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop commands at 50 km/h; a brake hardware fault prevented stopping within the zone.', ko: '9월 19–20일 대회장 연습에서 예선과 본선 코스를 모두 10 m/s(36 km/h)로 주행했습니다. AEB는 50 km/h에서 정지 명령을 내렸지만, 브레이크 고장으로 지정 구간 안에 멈추지 못했습니다.' },
     visual: {
       src: '/media/projects/ai-sw-mobility/03-final-course-waypoint-poster.jpg',
       alt: { en: 'Onboard view of final-course waypoint driving', ko: '실차 본선 코스 waypoint 주행 장면' },
@@ -56,30 +56,30 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'camera-v2i-e2e': {
     title: { en: 'Camera-Based V2I & End-to-End Driving', ko: 'Camera 기반 V2I·End-to-End 주행' },
-    summary: { en: 'Designing camera-only and V2I-assisted E2E driving for a 1/5-scale HENES vehicle in an occluded-pedestrian scenario.', ko: '1/5 HENES 차량의 보행자 사각지대 대응을 위한 Camera-only·V2I-assisted E2E 비교 설계.' },
-    result: { en: 'Week 4: operating domain defined; system requirements, homography, latency and stopping-distance budgets in design. Implementation is planned.', ko: '4주차: 운행 조건 정의 완료. 시스템 요구·상위 설계 진행 중이며 Homography, 지연시간·최소 인지거리 평가 방법을 구체화했습니다.' },
+    summary: { en: 'Designing camera-only and V2I-assisted E2E driving for a 1/5-scale HENES vehicle in an occluded-pedestrian scenario.', ko: '1/5 HENES 차량에서 카메라만 사용하는 E2E 주행과 인프라 카메라 정보를 더한 주행을 비교하는 실험을 설계하고 있습니다.' },
+    result: { en: 'Week 4: operating domain defined; system requirements, homography, latency and stopping-distance budgets in design. Implementation is planned.', ko: '4주차에는 운행 조건을 정하고 시스템 요구사항과 상위 설계를 진행했습니다. Homography로 보행자 위치를 구하는 방법과 지연시간, 최소 인지거리를 평가할 기준을 정리했습니다.' },
     visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: { en: 'Week-4 camera-only and V2I-assisted E2E comparison design', ko: '4주차 발표의 Camera-only·V2I-assisted E2E 비교 구조' }, title: { en: 'E2E comparison design', ko: 'E2E 비교 설계' }, caption: { en: 'Week 4 · Proposed comparison architecture', ko: '4주차 발표 · 비교 구조 설계안' }, kind: 'image' },
   },
   'uav-waypoint': {
     title: { en: 'UAV Waypoint Mission', ko: 'UAV Waypoint 미션' },
-    summary: { en: 'A ROS 2 mission package for sequential 3D waypoints, TF2 arrival checks, and PX4 offboard integration.', ko: '3D waypoint 순차 추종, TF2 도착 판정, PX4 offboard 연동을 위한 ROS 2 미션 패키지.' },
-    result: { en: 'Waypoint tracking and final landing completed in the PX4 SITL/Gazebo demonstration.', ko: 'PX4 SITL/Gazebo 시연에서 waypoint 추종 및 최종 착륙 완료.' },
+    summary: { en: 'A ROS 2 mission package for sequential 3D waypoints, TF2 arrival checks, and PX4 offboard integration.', ko: '3D waypoint를 순서대로 따라가고 TF2로 도착을 판정하는 ROS 2 미션 패키지를 개발해 PX4 offboard 제어기와 연결했습니다.' },
+    result: { en: 'Waypoint tracking and final landing completed in the PX4 SITL/Gazebo demonstration.', ko: 'PX4 SITL/Gazebo 시뮬레이션에서 waypoint 추종과 최종 착륙을 완료했습니다.' },
     visual: { title: { en: 'Waypoint tracking & landing', ko: 'Waypoint 추종·착륙 시연' }, kind: 'video' },
   },
   'vmodel-neuro-symbolic': {
     title: { en: 'Dream Semester: Decision & Control', ko: '드림학기제: 판단·제어 개발' },
-    summary: { en: 'An early ROS 2 / CARLA project exploring Pure Pursuit, longitudinal control, and vehicle-command integration.', ko: 'Pure Pursuit, 종방향 제어, 차량 명령 연동을 다룬 초기 ROS 2 / CARLA 프로젝트.' },
-    result: { en: 'Stable autonomous driving was not achieved, and the project did not reach real-vehicle driving. The case study documents implementation, debugging, and lessons for later work.', ko: '안정적인 자율주행을 달성하지 못했고, 실제 차량 주행에는 이르지 못했습니다. 구현·디버깅 과정과 이후 프로젝트를 위한 교훈을 정리했습니다.' },
+    summary: { en: 'An early ROS 2 / CARLA project exploring Pure Pursuit, longitudinal control, and vehicle-command integration.', ko: 'ROS 2와 CARLA에서 Pure Pursuit 경로 추종과 속도 제어를 구현하고 차량 명령 인터페이스를 연결했습니다.' },
+    result: { en: 'Path tracking remained unstable in simulation. The project ended without achieving stable autonomous driving or a real-vehicle run.', ko: '시뮬레이션에서 경로 추종이 불안정했고, 원인을 해결하지 못한 채 프로젝트를 마쳤습니다. 실제 차량 주행은 하지 못했습니다.' },
   },
 };
 const skills = [
   { label: ko ? '프로그래밍' : 'Programming', tools: 'Python, C++' },
   { label: ko ? '자율시스템' : 'Autonomous systems', tools: 'ROS 2, CARLA, Gazebo, PX4 SITL' },
-  { label: ko ? 'AI·컴퓨터 비전' : 'AI & computer vision', tools: 'PyTorch, YOLO, OpenCV, Roboflow' },
-  { label: ko ? '개발·분석 도구' : 'Development & inspection', tools: 'Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2, QGroundControl' },
+  { label: ko ? 'AI 및 컴퓨터 비전' : 'AI & computer vision', tools: 'PyTorch, YOLO, OpenCV, Roboflow' },
+  { label: ko ? '개발 및 분석 도구' : 'Development & inspection', tools: 'Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2, QGroundControl' },
 ];
 ---
-<BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={ko ? '황정헌의 자율주행·AI·자율시스템 프로젝트와 기술 기록.' : 'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'} lang={lang} alternate={{ lang: ko ? 'en' : 'ko', href: ko ? '/' : '/ko/' }}>
+<BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={ko ? '황정헌의 자율주행과 AI 프로젝트. 개발 내용, 실험 결과와 연구 계획을 소개합니다.' : 'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'} lang={lang} alternate={{ lang: ko ? 'en' : 'ko', href: ko ? '/' : '/ko/' }}>
   <main id="main" class="container home-page">
     <section class="intro" aria-labelledby="intro-title">
       <figure class="intro-profile">
@@ -90,7 +90,7 @@ const skills = [
         <p class="eyebrow">{ko ? '건국대학교 / 스마트운행체공학과' : 'Konkuk University / Smart Mobility Engineering'}</p>
         <h1 id="intro-title">Junghun Hwang <span lang="ko">황정헌</span></h1>
         <p class="intro-field">Autonomous Driving · Perception · Learning</p>
-        <p class="intro-summary">{ko ? '건국대학교 스마트운행체공학과 학부생입니다. ROS 2 기반 판단·제어, AI 인지, 시스템 통합을 구현하고 시뮬레이션과 실차 실험으로 확인합니다.' : 'I study Smart Mobility Engineering at Konkuk University. My work connects ROS 2 decision-making, AI perception, and control integration through simulation and initial vehicle experiments.'}</p>
+        <p class="intro-summary">{ko ? '건국대학교 스마트운행체공학과 학부생입니다. ROS 2로 주행 판단과 제어를 구현하고, AI 인지 모델을 차량에 적용해 시뮬레이션과 실차에서 시험해 왔습니다.' : 'I study Smart Mobility Engineering at Konkuk University. I develop ROS 2 decision and control software, train perception models, and test their integration in simulation and on autonomous vehicles.'}</p>
         <dl class="intro-details">
           <div><dt>{ko ? '생년월일' : 'Born'}</dt><dd><time datetime="2001-12-10">2001.12.10</time></dd></div>
           <div><dt>{ko ? '거주지' : 'Based in'}</dt><dd>Seoul, Korea</dd></div>
@@ -105,7 +105,6 @@ const skills = [
     <section id="projects" class="home-section projects-section" aria-labelledby="projects-title">
       <div class="section-heading">
         <div><p class="eyebrow">{ko ? '구현과 실험 기록' : 'Implementation & experiments'}</p><h2 id="projects-title">{ko ? '주요 프로젝트' : 'Selected projects'}</h2></div>
-        <p class="section-note">{ko ? '문제, 설계 선택, 그리고 확인한 결과.' : 'Problems, design decisions, and observed results.'}</p>
       </div>
       <ol class="project-list">
         {projects.map(({ data }) => {
