@@ -24,3 +24,16 @@ The participant supplied `KakaoTalk_20260922_174025079.mp4` on September 22, 202
 Both excerpts use the same crop: x=534, y=250, width=536, height=302 in the 1280×720 source. This shows the flight view and excludes the marker-recognition dashboard, desktop, and entity inspector. The poster is the cropped source frame at 00:36.0, exported at 960×540. The recording illustrates takeoff and waypoint flight; it does not provide tracking-error measurements or evidence of a completed landing.
 
 The home page uses the poster, and the UAV case study provides the GIF playback toggle and download. The original recording stays outside the public repository.
+
+# Dream Semester test recordings
+
+The participant identified both recordings as Dream Semester material on September 22, 2026. They show CARLA simulation and a stationary physical wheel test.
+
+| Asset | Original file | Source interval | Encoding | Visible context |
+| --- | --- | --- | --- | --- |
+| `01-carla-simulation.gif` | `KakaoTalk_20260922_174628729.mp4` | 00:02–00:12 (10 s) | 640×360, 8 fps | Vehicle motion through a curve in CARLA; waypoint, Pure Pursuit, and speed-control terminals remain visible. |
+| `02-stationary-wheel-test.gif` | `KakaoTalk_20260922_174630125.mp4` | 00:09–00:15 (6 s) | 576×432, 12 fps | A wheel rotates while the chassis is raised on supports. The participant confirmed issuing separate commands to the control side for this test. |
+
+Both GIFs are continuous excerpts at the recorded playback speed. The CARLA crop is x=4, y=54, width=1184, height=666 from the 1192×720 recording. Its poster uses 00:06 and is exported at 960×540. The physical-test video is automatically oriented to 1080×1920 before cropping at x=8, y=460, width=1056, height=792. Its poster uses 00:12 and is exported at 960×720. The physical crop keeps the wheel and supports in view and excludes the operator's upper body.
+
+The home page uses the CARLA poster. Both GIFs have playback toggles and downloads in the case study. The project outcome remains unresolved tracking instability and no real-vehicle driving run; these clips add implementation and test records. No tracking-error statistics, steering calibration, or causal diagnosis are derived from them. The original recordings remain outside the public repository.

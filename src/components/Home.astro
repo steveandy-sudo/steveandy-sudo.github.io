@@ -77,6 +77,13 @@ const projectCopy: Record<string, HomeProject> = {
     title: { en: 'Dream Semester: Decision & Control', ko: '드림학기제: 판단·제어 개발' },
     summary: { en: 'An early ROS 2 / CARLA project exploring Pure Pursuit, longitudinal control, and vehicle-command integration.', ko: 'ROS 2와 CARLA에서 Pure Pursuit 경로 추종과 속도 제어를 구현하고 차량 명령 인터페이스를 연결했습니다.' },
     result: { en: 'Path tracking remained unstable in simulation. The project ended without achieving stable autonomous driving or a real-vehicle run.', ko: '시뮬레이션에서 경로 추종이 불안정했고, 원인을 해결하지 못한 채 프로젝트를 마쳤습니다. 실제 차량 주행은 하지 못했습니다.' },
+    visual: {
+      src: '/media/projects/vmodel-neuro-symbolic/01-carla-simulation-poster.jpg',
+      alt: { en: 'Dream Semester CARLA simulation with ROS 2 control terminals', ko: 'ROS 2 제어 터미널과 함께 기록한 드림학기제 CARLA 시뮬레이션' },
+      title: { en: 'CARLA simulation test', ko: 'CARLA 시뮬레이션 시험' },
+      caption: { en: 'Dream Semester · CARLA simulation test', ko: '드림학기제 · CARLA 시뮬레이션 시험' },
+      kind: 'image',
+    },
   },
 };
 const skills = [
@@ -143,7 +150,7 @@ const skills = [
               </div>
               {visual && <div class="project-visual">
                 {visual.src ? <figure>
-                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={data.slug === 'uav-waypoint' ? 960 : data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={data.slug === 'uav-waypoint' ? 540 : data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></a>
+                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 960 : data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 540 : data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></a>
                   <figcaption>{visual.caption?.[lang]}</figcaption>
                 </figure> : <ReservedMedia title={visual.title[lang]} kind={visual.kind ?? 'image'} lang={lang} />}
               </div>}
