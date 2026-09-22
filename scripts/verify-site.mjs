@@ -57,11 +57,15 @@ for (const file of htmlFiles) {
     if (document.querySelectorAll('a[href^="https://github.com/"]').length > 1) errors.push(`${route}: duplicate GitHub links`);
   }
   if (route === '/') {
-    if (document.querySelector('a[href^="/projects/"]')) errors.push('Home: unexpected case-study link');
+    const linkedProjects = [];
     for (const project of document.querySelectorAll('.project-entry')) {
-      const links = [...project.querySelectorAll('a[href]')];
-      if (links.length > 1 || links.some(link => !link.getAttribute('href').startsWith('https://github.com/'))) errors.push('Home: projects must have at most one GitHub link');
+      const titleTarget = project.querySelector('h3 a')?.getAttribute('href');
+      const previewTarget = project.querySelector('a.project-preview')?.getAttribute('href');
+      if (!projectRoutes.includes(titleTarget) || previewTarget !== titleTarget) errors.push('Home: project title and image must link to its detail page');
+      if (titleTarget) linkedProjects.push(titleTarget);
+      if (project.querySelectorAll('a[href^="https://github.com/"]').length > 1) errors.push('Home: projects must have at most one GitHub link');
     }
+    if (new Set(linkedProjects).size !== projectRoutes.length) errors.push('Home: some projects are not accessible');
     if (document.querySelectorAll('.project-entry a[href^="https://github.com/"]').length !== 3) errors.push('Home: expected three public project repositories');
   }
   for (const image of document.querySelectorAll('img')) if (!image.getAttribute('alt')?.trim()) errors.push(`${route}: image without alt`);

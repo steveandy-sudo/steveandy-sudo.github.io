@@ -40,9 +40,17 @@ test('keyboard, English-only navigation, project repositories and development sl
   await expect(page.locator('.global-nav a[href$="#cv"], a[href="https://github.com/steveandy-sudo"]')).toHaveCount(0);
   const cards = page.locator('.project-entry');
   await expect(cards).toHaveCount(5);
-  await expect(page.locator('.project-list a')).toHaveCount(3);
-  await expect(page.locator('.project-list a[href^="/projects/"]')).toHaveCount(0);
+  await expect(page.locator('.project-list a')).toHaveCount(13);
+  await expect(page.locator('.project-list a[href^="/projects/"]')).toHaveCount(10);
   await expect(page.getByRole('link', { name: /Read case study/i })).toHaveCount(0);
+  for (const slug of ['kookmin-ai-edge', 'ai-sw-mobility', 'camera-v2i-e2e', 'uav-waypoint', 'vmodel-neuro-symbolic']) {
+    const href = `/projects/${slug}/`;
+    const card = cards.filter({ has: page.locator(`a[href="${href}"]`) });
+    await expect(card).toHaveCount(1);
+    await expect(card.locator(`a[href="${href}"]`)).toHaveCount(2);
+    await expect(card.locator('h3 a')).toHaveAttribute('href', href);
+    await expect(card.locator('a:has(img)')).toHaveAttribute('href', href);
+  }
   for (const repository of [
     'https://github.com/steveandy-sudo/kookmin-autonomous-portfolio',
     'https://github.com/steveandy-sudo/uav-waypoint-portfolio',
@@ -50,16 +58,19 @@ test('keyboard, English-only navigation, project repositories and development sl
   ]) {
     const card = cards.filter({ has: page.locator(`a[href="${repository}"]`) });
     await expect(card).toHaveCount(1);
-    await expect(card.getByRole('link')).toHaveCount(1);
-    await expect(card.getByRole('link')).toHaveAccessibleName(/GitHub/);
+    await expect(card.getByRole('link')).toHaveCount(3);
+    await expect(card.locator('a[href^="https://github.com/"]')).toHaveCount(1);
+    await expect(card.locator('a[href^="https://github.com/"]')).toHaveAccessibleName(/GitHub/);
   }
   const privateCard = cards.filter({ has: page.locator('[data-repository-visibility="private"]') });
   await expect(privateCard).toHaveCount(1);
-  await expect(privateCard.getByRole('link')).toHaveCount(0);
+  await expect(privateCard.getByRole('link')).toHaveCount(2);
+  await expect(privateCard.locator('a[href^="https://github.com/"]')).toHaveCount(0);
   await expect(privateCard).toContainText('competition is ongoing');
   const capstoneCard = cards.filter({ has: page.getByRole('heading', { level: 3, name: 'Camera-Based V2I & End-to-End Driving', exact: true }) });
   await expect(capstoneCard).toHaveCount(1);
-  await expect(capstoneCard.getByRole('link')).toHaveCount(0);
+  await expect(capstoneCard.getByRole('link')).toHaveCount(2);
+  await expect(capstoneCard.locator('a[href^="https://github.com/"]')).toHaveCount(0);
   for (const [slug, repository] of [
     ['kookmin-ai-edge', 'https://github.com/steveandy-sudo/kookmin-autonomous-portfolio'],
     ['uav-waypoint', 'https://github.com/steveandy-sudo/uav-waypoint-portfolio'],
@@ -76,8 +87,8 @@ test('keyboard, English-only navigation, project repositories and development sl
     await expect(notice).toContainText('competition is ongoing');
   }
   await page.goto('/projects/kookmin-ai-edge/');
-  await expect(page.getByRole('link', { name: 'driving integration code' })).toHaveAttribute('href', 'https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_map_nav');
-  await expect(page.getByRole('link', { name: 'parking package', exact: true })).toHaveAttribute('href', 'https://github.com/steveandy-sudo/kookmin-autonomous-portfolio/tree/main/src/xycar_parking_nav');
+  await expect(page.locator('.case-header').getByRole('link', { name: 'GitHub repository', exact: true })).toHaveCount(1);
+  await expect(page.locator('a[href^="https://github.com/"]')).toHaveCount(1);
   await expect(page.locator('a[href*="kookmin_autonomous_competition_teamKAI"]')).toHaveCount(0);
   await expect(page.locator('[data-media-slot]')).toHaveCount(0);
 });
