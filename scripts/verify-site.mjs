@@ -30,7 +30,8 @@ async function targetOf(url) {
 }
 const htmlFiles = files.filter(file => file.endsWith('.html'));
 const routes = htmlFiles.map(routeOf);
-for (const route of ['/', '/ko/', '/projects/kookmin-ai-edge/', '/projects/ai-sw-mobility/', '/projects/camera-v2i-e2e/', '/projects/uav-waypoint/', '/projects/vmodel-neuro-symbolic/']) {
+const projectRoutes = ['/projects/kookmin-ai-edge/', '/projects/ai-sw-mobility/', '/projects/camera-v2i-e2e/', '/projects/uav-waypoint/', '/projects/vmodel-neuro-symbolic/'];
+for (const route of ['/', '/ko/', ...projectRoutes, ...projectRoutes.map(route => '/ko' + route)]) {
   if (!routes.includes(route)) errors.push(`Missing route ${route}`);
 }
 let checkedLinks = 0;
@@ -38,6 +39,8 @@ for (const file of htmlFiles) {
   const document = await doc(file);
   const route = routeOf(file);
   const pageUrl = new URL(route, origin);
+  const lang = route.startsWith('/ko/') ? 'ko' : 'en';
+  if (document.documentElement.lang !== lang) errors.push(`${route}: incorrect document language`);
   if (document.querySelectorAll('h1').length !== 1) errors.push(`${route}: expected one h1`);
   if (!document.querySelector('main#main')) errors.push(`${route}: missing skip target`);
   for (const field of ['meta[name="description"]', 'meta[property="og:title"]', 'meta[property="og:description"]', 'meta[property="og:url"]']) {
@@ -51,6 +54,20 @@ for (const file of htmlFiles) {
   if (route.includes('/projects/')) {
     if (!document.querySelector('#my-contribution') || !document.querySelector('.contribution-section li')) errors.push(`${route}: missing personal contribution`);
     if (!document.querySelector('.toc-desktop') || !document.querySelector('.toc-mobile')) errors.push(`${route}: missing responsive local navigation`);
+    const counterpartRoute = lang === 'ko' ? route.slice(3) : '/ko' + route;
+    const alternate = document.querySelector('.language-link')?.getAttribute('href');
+    if (alternate !== counterpartRoute) errors.push(`${route}: missing matching language switch`);
+    if (lang === 'ko') {
+      const english = await doc(await targetOf(new URL(counterpartRoute, origin)));
+      const mediaRefs = page => [...page.querySelectorAll('.case-content img[src],.case-content source[src],.case-content iframe[src],.case-content [data-animation]')].map(el => el.getAttribute('src') ?? el.getAttribute('data-animation'));
+      if (JSON.stringify(mediaRefs(document)) !== JSON.stringify(mediaRefs(english))) errors.push(`${route}: translated page uses different media`);
+      if (document.querySelectorAll('.case-content h2').length !== english.querySelectorAll('.case-content h2').length) errors.push(`${route}: translated page is missing sections`);
+    }
+  }
+  if (lang === 'ko') {
+    for (const link of document.querySelectorAll('a[href^="/projects/"]')) {
+      if (!link.classList.contains('language-link')) errors.push(`${route}: Korean navigation leads to English ${link.getAttribute('href')}`);
+    }
   }
   for (const image of document.querySelectorAll('img')) if (!image.getAttribute('alt')?.trim()) errors.push(`${route}: image without alt`);
   const refs = [];

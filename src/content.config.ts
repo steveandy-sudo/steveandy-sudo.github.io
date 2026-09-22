@@ -2,7 +2,7 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 const projects = defineCollection({
-  loader: glob({ pattern: '**/*.mdx', base: './src/content/projects' }),
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/projects', generateId: ({ data }) => `${data.lang}/${data.slug}` }),
   schema: z.object({
     slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
     lang: z.enum(['en', 'ko']).default('en'), order: z.number().int().positive(),

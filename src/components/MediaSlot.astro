@@ -4,18 +4,22 @@ import Video from './Video.astro';
 import AnimatedFigure from './AnimatedFigure.astro';
 import ReservedMedia from './ReservedMedia.astro';
 import { media } from '../data/media';
-interface Props { id: string; }
-const item = media[Astro.props.id];
-if (!item) throw new Error(`Unknown media slot: ${Astro.props.id}`);
+import { mediaKo } from '../data/media-ko';
+interface Props { id: string; lang?: 'en' | 'ko'; }
+const { id, lang = 'en' } = Astro.props;
+const source = media[id];
+if (!source) throw new Error(`Unknown media slot: ${id}`);
+if (lang === 'ko' && !mediaKo[id]) throw new Error(`Missing Korean media copy: ${id}`);
+const item = lang === 'ko' ? { ...source, ...mediaKo[id] } : source;
 ---
 {item.youtubeId || (item.src && item.kind === 'video') ? (
-  <Video src={item.src} youtubeId={item.youtubeId} title={item.alt} caption={item.caption} poster={item.poster} gifSrc={item.gifSrc} portrait={item.portrait} />
+  <Video src={item.src} youtubeId={item.youtubeId} title={item.alt} caption={item.caption} poster={item.poster} gifSrc={item.gifSrc} portrait={item.portrait} lang={lang} />
 ) : item.src && item.gifSrc && item.poster ? (
-  <AnimatedFigure src={item.gifSrc} poster={item.poster} alt={item.alt} caption={item.caption} width={item.width} height={item.height} />
+  <AnimatedFigure src={item.gifSrc} poster={item.poster} alt={item.alt} caption={item.caption} width={item.width} height={item.height} lang={lang} />
 ) : item.src ? (
   <Figure src={item.src} alt={item.alt} caption={item.caption} />
 ) : item.reserve ? (
-  <div class="media-reservation"><ReservedMedia title={item.title} kind={item.kind ?? 'image'} slotId={Astro.props.id} /></div>
+  <div class="media-reservation"><ReservedMedia title={item.title} kind={item.kind ?? 'image'} slotId={id} lang={lang} /></div>
 ) : import.meta.env.DEV && (
   <aside class="media-request" data-media-slot={Astro.props.id}><span class="eyebrow">Development preview / 자료 요청</span><strong>{item.title}</strong><p>{item.request}</p><code>{item.target}</code></aside>
 )}

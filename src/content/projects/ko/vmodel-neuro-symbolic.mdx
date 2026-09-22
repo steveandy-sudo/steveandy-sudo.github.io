@@ -1,0 +1,70 @@
+---
+slug: vmodel-neuro-symbolic
+lang: ko
+order: 5
+title: "드림학기제: ROS 2 / CARLA 판단·제어"
+titleEn: "Dream Semester: ROS 2 / CARLA Decision and Control"
+titleKo: "드림학기제: ROS 2 / CARLA 판단·제어"
+context: 드림학기제 프로젝트
+period: 2026년 3월 – 2026년 6월
+team: 3명
+role: 판단 및 제어 통합
+status: ended
+summary: "ROS 2/CARLA에서 Pure Pursuit와 판단·제어 모듈을 통합하고, 불안정한 경로 추종과 차량 명령 인터페이스를 점검했습니다."
+outcome: "자율주행 목표를 달성하지 못했습니다. 경로 추종 불안정을 해결하지 못한 채 프로젝트가 종료되었으며, 실차 주행은 진행하지 못했습니다."
+teamScope: "3명으로 구성된 드림학기제 팀이 주행 플랫폼을 개발했습니다. 저는 판단, 경로 추종과 제어 통합을 맡았습니다."
+contributions:
+  - ROS 2 판단, 웨이포인트 추종, Pure Pursuit와 종방향 속도 제어를 구현하고 CARLA와 연동했습니다.
+  - 폐루프 시뮬레이션을 수행하며 조향 방향, lookahead, 평활화, 변화율 제한과 명령 범위를 점검했습니다.
+  - 이후 MCU 브리지 연동을 수정하고, 차량을 받침대에 올린 상태에서 별도의 제어 명령으로 바퀴 구동을 시험했습니다.
+technologies: [ROS 2, CARLA, Pure Pursuit, Control Integration]
+github: https://github.com/steveandy-sudo/vmodel-driving-portfolio
+featured: true
+---
+
+import SystemFlow from '../../../components/SystemFlow.astro';
+import MediaSlot from '../../../components/MediaSlot.astro';
+
+## 목표와 구현
+
+**V-Model Neuro-Symbolic Driving**이라는 이름으로 시작한 드림학기제 프로젝트입니다. ROS 2 주행 판단과 웨이포인트 추종을 연결해 자율주행을 구현하는 것이 목표였습니다. 저는 Pure Pursuit, 종방향 속도 제어와 CARLA 연동을 구현하고, 이후 차량 명령 인터페이스를 수정했습니다.
+
+<SystemFlow title="판단과 제어의 역할" steps={[
+  { label: '목표와 행동 상태', detail: '행동 로직이 목표점, 목표 속도와 주행 상태를 제공합니다.' },
+  { label: '경로 추종', detail: 'Pure Pursuit가 목표점의 기하 관계를 조향 요청으로 변환합니다.' },
+  { label: '명령 조정', detail: '명령 범위, 평활화와 변화율 제한을 적용합니다.' },
+  { label: '실행 인터페이스', detail: '초기 코드는 CARLA를 대상으로 하며, 후기 패키지는 조향과 MCU 시리얼 브리지를 분리합니다.' },
+]} caption="아카이브에는 단계별 통합 코드가 보관되어 있습니다. CARLA 경로와 MCU 경로는 별도로 구현되어 있습니다." />
+
+## 시험 영상
+
+### CARLA 시뮬레이션
+
+<MediaSlot id="vmodel-simulation" lang="ko" />
+
+### 받침대 위 바퀴 구동 시험
+
+<MediaSlot id="vmodel-wheel-test" lang="ko" />
+
+## 디버깅 기록
+
+**관찰한 현상:** 폐루프 시뮬레이션에서 경로 추종이 불안정했습니다. 조향 방향, lookahead, 목표점 평활화, 변화율 제한과 명령 범위를 점검했습니다. 원인을 하나로 확정하기 전에 프로젝트가 종료되었습니다.
+
+| 점검 영역 | 수행한 작업 | 영향을 분리해 확인하는 데 필요한 기록 |
+| --- | --- | --- |
+| 조향 방향과 단위 | 조향 응답 확인 및 조정 | 고정 목표점에 대한 요청 회전 방향과 관측 회전 방향 |
+| Lookahead와 목표점 기하 관계 | 목표점 추종 파라미터 조정 | 동일 경로에서 목표점과 실제 궤적을 겹쳐 표시한 기록 |
+| 평활화와 변화율 제한 | 명령 필터와 변화량 제한 조정 | 변경 전후 조향 명령을 같은 시간축으로 정렬한 기록 |
+| 명령 범위와 인터페이스 | 출력 범위 조정 및 명령 브리지 수정 | 단위, 포화 여부와 타임스탬프를 포함한 입출력 기록 |
+
+현재 기록으로는 각 조정이 추종 오차에 미친 영향을 분리해 확인하기 어렵습니다.
+
+## 보관된 코드
+
+[프로젝트 저장소](https://github.com/steveandy-sudo/vmodel-driving-portfolio)는 `src/neuro_decision/archive`의 초기 CARLA 구현과 이후의 행동, 조향, MCU 브리지 패키지를 분리해 보관합니다. 후기 조향 노드에는 목표점 기하 관계 처리, 평활화, 명령 범위와 주기별 조향 변화량 제한이 들어 있습니다. 브리지는 목표 속도, 조향각과 상태를 시리얼 명령 형식으로 변환합니다.
+
+## 배운 점과 후속 실험
+
+제어기를 조정하기 전에 **목표 좌표, 조향 단위, 타임스탬프와 명령을 담당하는 모듈**을 명확히 정해야 한다는 점을 배웠습니다. 궤적과 명령을 서로 맞춰 기록하지 않으면 개별 조정의 영향을 확인하기 어렵습니다.
+
+다시 구성한다면 직선 경로와 일정한 곡률의 선회 경로부터 시작해 조향 부호와 단위를 확인한 뒤, 한 번에 하나의 설정만 바꾸려 합니다. 목표 궤적과 실제 궤적, 시간축을 맞춘 제어 명령을 함께 기록해 각 설정이 추종에 미치는 영향을 측정하겠습니다.
