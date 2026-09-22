@@ -11,13 +11,13 @@ team: 27 members / decision team of 5
 role: Decision-Making / AEB Development
 status: ongoing
 summary: "ROS 2 waypoint driving, constrained Stanley tracking, and AEB stop logic for autonomous competition courses."
-outcome: "During real-vehicle practice at the competition venue on September 19–20, 2026, waypoint driving succeeded on both preliminary and final courses at 10 m/s (36 km/h). AEB stops succeeded at speeds up to 50 km/h, compared with the competition requirement of 30 km/h."
+outcome: "During real-vehicle practice at the competition venue on September 19–20, 2026, waypoint driving succeeded on both preliminary and final courses at 10 m/s (36 km/h). At 50 km/h, the AEB stop command was issued at the red cones, but a brake hardware fault prevented a stop within the zone."
 teamScope: "I work in the five-member decision-making group of a 27-member vehicle team, connecting driving decisions, path tracking, and vehicle integration."
 contributions:
   - Worked on the ROS 2 AEB pipeline, including cone-boundary center-path generation, a red-entry stop latch, and stateful fail-safe behavior.
   - Implemented Stanley tracking with steering limits, steering-rate limits, and motion preview.
   - Validated the AEB pipeline in Gazebo closed-loop simulation and used Foxglove for path, steering, and stop-state debugging.
-  - "Conducted real-vehicle venue practice on September 19–20: waypoint driving on both courses at 10 m/s (36 km/h), and AEB stopping at speeds up to 50 km/h."
+  - "Conducted real-vehicle venue practice on September 19–20: waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop-command trials at 50 km/h; stopping-zone compliance was not achieved due to a brake hardware fault."
 technologies: [ROS 2, Stanley, Gazebo, Foxglove, AEB]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
 featured: true
@@ -48,7 +48,7 @@ How can a perceived cone corridor become a trackable path and a reliable stop co
 | Steering and steering-rate limits | Bound command magnitude and abrupt changes | Stanley tracking and command limiting |
 | Stale-input checks | Request a stop when required path or state data is unavailable | Offline AEB tests and fail-safe branches |
 
-The [AEB implementation and tests](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) expose behavior at these boundaries. Motion preview was also implemented as part of the path-tracking work. The latest course and stop trials establish successful operation at the reported speeds; isolating the effect of a specific control change requires matched logs.
+The [AEB implementation and tests](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio) expose behavior at these boundaries. Motion preview was also implemented as part of the path-tracking work. The venue trials demonstrated course driving and AEB command issuance; the 50 km/h AEB trial did not meet the physical stopping criterion. Isolating the effect of a specific control change requires matched logs.
 
 ## Evidence and current result
 
@@ -56,23 +56,24 @@ The [AEB implementation and tests](https://github.com/steveandy-sudo/ai-sw-mobil
 | --- | --- | --- |
 | Waypoint driving | Preliminary course | Successful driving at **10 m/s (36 km/h)** |
 | Waypoint driving | Final course | Successful driving at **10 m/s (36 km/h)** |
-| AEB stop | Competition requirement: **30 km/h** | Successful stops at speeds up to **50 km/h** |
+| AEB command trial | Trial speed: **50 km/h**; competition requirement: **30 km/h** | Stop command issued at the red cones; vehicle overran the stopping zone due to a reported brake hardware fault |
 
 These real-vehicle tests took place on **September 19–20, 2026**, during the organizer's open-practice period at the competition venue. Both courses and AEB were exercised repeatedly. They are practice results, not official preliminary/final competition results.
 
-**AEB success criterion:** detect the red cones, apply braking at the start of the red-cone zone, and come to a complete stop before the end of that zone. Successful stops were reported at speeds up to **50 km/h**, against the **30 km/h** competition requirement.
+**AEB success criterion:** detect the red cones, apply braking at the start of the red-cone zone, and come to a complete stop before the end of that zone. In the **50 km/h** trial, the stop command was issued at the red cones, but **two of the four brakes were inoperative**, as reported after reviewing the footage. The vehicle passed the stopping-zone end. Command issuance was achieved; the required physical stop was not.
 
-Waypoint driving and AEB stopping are separate trials; the 50 km/h figure refers to AEB testing. Results were reported in the project update on September 22, 2026.
+Waypoint driving and AEB stopping are separate trials; the 50 km/h figure refers to AEB testing. The result was clarified during footage review on September 22, 2026; 50 km/h is the trial speed, not a successful stopping-speed claim.
 
 Earlier development included Gazebo closed-loop validation, initial real-vehicle trials at approximately 7 km/h, investigation of steering oscillation, and a steering-motor delay correction by the control team. The repository also contains 29 AEB tests checked during source collection. These development records are retained separately from the latest course results.
 
-<MediaSlot id="mobility-monitor" />
 <MediaSlot id="mobility-waypoint" />
 <MediaSlot id="mobility-aeb-stop" />
+<MediaSlot id="mobility-aeb-replay" />
+<MediaSlot id="mobility-monitor" />
 
 ## Follow-up measurements
 
-The next analysis will quantify the successful course and stop trials using synchronized speed, steering, path, and brake records. A matched earlier recording is needed to isolate the effect of the steering correction.
+The next analysis will quantify course tracking and distinguish AEB command timing from physical braking response using synchronized speed, steering, path, and brake records. A matched earlier recording is needed to isolate the effect of the steering correction.
 
 | Record | Question it answers |
 | --- | --- |
@@ -81,7 +82,7 @@ The next analysis will quantify the successful course and stop trials using sync
 | Braking request, measured speed, and stop position | Does the vehicle stop at the intended location? |
 | Trial count and individual outcomes | Does the behavior repeat under the same conditions? |
 
-Trial counts, stopping distances, and path-error statistics will be added with the corresponding records. No success rate or quantified reduction in steering oscillation is inferred from the reported successful runs.
+Trial counts, stopping distances, and path-error statistics will be added with the corresponding records. No success rate or quantified reduction in steering oscillation is inferred from the reported trials.
 
 ## Code and reproduction
 

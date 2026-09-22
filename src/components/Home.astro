@@ -46,12 +46,12 @@ const projectCopy: Record<string, HomeProject> = {
   'ai-sw-mobility': {
     title: { en: 'AI·SW Mobility: Decision-Making & AEB', ko: 'AI·SW 모빌리티: 주행 판단과 AEB' },
     summary: { en: 'ROS 2 stop logic and constrained Stanley tracking, connected through Gazebo and vehicle integration.', ko: 'ROS 2 정지 판단과 조향 제약을 적용한 Stanley 추종, Gazebo 검증 및 실차 통합.' },
-    result: { en: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stops at up to 50 km/h (required: 30 km/h).', ko: '9월 19–20일 대회장 연습: 예선·본선 코스 모두 실차 waypoint 주행 10 m/s(36 km/h) 성공, AEB 정지 최대 50 km/h 성공(대회 요구: 30 km/h).' },
+    result: { en: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop commands at 50 km/h; a brake hardware fault prevented stopping within the zone.', ko: '9월 19–20일 대회장 연습: 예선·본선 코스 모두 실차 waypoint 주행 10 m/s(36 km/h) 성공, 50 km/h AEB 정지 명령 확인. 브레이크 하드웨어 이상으로 구간 내 정지는 미달성.' },
     visual: {
-      src: '/media/projects/ai-sw-mobility/foxglove-recorded-monitor.png',
-      alt: { en: 'Foxglove MCAP replay monitor with route, camera, and vehicle signal panels', ko: '경로·카메라·차량 신호가 표시된 Foxglove MCAP 재생 화면' },
-      title: { en: 'Recorded-run inspection', ko: '기록 데이터 분석' },
-      caption: { en: 'Foxglove · Recorded-data replay', ko: 'Foxglove · 기록 데이터 재생' },
+      src: '/media/projects/ai-sw-mobility/03-final-course-waypoint-poster.jpg',
+      alt: { en: 'Onboard view of final-course waypoint driving', ko: '실차 본선 코스 waypoint 주행 장면' },
+      title: { en: 'Final-course venue practice', ko: '본선 코스 대회장 연습' },
+      caption: { en: 'Final-course waypoint driving · Venue practice', ko: '본선 코스 waypoint 주행 · 대회장 연습' },
     },
   },
   'camera-v2i-e2e': {
@@ -137,7 +137,7 @@ const skills = [
               </div>
               {visual && <div class="project-visual">
                 {visual.src ? <figure>
-                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={data.slug === 'ai-sw-mobility' ? 2880 : 1576} height={data.slug === 'ai-sw-mobility' ? 1800 : 884} loading="lazy" decoding="async" /></a>
+                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt?.[lang] ?? visual.title[lang]} width={data.slug === 'ai-sw-mobility' ? 1280 : 1576} height={data.slug === 'ai-sw-mobility' ? 720 : 884} loading="lazy" decoding="async" /></a>
                   <figcaption>{visual.caption?.[lang]}</figcaption>
                 </figure> : <ReservedMedia title={visual.title[lang]} kind={visual.kind ?? 'image'} lang={lang} />}
               </div>}

@@ -1,6 +1,7 @@
 ---
 import Figure from './Figure.astro';
 import Video from './Video.astro';
+import AnimatedFigure from './AnimatedFigure.astro';
 import ReservedMedia from './ReservedMedia.astro';
 import { media } from '../data/media';
 interface Props { id: string; }
@@ -9,6 +10,8 @@ if (!item) throw new Error(`Unknown media slot: ${Astro.props.id}`);
 ---
 {item.youtubeId || (item.src && item.kind === 'video') ? (
   <Video src={item.src} youtubeId={item.youtubeId} title={item.alt} caption={item.caption} poster={item.poster} gifSrc={item.gifSrc} portrait={item.portrait} />
+) : item.src && item.gifSrc && item.poster ? (
+  <AnimatedFigure src={item.gifSrc} poster={item.poster} alt={item.alt} caption={item.caption} />
 ) : item.src ? (
   <Figure src={item.src} alt={item.alt} caption={item.caption} />
 ) : item.reserve ? (
