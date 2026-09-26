@@ -7,14 +7,16 @@ titleEn: 2026 Student AI·SW Mobility Competition
 context: Student AI·SW Mobility Competition
 period: Mar 2026 – Ongoing
 team: 27 members / decision team of 5
-role: Decision-Making / AEB Development
+role: Decision-Making / High-Level Control / AEB
 status: ongoing
-summary: "ROS 2 waypoint driving, Pure Pursuit and Stanley tracking with steering constraints, and AEB stop logic for autonomous competition courses."
-outcome: "During real-vehicle practice at the competition venue on September 19–20, 2026, waypoint driving succeeded on both preliminary and final courses at 10 m/s (36 km/h). At 50 km/h, the AEB stop command was issued at the red cones, but a brake hardware fault prevented a stop within the zone."
+summary: "ROS 2 waypoint driving, hybrid Pure Pursuit + Stanley tracking, and AEB stop logic, with comparison tests, log analysis, and technical-report authorship."
+outcome: "In matched Gazebo segments at 6 m/s, hybrid tracking reduced heading-error p95 by approximately 14% and steering-command total variation by approximately 10% versus Stanley alone. During venue practice on September 19–20, 2026, waypoint driving succeeded on both courses at 10 m/s (36 km/h). A 50 km/h AEB trial confirmed stop-command issuance at the red cones; a brake hardware fault prevented an in-zone stop."
 teamScope: "I work in the five-member decision-making group of a 27-member vehicle team, connecting driving decisions, path tracking, and vehicle integration."
 contributions:
   - Worked on the ROS 2 AEB pipeline, including cone-boundary center-path generation, a red-entry stop latch, and stateful fail-safe behavior.
-  - Implemented Pure Pursuit and Stanley tracking with steering limits, steering-rate limits, and motion preview.
+  - Implemented hybrid Pure Pursuit + Stanley tracking with steering and steering-rate limits, and motion preview.
+  - Conducted matched Gazebo comparison tests against Stanley alone at 6 m/s and analyzed the logs for tracking error and steering-command variation.
+  - Authored the high-level control section of Team K.A.I.'s competition technical report, documenting path tracking, steering constraints, and vehicle-command integration.
   - Tested the AEB pipeline in Gazebo closed-loop simulation and used Foxglove for path, steering, and stop-state debugging.
   - "Completed real-vehicle waypoint runs on both preliminary and final courses at 10 m/s (36 km/h) during venue practice on September 19–20, 2026."
   - "Confirmed AEB stop-command issuance at the red cones in a 50 km/h trial; a brake hardware fault prevented stopping within the required zone."
@@ -38,7 +40,7 @@ The AEB pipeline uses perceived cone boundaries to generate a path and identify 
 <SystemFlow title="Decision-to-vehicle command path" steps={[
   { label: 'Route and perception', detail: 'Route zones, cone boundaries, traffic state, and vehicle feedback provide the driving context.' },
   { label: 'Behavior and target selection', detail: 'The planning engine selects a driving state, target path, and desired speed.' },
-  { label: 'Tracking and stop logic', detail: 'Pure Pursuit and Stanley tracking apply steering constraints; AEB logic can request zero speed and braking.' },
+  { label: 'Tracking and stop logic', detail: 'Hybrid Pure Pursuit + Stanley tracking applies steering constraints; stop logic can request zero speed and braking.' },
   { label: 'Command gate and vehicle control', detail: 'The test workflow passes the selected command through a gate to the external vehicle-control stack.' },
 ]} caption="Route driving and cone-course AEB use separate trial workflows." />
 
@@ -51,9 +53,28 @@ The AEB pipeline uses perceived cone boundaries to generate a path and identify 
 | Steering and steering-rate limits | Bound command magnitude and abrupt changes | Pure Pursuit and Stanley tracking, and command limiting |
 | Stale-input checks | Request a stop when required path or state data is unavailable | Offline AEB tests and fail-safe branches |
 
-The AEB logic checks input freshness and preserves the stop state after the red-cone trigger. The path-tracking implementation uses Pure Pursuit and Stanley and also includes motion preview.
+The AEB logic checks input freshness and preserves the stop state after the red-cone trigger. The path-tracking implementation combines Pure Pursuit and Stanley and also includes motion preview.
 
-## Evidence and current result
+## High-level control and technical report
+
+I authored **Section 3.4, High-Level Control**, of Team K.A.I.'s competition technical report, dated **September 24, 2026** (pp. 186–191). The section explains how a target path, target speed, and stop request become steering, speed, and brake commands for the vehicle.
+
+The controller combines Pure Pursuit and Stanley steering at **50 Hz**. Their weights change with straight driving, corner approach, turning, and corner exit. Lookahead distance adapts to speed and upcoming curvature; gradual weight changes and steering-rate limits control command transitions. The interface sends target speed, steering angle, a brake request, and a timestamp to the low-level controller.
+
+## Matched simulation comparison
+
+I conducted the comparison tests and analyzed the logs for **hybrid Pure Pursuit + Stanley versus Stanley alone**. The comparison used **the same Gazebo course segments at 6 m/s**, with route progress aligned to reduce differences in segment composition and travel distance.
+
+| Metric | Change with hybrid tracking versus Stanley alone |
+| --- | --- |
+| Heading-error p95 | Approximately **14% lower** |
+| Steering-error p95 | Approximately **7% lower** |
+| Steering-command total variation | Approximately **10% lower** |
+| Curved-section lateral-error p95 | Approximately **8% lower** |
+
+Here, **p95** is the 95th percentile of the recorded error values. Steering-command total variation measures the accumulated changes in the steering command over the comparison segment. These results are recorded in **Section 4.3.1 (pp. 239–240)** and the **performance summary on p. 256** of the team technical report.
+
+## Real-vehicle trials
 
 | Test | Course or reference | Reported result |
 | --- | --- | --- |
@@ -74,13 +95,13 @@ Earlier development included Gazebo closed-loop testing, initial real-vehicle tr
 
 ## Follow-up measurements
 
-The next analysis needs synchronized speed, steering, path, and brake records to measure tracking error and the delay between an AEB command and vehicle deceleration. Comparing the steering correction also requires a recording from before the change under matching conditions.
+The simulation comparison provides a baseline for the next vehicle tests. Further work will examine repeatability across vehicle runs and measure the delay between an AEB command and vehicle deceleration using synchronized speed, steering, path, and brake records.
 
 | Record | Question it answers |
 | --- | --- |
 | Time-aligned target and measured steering | Does the actuator follow the requested angle, and with what delay? |
-| Target path and vehicle trajectory | How large are lateral tracking errors along the route? |
+| Target path and vehicle trajectory across repeated runs | How do vehicle tracking errors vary by course segment and speed? |
 | Braking request, measured speed, and stop position | Does the vehicle stop at the intended location? |
 | Trial count and individual outcomes | Does the behavior repeat under the same conditions? |
 
-Per-trial counts, stopping distances, and path-error statistics are not available in the current record.
+Per-trial counts and stopping distances remain to be documented for the venue-practice runs.

@@ -22,6 +22,7 @@ The homepage presents each public project's GitHub link once. Kookmin, UAV, and 
 
 - The Kookmin case study has one GitHub link in its header, pointing to `steveandy-sudo/kookmin-autonomous-portfolio`. Obsolete links to the original team repository are rejected.
 - AI·SW records 10 m/s waypoint driving on both courses during venue practice and a 50 km/h AEB stop command. Detailed trial descriptions retain the brake fault and stopping-zone overrun.
+- AI·SW also records the user-confirmed high-level-control report authorship and comparison-test/log-analysis work. The approximately 14% heading-error p95 and 10% steering-command-total-variation reductions on the homepage and CV are explicitly tied to matched 6 m/s Gazebo segments against Stanley alone. The detail page includes the report's additional approximately 7% steering-error p95 and 8% curved-section lateral-error p95 reductions. These percentages do not describe vehicle tests or the hardware repair. The report itself is not hosted on the site; repository access remains private during the competition.
 - Capstone material describes a design-stage project; slide diagrams do not establish completed implementation or vehicle validation.
 - UAV footage shows simulated waypoint flight. Dream Semester footage separates CARLA simulation from supported-wheel testing with separate control commands.
 - V2 English/Korean CVs are included. V1 files are not included while the GPA remains unconfirmed.

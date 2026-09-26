@@ -34,8 +34,8 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision-Making & AEB',
-    summary: 'Developed cone-boundary path generation, red-cone-triggered stop commands, and Pure Pursuit + Stanley tracking with steering limits; tested the pipeline in Gazebo and on the vehicle.',
-    result: 'Venue practice, Sep 19–20: real-vehicle waypoint driving on both courses at 10 m/s (36 km/h), and AEB stop commands at 50 km/h.',
+    summary: 'Developed ROS 2 path generation, Pure Pursuit + Stanley tracking, and AEB stop logic. Conducted comparison tests and log analysis, and authored the high-level control section of the team technical report.',
+    result: 'In matched Gazebo segments at 6 m/s, hybrid tracking reduced heading-error p95 by approximately 14% and steering-command total variation by approximately 10% versus Stanley alone. Venue practice: waypoint driving on both courses at 10 m/s (36 km/h); AEB stop commands at 50 km/h.',
     visual: {
       src: '/media/projects/ai-sw-mobility/03-final-course-waypoint-poster.jpg',
       alt: 'Onboard view of final-course waypoint driving',
