@@ -8,7 +8,7 @@ const { lead, summary, topics } = Astro.props;
 ---
 <section id="research" class="home-section" aria-labelledby="research-title">
   <div class="section-heading">
-    <div><p class="eyebrow">{'Questions I want to explore'}</p><h2 id="research-title">{'Research interests'}</h2></div>
+    <div><p class="eyebrow">Research interests</p><h2 id="research-title">Perception, decisions, and learning.</h2></div>
   </div>
   <div class="research-grid">
     <div class="research-statement">
@@ -22,25 +22,27 @@ const { lead, summary, topics } = Astro.props;
   </div>
 </section>
 <style>
-  .home-section { padding-top: 28px; margin-bottom: 68px; }
-  .section-heading h2 { margin-top: 7px; }
-  .research-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 62px; }
-  .research-lead { font-size: 1.25rem; line-height: 1.6; letter-spacing: -.012em; color: var(--ink); }
-  .research-summary { margin-top: 17px; font-size: .9375rem; line-height: 1.95; }
-  .research-link { display: inline-block; font-size: .8125rem; margin-top: 21px; }
-  .research-topics { list-style: none; padding: 0 0 0 28px; border-left: 1px solid var(--line); align-self: start; }
-  .research-topics li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 13px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .home-section { padding: 40px 44px; margin-bottom: 56px; border: 0; border-radius: 12px; background: var(--ink); color: #c8d7df; }
+  .eyebrow { color: #a9c5d3; font-family: var(--font); font-size: .67rem; }
+  .section-heading { margin-bottom: 28px; }
+  .section-heading h2 { margin-top: 10px; color: #fff; font-size: 1.8rem; font-weight: 500; }
+  .research-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 62px; }
+  .research-lead { font-size: 1.08rem; line-height: 1.65; color: #f2f7fa; }
+  .research-summary { margin-top: 16px; font-size: .86rem; line-height: 1.9; }
+  .research-topics { list-style: none; padding: 0 0 0 28px; border-left: 1px solid #48606e; align-self: start; }
+  .research-topics li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 13px; padding: 15px 0; border-bottom: 1px solid #48606e; }
   .research-topics li:first-child { padding-top: 0; }
   .research-topics li:last-child { padding-bottom: 0; border-bottom: 0; }
-  .research-topics li > span { font: .6875rem var(--mono); color: var(--muted); padding-top: 6px; white-space: nowrap; }
-  .research-topics h3 { color: var(--accent); font-size: .9375rem; line-height: 1.6; }
-  .research-topics p { margin-top: 6px; font-size: .8125rem; line-height: 1.75; }
+  .research-topics li > span { font: .6875rem var(--mono); color: #a9c5d3; padding-top: 6px; white-space: nowrap; }
+  .research-topics h3 { color: #fff; font-size: .875rem; line-height: 1.6; font-weight: 500; }
+  .research-topics p { margin-top: 5px; font-size: .79rem; line-height: 1.75; }
   @media (max-width: 1000px) { .research-grid { gap: 30px; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } .research-topics { padding-left: 22px; } }
   @media (max-width: 760px) {
-    .home-section { margin-bottom: 46px; }
+    .home-section { margin-bottom: 32px; padding: 28px 24px; }
+    .section-heading h2 { font-size: 1.55rem; }
     .section-heading .eyebrow { margin-top: 0; }
     .research-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-    .research-lead { font-size: 1.15rem; }
+    .research-lead { font-size: 1.05rem; }
     .research-topics { padding-left: 0; border-left: 0; }
     .research-topics li { grid-template-columns: 25px minmax(0, 1fr); }
   }
