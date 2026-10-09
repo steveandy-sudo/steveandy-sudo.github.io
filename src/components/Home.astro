@@ -7,7 +7,7 @@ import { allProjects, projectUrl, statusLabel } from '../lib/projects';
 
 const research = {
   lead: 'How can a vehicle make better decisions with incomplete information?',
-  summary: 'My interests lie in autonomous-driving perception, decision-making, and deep learning. Building an imitation-learning pipeline and integrating ROS 2 controllers led me to look more closely at how predictions translate into vehicle behavior. I want to pursue end-to-end driving research through implementation and experiments, especially under occlusion and input delay. My current capstone design compares camera-only driving with infrastructure-camera assistance for a hidden-pedestrian scenario.',
+  summary: 'My interests lie in autonomous-driving perception, decision-making, and deep learning. Building an imitation-learning pipeline and integrating ROS 2 controllers led me to look more closely at how predictions translate into vehicle behavior. I want to pursue end-to-end driving research through implementation and experiments, especially under occlusion and input delay. In my capstone, I am reviewing vehicle–infrastructure fusion research and helping define a planned comparison of camera-only and V2I-assisted E2E driving.',
   topics: [
     { title: 'Perception under occlusion', description: 'How can a vehicle respond to what it cannot yet see?' },
     { title: 'Decisions and vehicle response', description: 'How do input and steering delays change driving behavior?' },
@@ -45,11 +45,11 @@ const projectCopy: Record<string, HomeProject> = {
     },
   },
   'camera-v2i-e2e': {
-    title: 'Camera-Based V2I & End-to-End Driving',
-    summary: 'Designing camera-only and V2I-assisted E2E driving for a 1/5-scale test vehicle in an occluded-pedestrian scenario.',
-    result: 'Defined the occlusion scenario and comparison architecture. Geometry, latency, and stopping-distance requirements are in design; implementation is planned.',
-    resultLabel: 'Design in progress',
-    visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: 'Camera-only and V2I-assisted E2E comparison design', title: 'E2E comparison design', caption: 'Proposed camera-only and V2I-assisted comparison', kind: 'image' },
+    title: 'Camera-Based V2I Cooperative End-to-End Autonomous Driving',
+    summary: 'Reviewed UniV2X and proposed a simplified vehicle–infrastructure fusion direction for a five-member capstone, with a small-scale closed-loop comparison planned for a later stage.',
+    result: 'This semester focuses on research and design. The team is developing infrastructure position estimation, coordinate conversion, and time correction toward a camera-only versus V2I-assisted E2E comparison.',
+    resultLabel: 'Research & design',
+    visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: 'Team proposal for comparing camera-only and V2I-assisted E2E planning', title: 'Proposed E2E comparison', caption: 'Team design proposal · Camera-only and V2I-assisted E2E planning', kind: 'image' },
   },
   'uav-waypoint': {
     title: 'UAV Waypoint Mission',
