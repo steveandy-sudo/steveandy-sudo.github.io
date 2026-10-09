@@ -2,12 +2,18 @@
 import BaseLayout from './BaseLayout.astro';
 import ProjectToc from '../components/ProjectToc.astro';
 import RepositoryAccess from '../components/RepositoryAccess.astro';
+import { projectHighlights } from '../data/projectHighlights';
 import { statusLabel } from '../lib/projects';
 import type { CollectionEntry } from 'astro:content';
 import type { MarkdownHeading } from 'astro';
 interface Props { project: CollectionEntry<'projects'>; headings: MarkdownHeading[]; }
 const { project, headings } = Astro.props;
 const d = project.data;
+const highlight = projectHighlights[d.slug];
+if (!highlight) throw new Error(`Missing project reading summary: ${d.slug}`);
+for (const item of highlight.evidence) {
+  if (!headings.some(heading => heading.slug === item.anchor)) throw new Error(`Missing project summary anchor: ${d.slug}#${item.anchor}`);
+}
 const toc = [{slug:'overview',text:'Overview'}, {slug:'my-contribution',text:'My contribution'}, ...headings.filter(h => h.depth === 2)];
 ---
 <BaseLayout title={`${d.title} | Junghun Hwang`} description={d.summary}>
@@ -15,9 +21,14 @@ const toc = [{slug:'overview',text:'Overview'}, {slug:'my-contribution',text:'My
     <a class="back-link" href="/#projects">← All projects</a>
     <header class="case-header" data-reveal>
       <p class="eyebrow">Project {String(d.order).padStart(2,'0')} / {d.context}</p>
-      <h1>{d.title}</h1>
+      <h1>{highlight.title}</h1>
       <dl class="project-meta"><div><dt>Period</dt><dd>{d.period}</dd></div>{d.team && <div><dt>Team</dt><dd>{d.team}</dd></div>}<div><dt>Role</dt><dd>{d.role}</dd></div><div><dt>Status</dt><dd><span class={`status ${d.status}`}>{statusLabel.en[d.status]}</span></dd></div></dl>
-      {d.github && <RepositoryAccess href={d.github} visibility={d.githubVisibility} privateReason={d.githubPrivateReason} label="GitHub repository" />}
+      <div class="project-brief" aria-label="Project summary">
+        <div><h2>My work</h2><p>{highlight.work}</p></div>
+        <div><h2>{highlight.resultLabel}</h2><p>{highlight.result}</p></div>
+        <nav class="brief-evidence" aria-label="Supporting project materials"><h2>Explore the work</h2><ul>{highlight.evidence.map(item => <li><a href={`#${item.anchor}`}>{item.label}<span aria-hidden="true">↘</span></a></li>)}</ul></nav>
+      </div>
+      {d.github && <div class="case-repository"><RepositoryAccess href={d.github} visibility={d.githubVisibility} privateReason={d.githubPrivateReason} label="GitHub repository" /></div>}
     </header>
     <div class="case-grid"><ProjectToc items={toc} /><article class="case-content">
       <section aria-labelledby="overview" data-reveal><h2 id="overview">Overview</h2><p class="lead">{d.summary}</p><p class="outcome"><strong>Outcome</strong> {d.outcome}</p></section>
@@ -28,48 +39,70 @@ const toc = [{slug:'overview',text:'Overview'}, {slug:'my-contribution',text:'My
 </BaseLayout>
 
 <style>
-  .case-page { padding-top: 42px; }
-  .back-link { display: inline-block; color: var(--muted); font-size: .78rem; transition: color 180ms ease; }
+  .case-page { padding-top: 28px; }
+  .back-link { display: inline-block; color: var(--body); font-size: .85rem; transition: color 180ms ease; }
   .back-link:hover { color: var(--accent); }
-  .case-header { position: relative; padding: 44px 46px; margin-top: 26px; border: 1px solid var(--line); border-radius: 20px; background: linear-gradient(125deg, color-mix(in srgb, var(--accent) 4%, var(--soft)), var(--soft) 65%); overflow: hidden; }
-  .case-header::before { content: ''; position: absolute; width: 88px; height: 1px; left: 46px; top: 0; background: var(--accent); }
-  .case-header h1 { margin-top: 20px; max-width: 920px; font-size: clamp(2rem, 3.8vw, 3.1rem); font-weight: 500; letter-spacing: -.035em; }
-  .case-header > .eyebrow { font-size: .65rem; color: var(--accent); letter-spacing: .12em; }
-  .project-meta { margin-top: 34px; padding-top: 25px; border-top: 1px solid var(--line); }
-  .project-meta dt { font-size: .62rem; letter-spacing: .1em; }
-  .project-meta dd { font-size: .83rem; line-height: 1.7; }
-  .case-header :global(.repository-private), .case-header :global(.repository-link) { margin-top: 26px; }
+  .case-header { position: relative; padding: 28px 32px; margin-top: 18px; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(125deg, color-mix(in srgb, var(--accent) 4%, var(--soft)), var(--soft) 65%); overflow: hidden; }
+  .case-header::before { content: ''; position: absolute; width: 88px; height: 1px; left: 32px; top: 0; background: var(--accent); }
+  .case-header h1 { margin-top: 12px; max-width: 100%; font-size: clamp(1.8rem, 3vw, 2.45rem); line-height: 1.2; font-weight: 550; letter-spacing: -.035em; text-wrap: balance; }
+  .case-header > .eyebrow { font-size: .7rem; color: var(--accent); letter-spacing: .1em; }
+  .project-meta { grid-template-columns: .9fr 1fr 1.6fr .65fr; margin-top: 22px; gap: 12px 24px; }
+  .project-meta dt { font-size: .69rem; letter-spacing: .08em; margin-bottom: 3px; }
+  .project-meta dd { font-size: .875rem; line-height: 1.65; }
+  .project-brief { display: grid; grid-template-columns: 1fr 1.15fr .65fr; gap: 28px; margin-top: 24px; padding-top: 23px; border-top: 1px solid var(--line); }
+  .project-brief > * { min-width: 0; }
+  .project-brief h2 { color: var(--accent); font: 500 .7rem/1.6 var(--mono); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 9px; }
+  .project-brief p { font-size: .9375rem; line-height: 1.75; color: var(--ink); }
+  .brief-evidence ul { list-style: none; padding: 0; }
+  .brief-evidence li + li { margin-top: 11px; }
+  .brief-evidence a { display: flex; justify-content: space-between; gap: 10px; color: var(--body); font-size: .875rem; line-height: 1.65; text-decoration: none; }
+  .brief-evidence a:hover { color: var(--accent); text-decoration: underline; }
+  .brief-evidence a span { color: var(--accent); }
+  .case-repository { margin-top: 22px; }
+  .case-repository :global(.repository-link) { font-size: .875rem; }
+  .case-repository :global(.repository-status), .case-repository :global(.repository-note) { font-size: .8125rem; }
   .case-header :global(.repository-link) { display: inline-flex; align-items: center; gap: 22px; border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); padding-bottom: 3px; text-decoration: none; }
-  .case-grid { grid-template-columns: 205px minmax(0, 1fr); gap: 60px; margin-top: 56px; }
-  .case-content :global(h2) { font-size: 1.7rem; font-weight: 500; padding-top: 34px; margin-top: 58px; }
-  .case-content :global(h2::before) { font-size: .64rem; color: var(--accent); margin-bottom: 12px; }
+  .case-grid { grid-template-columns: 215px minmax(0, 1fr); gap: 48px; margin-top: 40px; }
+  .case-content :global(h2) { font-size: 1.65rem; font-weight: 550; padding-top: 28px; margin-top: 48px; }
+  .case-content > section:first-child :global(h2) { margin-top: 0; padding-top: 0; border-top: 0; }
+  .case-content :global(h2::before) { font-size: .7rem; color: var(--accent); margin-bottom: 12px; }
   .case-content :global(h3) { font-size: 1.15rem; }
-  .case-content :global(p), .case-content :global(li) { font-size: .95rem; line-height: 1.9; }
+  .case-content :global(p), .case-content :global(li) { font-size: 1.0625rem; line-height: 1.85; color: #b9c9d2; }
+  .case-content :global(table), .case-content :global(dl) { font-size: .9375rem; line-height: 1.75; color: #b9c9d2; }
   .case-content :global(.lead) { font-size: 1.12rem; line-height: 1.85; color: var(--ink); }
   .case-content :global(.outcome) { border: 1px solid var(--line); border-left: 2px solid var(--accent); border-radius: 0 10px 10px 0; padding: 21px 24px; line-height: 1.85; background: var(--soft); }
-  .case-content :global(.outcome strong) { color: var(--accent); font-size: .65rem; font-weight: 500; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
-  .case-content :global(.scope-label) { font-size: .65rem !important; color: var(--accent); letter-spacing: .1em; margin-top: 25px; }
+  .case-content :global(.outcome strong) { color: var(--accent); font-size: .75rem; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+  .case-content :global(.scope-label) { font-size: .75rem !important; color: var(--accent); letter-spacing: .08em; margin-top: 25px; }
   .contribution-section ul { padding-left: 24px; border: 0; }
   .contribution-section li::marker { color: var(--accent); }
   .case-content :global(figure img), .case-content :global(figure video) { border-radius: 10px; }
-  .case-content :global(figcaption) { font-size: .78rem; }
+  .case-content :global(figcaption) { font-size: .9rem; line-height: 1.75; color: #b1c1cb; }
+  .case-content :global(.animation-controls) { font-size: .875rem; }
   .case-content :global(.system-flow) { border-radius: 12px; padding: 26px; }
   .case-content :global(.decision), .case-content :global(.investigation) { border-color: var(--line); }
   .case-content :global(.result) { border-color: var(--line); }
-  @media (max-width: 1000px) { .case-header { padding: 36px; } .case-header::before { left: 36px; } .case-grid { grid-template-columns: 180px minmax(0, 1fr); gap: 35px; } }
+  @media (max-width: 1000px) { .project-meta { grid-template-columns: 1fr 1fr; } .project-brief { grid-template-columns: 1fr 1fr; gap: 22px; } .brief-evidence { grid-column: 1 / -1; } .brief-evidence ul { display: flex; flex-wrap: wrap; gap: 10px 30px; } .brief-evidence li + li { margin-top: 0; } .case-grid { grid-template-columns: 180px minmax(0, 1fr); gap: 35px; } }
   @media (max-width: 760px) {
-    .case-page { padding-top: 28px; }
-    .case-header { padding: 28px 24px; margin-top: 22px; border-radius: 16px; }
-    .case-header::before { left: 24px; }
-    .case-header h1 { font-size: 2rem; }
+    .case-page { padding-top: 22px; }
+    .case-header { padding: 23px 20px; margin-top: 16px; border-radius: 12px; }
+    .case-header::before { left: 20px; }
+    .case-header h1 { font-size: 1.85rem; text-wrap: initial; }
+    .case-header > .eyebrow { font-size: .65rem; }
+    .project-meta { gap: 14px 18px; }
+    .project-brief { grid-template-columns: 1fr; gap: 20px; margin-top: 21px; padding-top: 20px; }
+    .project-brief p { font-size: 1rem; }
+    .brief-evidence { grid-column: auto; }
+    .brief-evidence ul { display: block; }
+    .brief-evidence li + li { margin-top: 10px; }
     .case-grid { display: block; margin-top: 32px; }
     .case-content :global(h2) { font-size: 1.5rem; }
-    .case-content :global(p), .case-content :global(li) { font-size: .9375rem; }
+    .case-content :global(p), .case-content :global(li) { font-size: 1rem; }
+    .case-content :global(figcaption) { font-size: .875rem; }
     .case-content :global(.lead) { font-size: 1.05rem; }
     .case-content :global(table) { display: block; max-width: 100%; overflow-x: auto; }
     .case-content :global(th), .case-content :global(td) { min-width: 130px; }
     .case-content :global(.outcome) { padding: 17px 19px; }
     .case-content :global(.system-flow) { padding: 20px; }
   }
-  @media print { .case-header { background: none; padding: 0 0 20px; border: 0; } .case-grid { display: block; } }
+  @media print { .case-header { background: none; padding: 0 0 20px; border: 0; } .project-brief { grid-template-columns: 1fr 1fr; } .brief-evidence { display: none; } .case-grid { display: block; } .case-content :global(p), .case-content :global(li), .case-content :global(figcaption), .case-content :global(table), .case-content :global(dl) { color: var(--body); } }
 </style>
