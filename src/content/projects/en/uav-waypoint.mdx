@@ -46,25 +46,23 @@ The course environment combined ROS 2 Humble, PX4 SITL, Gazebo, QGroundControl, 
 | Explicit ENU / local-NED modes | Handle the coordinate boundary between ROS poses and PX4 commands |
 | Altitude checks before disarm | Gate the implemented land-then-disarm finish path on the reported vehicle state |
 
-The archived configuration contains **nine waypoints** and a default **1.0 m arrival tolerance**. The exact configuration used in the demonstration has yet to be matched to a run record, and measured tracking-error statistics are unavailable.
+The repository configuration defines **nine waypoints** and a default **1.0 m arrival tolerance**. The demonstration confirmed mission completion in simulation; quantitative tracking-error and repeat-trial results are not available.
 
-## Demonstration and evidence
+## Simulation demonstration
 
-| Item | Record |
+| Item | Result |
 | --- | --- |
 | Environment | PX4 SITL / Gazebo course simulation |
 | Course demonstration outcome | Sequential waypoint tracking and final landing completed using the waypoint package |
 | Recording below | Takeoff and waypoint flight during simulation testing |
-| Source archive | Final course workspace supplied after the demonstration |
-| Quantitative tracking result | Repeat-trial counts and measured position-error statistics have not been consolidated |
 
 <MediaSlot id="uav-demo" />
 
 ## Coordinate and finish-state integration
 
-The mission node supplies pose targets while the offboard controller performs vehicle-side conversion and command publication. During reproduction, **coordinate conversion must have one clearly defined owner**: the collected controller already converts ENU to NED, so the mission output mode and origin must be checked together.
+The mission node supplies pose targets, and the offboard controller converts them from ENU to NED before publishing PX4 commands. The mission output mode and origin must match this conversion.
 
-The package implements `hold`, `land`, `disarm`, and `land_then_disarm` finish options. The final simulation demonstrated landing, while the exact launch configuration and landing-command receiver still need to be matched to that run. The repository setup notes document these integration points.
+The package implements `hold`, `land`, `disarm`, and `land_then_disarm` finish options. The final simulation demonstrated waypoint tracking followed by landing.
 
 ## What I learned
 

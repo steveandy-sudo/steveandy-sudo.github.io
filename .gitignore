@@ -6,3 +6,6 @@ dist/
 !.env.example
 playwright-report/
 test-results/
+
+# Working copies; approved publication assets are in academic-2026.
+/public/media/academic-2026-review/

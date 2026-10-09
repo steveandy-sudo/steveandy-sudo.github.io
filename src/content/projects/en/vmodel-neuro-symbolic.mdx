@@ -33,7 +33,7 @@ This Dream Semester project, originally titled **V-Model Neuro-Symbolic Driving*
   { label: 'Path tracking', detail: 'Pure Pursuit maps target geometry to a steering request.' },
   { label: 'Command shaping', detail: 'Bounds, smoothing, and rate limits shape the requested command.' },
   { label: 'Execution interface', detail: 'Earlier code targets CARLA; later packages separate steering and the MCU serial bridge.' },
-]} caption="The archive contains successive integration stages; the CARLA and MCU paths are distinct implementations." />
+]} caption="Development progressed from CARLA integration to a separate vehicle-command interface." />
 
 ## Recorded tests
 
@@ -45,24 +45,22 @@ This Dream Semester project, originally titled **V-Model Neuro-Symbolic Driving*
 
 <MediaSlot id="vmodel-wheel-test" />
 
-## Debugging record
+## Investigating unstable tracking
 
-**Observation:** closed-loop simulation showed unstable path tracking. I investigated steering direction, lookahead, target smoothing, rate limiting, and command bounds. The project ended before a single root cause was conclusively isolated.
+Closed-loop simulation showed unstable path tracking. I investigated steering direction, lookahead, target smoothing, rate limiting, and command bounds. The project ended before a single root cause was conclusively isolated.
 
-| Area investigated | Work carried out | Evidence needed to isolate its effect |
+| Area investigated | Work carried out | Follow-up measurement |
 | --- | --- | --- |
 | Steering direction and units | Checked and adjusted steering response | A fixed target with requested and observed turn direction |
 | Lookahead and target geometry | Adjusted target-following parameters | Identical routes with target-point and trajectory overlays |
 | Smoothing and rate limiting | Adjusted command filtering and change limits | Time-aligned steering before and after each change |
 | Command bounds and interface | Adjusted output limits and adapted the command bridge | Input/output traces with units, saturation, and timestamps |
 
-The available records do not isolate the effect of each adjustment on tracking error.
+## Implementation
 
-## What the code preserves
+Development began with CARLA integration and progressed to separate behavior, steering, and MCU bridge packages. The steering node handles target geometry, smoothing, command bounds, and per-cycle steering limits. The bridge translates desired speed, steering angle, and state into serial commands for the vehicle.
 
-The project repository separates earlier CARLA implementations under `src/neuro_decision/archive` from later behavior, steering, and MCU bridge packages. The later steering node contains target-geometry handling, smoothing, bounds, and per-cycle steering limits. The bridge translates desired speed, steering angle, and state into the serial command format.
-
-## Lessons and a better experiment
+## Lessons and next experiment
 
 The main lesson was to make **target coordinates, steering units, timestamps, and command ownership** explicit before tuning the controller. Without matched trajectory and command records, the effect of individual adjustments remains difficult to establish.
 

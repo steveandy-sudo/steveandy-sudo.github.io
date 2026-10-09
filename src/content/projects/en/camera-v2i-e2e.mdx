@@ -9,7 +9,7 @@ period: 2026 – Ongoing
 role: Requirements & System Design
 status: design
 summary: "A proposed camera-based V2I system for a 1/5-scale test vehicle, comparing E2E driving with and without infrastructure information in an occluded-pedestrian scenario."
-outcome: "Week 4: user needs and the initial operational design domain are defined. System requirements and high-level architecture are in progress, with preliminary geometry, latency, and stopping-distance requirements outlined. Implementation and vehicle validation remain planned."
+outcome: "Defined the pedestrian-occlusion scenario and operating conditions. The current design covers camera-to-vehicle information flow, geometry, latency, and stopping-distance requirements; implementation and vehicle testing are planned."
 teamScope: "The capstone uses the V-model to develop a camera-based V2I driving system. My design work focuses on the occlusion scenario, infrastructure-to-vehicle information flow, and a controlled comparison of perception and braking response."
 contributions:
   - Defined a school-zone pedestrian-occlusion scenario and an initial daytime, dry-road, low-speed operating domain for the test vehicle.
@@ -29,7 +29,7 @@ import SystemFlow from '../../../components/SystemFlow.astro';
 
 The proposed system uses a **1/5-scale test vehicle**. A roadside camera observes the occluded area and sends pedestrian state to the vehicle, where an E2E planner combines it with the ego-camera input. The current work defines the requirements and comparison structure; implementation, training, and vehicle trials are planned.
 
-## Week 4 design status
+## Current design
 
 | V-model stage | Current output | Status |
 | --- | --- | --- |
@@ -38,7 +38,7 @@ The proposed system uses a **1/5-scale test vehicle**. A roadside camera observe
 | L3: preliminary design | Homography approach, detection-distance budget, and latency measurement boundaries | Initial definition |
 | L4: detailed design and implementation | Computing hardware, MCU, message details, power, mounting, and proof of concept | Planned |
 
-The design semester focuses on requirements, high-level architecture, and preliminary design. The subsequent implementation semester will measure the test vehicle's actual speed, braking distance, and system latency and use them to evaluate stopping performance.
+The current work focuses on requirements and system architecture. Implementation will include measuring vehicle speed, braking distance, and system latency to evaluate stopping performance.
 
 ## Occlusion scenario and operating domain
 
@@ -63,7 +63,7 @@ The **operational design domain (ODD)** specifies the conditions in which the sy
   { label: 'Direct V2I communication', detail: 'Send pedestrian x, y, confidence, and timestamp from the edge device to the vehicle, without a central server.' },
   { label: 'E2E fusion and planning', detail: 'Combine ego images and vehicle state with encoded V2I object state through lightweight fusion.' },
   { label: 'Vehicle control', detail: 'Generate waypoints and target speed for a low-level controller that produces drive and steering commands.' },
-]} caption="Week-4 high-level design. Component selection and implementation are still in progress." />
+]} caption="Proposed architecture for combining vehicle-camera input with roadside pedestrian information." />
 
 The current message scope is **`x`, `y`, `confidence`, and `timestamp`**. The edge device sends these object-state fields directly to the vehicle. The exact message format, coordinate conventions, synchronization, and communication protocol remain to be finalized.
 
@@ -101,7 +101,7 @@ The preliminary design links available response distance to system latency, brak
 | `M` | Required safety clearance from the pedestrian |
 | `d_req` | Minimum distance budget for timely pedestrian information and stopping |
 
-The design semester will define speed and latency criteria and the measurement methods for braking distance and clearance. The implementation semester will supply measured values to evaluate this requirement.
+Speed and latency limits will be set alongside measurement methods for braking distance and clearance. Vehicle measurements will then be used to check whether the system can meet the required stopping distance.
 
 ## Latency and evaluation plan
 
@@ -114,10 +114,8 @@ The timing plan follows **camera acquisition → pedestrian detection → homogr
 | Response lead | Difference in deceleration-onset distance and time between the two systems |
 | Safety outcome | Minimum time to collision (TTC) and collision occurrence |
 
-## Vehicle integration and next milestone
+## Planned vehicle integration
 
 The proposed vehicle interfaces are front-camera input, a V2I object-state receiver, and waypoint/target-speed outputs. Safety requirements include **E-stop, command timeout, zero default output, and a watchdog**. These safety functions are planned for implementation and testing.
 
-Next, complete the system requirements and subsystem allocation, define the camera calibration and timestamp conventions, and specify the numerical test conditions. Computing hardware, the MCU, control interfaces, power, and mounting belong to detailed design. A proof of concept and matched driving trials follow those decisions.
-
-Design reference: the capstone team's week-4 presentation, supplied September 22, 2026.
+The next stage is to finalize subsystem interfaces, camera calibration, timestamp conventions, and test conditions. Hardware selection and mounting will support a proof of concept, followed by matched camera-only and V2I-assisted driving trials.

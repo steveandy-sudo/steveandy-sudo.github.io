@@ -1,0 +1,36 @@
+---
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import Figure from './Figure.astro';
+import Video from './Video.astro';
+
+const base = '/media/academic-2026';
+const available = (name: string) => existsSync(resolve('public', `${base.slice(1)}/${name}`));
+const slides = available('presentation.pdf');
+const recording = available('presentation.mp4');
+const poster = available('presentation-poster.jpg');
+const certificate = available('award.png');
+const ceremony = available('ceremony.png');
+// TODO: Add the dated event banner when the source photograph is supplied.
+// TODO: Add a public code-snapshot link only after its release is approved.
+---
+
+{(slides || recording || certificate || ceremony) && (
+  <details class="presentation-materials">
+    <summary>Presentation &amp; award materials</summary>
+    {slides && <p><a href={`${base}/presentation.pdf`} target="_blank" rel="noopener">Presentation slides (PDF, Korean)</a><br /><span class="authors">Woojin Hwang &amp; Junghun Hwang</span></p>}
+    {recording && <Video src={`${base}/presentation.mp4`} poster={poster ? `${base}/presentation-poster.jpg` : undefined} title="Recording of the Pure Pursuit–Stanley technical presentation" caption="Presenting the Pure Pursuit–Stanley control strategy." portrait />}
+    <div class="award-materials">
+      {certificate && <Figure src={`${base}/award.png`} alt="2026 Hyundai Mobis Technical Special Award certificate, Autonomous Driving Division, awarded to Konkuk University Team K.A.I." caption="Technical Special Award · Autonomous Driving Division · Konkuk University Team K.A.I." width={1050} height={1400} />}
+      {ceremony && <Figure src={`${base}/ceremony.png`} alt="Award ceremony with the Hyundai Mobis technical symposium title visible behind the participants" caption="Receiving the Hyundai Mobis Technical Special Award." width={1050} height={1400} />}
+    </div>
+  </details>
+)}
+
+<style>
+  .presentation-materials { margin: 28px 0; padding: 20px 24px; border: 1px solid var(--line); border-radius: 10px; background: var(--soft); }
+  summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+  .authors { color: var(--muted); font-size: .85rem; }
+  .award-materials { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: start; }
+  @media (max-width: 650px) { .award-materials { grid-template-columns: minmax(0, 1fr); } }
+</style>
