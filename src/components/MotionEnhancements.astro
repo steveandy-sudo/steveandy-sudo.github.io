@@ -1,0 +1,52 @@
+<script>
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const revealElements = [...document.querySelectorAll<HTMLElement>('[data-reveal]')];
+  let revealObserver: IntersectionObserver | undefined;
+
+  const reveal = (element: HTMLElement) => {
+    element.dataset.revealState = 'visible';
+    revealObserver?.unobserve(element);
+  };
+
+  if (!reducedMotion.matches && 'IntersectionObserver' in window) {
+    try {
+      revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) reveal(entry.target as HTMLElement);
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+      revealElements.forEach(element => {
+        const bounds = element.getBoundingClientRect();
+        if (bounds.top < window.innerHeight - 24 && bounds.bottom > 0) return;
+        element.dataset.revealState = 'pending';
+        revealObserver?.observe(element);
+      });
+    } catch {
+      revealElements.forEach(reveal);
+    }
+  }
+
+  document.addEventListener('focusin', event => {
+    if (!(event.target instanceof Element)) return;
+    const section = event.target.closest<HTMLElement>('[data-reveal-state="pending"]');
+    if (section) reveal(section);
+  });
+
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) {
+      revealElements.forEach(reveal);
+      revealObserver?.disconnect();
+    }
+  });
+</script>
+
+<style is:global>
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal-state] { transition: opacity 700ms ease, transform 700ms cubic-bezier(.2,.65,.3,1); }
+    [data-reveal-state="pending"] { opacity: 0; transform: translateY(18px); }
+    [data-reveal-state="visible"] { opacity: 1; transform: none; }
+  }
+  @media print {
+    [data-reveal-state] { opacity: 1 !important; transform: none !important; }
+  }
+</style>

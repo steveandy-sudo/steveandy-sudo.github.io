@@ -88,15 +88,16 @@ const skills = [
 <BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'}>
   <main id="main" class="container home-page">
     <section class="intro" aria-labelledby="intro-title">
-      <figure class="intro-profile">
+      <div class="intro-orbit" aria-hidden="true"><svg viewBox="0 0 600 220" fill="none"><path d="M0 180h140c85 0 70-130 160-130h300" /><path d="M0 196h140c100 0 85-130 160-130h300" /><circle cx="300" cy="50" r="4" /></svg></div>
+      <figure class="intro-profile" data-reveal>
         <div class="intro-portrait">
           <img src="/media/profile/junghun-hwang.webp" alt="Portrait of Junghun Hwang" width="1632" height="2044" fetchpriority="high" />
         </div>
-        <figcaption>B.S. expected 2028</figcaption>
+        <figcaption><span class="profile-caption-line" aria-hidden="true"></span>B.S. expected 2028</figcaption>
       </figure>
-      <div class="intro-copy">
+      <div class="intro-copy" data-reveal>
         <p class="eyebrow">Smart Vehicle Engineering · Konkuk University</p>
-        <h1 id="intro-title">Junghun Hwang <span lang="ko">황정헌</span></h1>
+        <h1 id="intro-title">Junghun Hwang<span class="name-period" aria-hidden="true">.</span><span class="korean-name" lang="ko">황정헌</span></h1>
         <p class="intro-field">Autonomous Driving · Perception · Learning</p>
         <p class="intro-summary">I build and test perception, decision-making, and control software for autonomous vehicles. Through competition vehicles and simulation projects, I am exploring how learning-based models and control algorithms work together in practice.</p>
         <dl class="intro-details">
@@ -111,8 +112,8 @@ const skills = [
     </section>
     <ResearchInterests {...research} />
     <section id="projects" class="home-section projects-section" aria-labelledby="projects-title">
-      <div class="section-heading">
-        <div><h2 id="projects-title">{'Projects'}</h2></div>
+      <div class="section-heading" data-reveal>
+        <div><p class="eyebrow">Engineering in practice</p><h2 id="projects-title">{'Projects'}<span class="section-count"> / {String(projects.length).padStart(2, '0')}</span></h2></div>
         <p class="section-note">From learning pipelines to vehicle experiments.</p>
       </div>
       <ol class="project-list">
@@ -121,7 +122,7 @@ const skills = [
           const visual = copy?.visual;
           const url = projectUrl(data);
           return (
-            <li class:list={['project-entry', { 'has-media': !!visual }]}>
+            <li class:list={['project-entry', { 'has-media': !!visual }]} data-reveal>
               <div class="project-heading">
                 <span class="project-index" aria-hidden="true">{String(data.order).padStart(2, '0')}</span>
                 <p class="project-context">{data.context}</p>
@@ -138,7 +139,7 @@ const skills = [
               </div>
               {visual && <div class="project-visual">
                 {visual.src ? <figure>
-                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt ?? visual.title} width={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 960 : data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 540 : data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /></a>
+                  <a class="project-preview" href={url}><img src={visual.src} alt={visual.alt ?? visual.title} width={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 960 : data.slug === 'ai-sw-mobility' ? 1280 : data.slug === 'camera-v2i-e2e' ? 1600 : 1576} height={['uav-waypoint', 'vmodel-neuro-symbolic'].includes(data.slug) ? 540 : data.slug === 'ai-sw-mobility' ? 720 : data.slug === 'camera-v2i-e2e' ? 900 : 884} loading="lazy" decoding="async" /><span class="preview-open" aria-hidden="true">↗</span></a>
                   <figcaption>{visual.caption}</figcaption>
                 </figure> : <ReservedMedia title={visual.title} kind={visual.kind ?? 'image'} />}
               </div>}
@@ -148,13 +149,13 @@ const skills = [
       </ol>
     </section>
     <div class="background-sections">
-      <section id="awards" class="home-section" aria-labelledby="awards-title">
+      <section id="awards" class="home-section" aria-labelledby="awards-title" data-reveal>
         <div class="section-heading"><div><p class="eyebrow">{'Competition record'}</p><h2 id="awards-title">{'Awards & competitions'}</h2></div></div>
         <div class="award-row"><span class="year">2026</span><div><h3>{'Kookmin AI-Edge Challenge'}</h3><p>{'Parking Special Award · Preliminary 2nd'}</p><p class="small-muted">{'Finals 13th, course completed · Team result'}</p></div></div>
         <div class="award-row"><span class="year">2026</span><div><h3>Hyundai Mobis Technical Special Award</h3><p>Autonomous Driving Division · Awarded to Team K.A.I.</p><p class="small-muted">For the decision-control presentation by Woojin Hwang and Junghun Hwang</p></div></div>
         <div class="award-row"><span class="year">2022</span><div><h3>Drone Clash</h3><p>{'General Division · 3rd Place'}</p></div></div>
       </section>
-      <section id="skills" class="home-section" aria-labelledby="skills-title">
+      <section id="skills" class="home-section" aria-labelledby="skills-title" data-reveal>
         <div class="section-heading"><div><p class="eyebrow">{'Tools used in projects'}</p><h2 id="skills-title">{'Technical skills'}</h2></div></div>
         <dl class="skills-list">{skills.map(({label,tools}) => <div><dt>{label}</dt><dd>{tools}</dd></div>)}</dl>
       </section>
@@ -162,108 +163,126 @@ const skills = [
   </main>
 </BaseLayout>
 <style>
-  .intro { max-width: 1080px; margin-inline: auto; padding: 76px 0 82px; grid-template-columns: 228px minmax(0, 1fr); align-items: center; gap: clamp(44px, 6vw, 90px); }
-  .intro-profile { width: 228px; max-width: 100%; }
-  .intro-portrait { aspect-ratio: 3 / 4; overflow: hidden; border-radius: 12px; background: var(--soft); box-shadow: 0 8px 32px #172c3b0d; }
+  .intro { position: relative; isolation: isolate; display: grid; max-width: none; grid-template-columns: 240px minmax(0, 1fr); gap: 30px 64px; padding: 60px 0 72px; align-items: center; }
+  .intro-orbit { position: absolute; width: 580px; max-width: 75%; top: -38px; right: 0; z-index: -1; opacity: .17; pointer-events: none; overflow: hidden; }
+  .intro-orbit svg { width: 100%; height: auto; }
+  .intro-orbit path { stroke: var(--accent); stroke-width: .8; }
+  .intro-orbit circle { fill: var(--accent); }
+  .intro-profile { width: 240px; max-width: 100%; }
+  .intro-portrait { aspect-ratio: 3 / 4; overflow: hidden; border-radius: 4px 40px 4px 4px; background: var(--soft); border: 1px solid #3d555c; box-shadow: 12px 12px 0 -1px var(--paper), 12px 12px 0 0 var(--line); }
   .intro-profile img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.18); transform-origin: 50% 20%; }
-  .intro-profile figcaption { margin-top: 15px; color: var(--muted); font-size: .7rem; text-align: center; }
-  .intro-copy > .eyebrow { font-family: var(--font); letter-spacing: .055em; font-size: .69rem; }
-  .intro h1 { font-size: clamp(2.5rem, 4.7vw, 3.6rem); margin: 18px 0 14px; font-weight: 650; }
-  .intro h1 span { font-size: 1rem; margin-left: 8px; }
-  .intro-field { font-size: 1.02rem; font-weight: 500; }
-  .intro-summary { max-width: 625px; margin-top: 22px; font-size: .975rem; line-height: 1.85; }
-  .intro-details { display: flex; flex-wrap: wrap; gap: 8px 25px; margin-top: 22px; font-size: .75rem; }
-  .intro-details > div { display: flex; gap: 8px; }
+  .intro-profile figcaption { display: flex; align-items: center; gap: 11px; margin-top: 26px; color: var(--muted); font: .64rem var(--mono); letter-spacing: .035em; }
+  .profile-caption-line { width: 25px; height: 1px; background: var(--accent); }
+  .intro-copy { min-width: 0; padding-bottom: 4px; }
+  .intro-copy > .eyebrow { font-size: .64rem; color: var(--accent); letter-spacing: .12em; }
+  .intro h1 { font-size: clamp(2.7rem, 5.1vw, 4.2rem); margin: 20px 0 16px; font-weight: 550; line-height: 1.08; letter-spacing: -.055em; }
+  .intro h1 .name-period { display: inline; margin: 0; font-size: inherit; color: var(--accent); font-weight: inherit; letter-spacing: inherit; }
+  .intro h1 .korean-name { display: inline-block; font-size: .92rem; font-weight: 400; color: var(--muted); margin-left: 15px; vertical-align: baseline; letter-spacing: 0; }
+  .intro-field { font-size: .91rem; font-weight: 400; color: #c5d8e0; letter-spacing: .025em; }
+  .intro-summary { max-width: 620px; margin-top: 23px; font-size: .92rem; line-height: 1.85; }
+  .intro-details { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 21px; font-size: .71rem; }
+  .intro-details > div { display: flex; gap: 10px; }
   .intro-details dt { color: var(--muted); }
   .intro-details dd { color: var(--ink); }
-  .intro-links { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 27px; font-size: .8rem; }
-  .primary-link { display: inline-flex; gap: 28px; justify-content: space-between; align-items: center; background: var(--ink); color: #fff; padding: 11px 18px; border: 1px solid var(--ink); border-radius: 5px; text-decoration: none; }
-  .primary-link:hover { background: var(--accent); border-color: var(--accent); }
-  .email-link { overflow-wrap: anywhere; }
-  .home-section { padding-top: 32px; margin-bottom: 80px; }
-  .section-heading { margin-bottom: 25px; }
-  .section-heading h2 { font-size: 2rem; font-weight: 600; }
-  .section-note { color: var(--muted); font-size: .875rem; }
+  .intro-links { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 26px; margin-top: 26px; font-size: .77rem; }
+  .primary-link { display: inline-flex; gap: 36px; justify-content: space-between; align-items: center; background: var(--accent); color: #071812; padding: 12px 17px; border: 1px solid var(--accent); border-radius: 3px; text-decoration: none; font-weight: 600; transition: background .2s, transform .2s; }
+  .primary-link:hover { background: #a0f5da; color: #071812; transform: translateY(-2px); }
+  .email-link { color: var(--body); overflow-wrap: anywhere; text-decoration-color: var(--line); }
+  .home-section { padding-top: 34px; margin-bottom: 90px; }
+  .section-heading { margin-bottom: 30px; align-items: end; }
+  .section-heading .eyebrow { color: var(--accent); font-size: .63rem; letter-spacing: .13em; margin-bottom: 12px; }
+  .section-heading h2 { font-size: clamp(2.1rem, 4vw, 3.05rem); font-weight: 450; letter-spacing: -.045em; }
+  .section-count { font: .77rem var(--mono); color: var(--muted); letter-spacing: 0; vertical-align: middle; }
+  .section-note { color: var(--muted); font-size: .78rem; padding-bottom: 5px; }
   .projects-section { border-top: 0; }
-  .project-list > .project-entry { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px 44px; padding: 42px 0 46px; border-bottom: 1px solid var(--line); }
-  .project-list > .project-entry:first-child { padding-top: 25px; }
-  .project-list > .project-entry:last-child { padding-bottom: 0; border-bottom: 0; }
-  .project-list > .has-media { grid-template-columns: minmax(0, .95fr) minmax(0, 1.15fr); }
-  .project-heading { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
-  .project-index { font-size: .7rem; color: var(--accent); padding: 0; white-space: nowrap; }
-  .project-context { font-size: .75rem; margin: 0; flex: 1; min-width: 140px; }
-  .status { font-size: .6875rem; border-radius: 20px; padding: 3px 10px; }
-  .project-summary { min-width: 0; grid-column: 2; grid-row: 2; }
-  .project-summary h3 { font-size: 1.6rem; line-height: 1.3; letter-spacing: -.025em; }
-  .project-summary h3 a { text-decoration: none; }
-  .project-summary h3 a::after { content: ' →'; color: var(--accent); font-size: 1.05rem; white-space: nowrap; }
-  .project-summary h3 a:hover { text-decoration: underline; }
-  .project-summary > .project-description { font-size: .9rem; line-height: 1.85; margin: 14px 0 19px; }
-  .project-evidence { padding: 15px 18px; border-radius: 5px; background: var(--soft); }
-  .project-evidence > span { display: block; color: var(--accent); font-size: .68rem; font-weight: 650; letter-spacing: .04em; text-transform: uppercase; }
-  .project-evidence p { color: var(--ink); font-size: .825rem; line-height: 1.75; margin-top: 5px; }
-  .project-tech { display: flex; flex-wrap: wrap; gap: 5px 8px; list-style: none; padding: 0; margin: 17px 0 18px; font-size: .66rem; color: var(--muted); }
+  .project-list > .project-entry { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 25px 50px; padding: 38px 0 50px; border-top: 1px solid var(--line); border-bottom: 0; }
+  .project-list > .project-entry:last-child { padding-bottom: 0; }
+  .project-list > .has-media { grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr); }
+  .project-heading { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 15px; }
+  .project-index { font-size: .68rem; color: var(--accent); padding: 0; white-space: nowrap; }
+  .project-context { font: .66rem var(--mono); margin: 0; flex: 1; min-width: 140px; color: var(--muted); }
+  .status { font-size: .62rem; border-radius: 3px; padding: 3px 9px; }
+  .project-summary { min-width: 0; grid-column: 2; grid-row: 2; align-self: center; }
+  .project-summary h3 { font-size: 1.65rem; line-height: 1.25; letter-spacing: -.035em; font-weight: 500; }
+  .project-summary h3 a { text-decoration: none; transition: color .2s; }
+  .project-summary h3 a::after { content: ' \2197'; color: var(--accent); font-size: 1rem; white-space: nowrap; }
+  .project-summary h3 a:hover { color: var(--accent); }
+  .project-summary > .project-description { font-size: .86rem; line-height: 1.85; margin: 16px 0 21px; }
+  .project-evidence { padding: 13px 0 13px 16px; border-left: 1px solid #68e0c261; background: linear-gradient(90deg, #68e0c206, transparent); }
+  .project-evidence > span { display: block; color: var(--accent); font: .61rem var(--mono); letter-spacing: .065em; text-transform: uppercase; }
+  .project-evidence p { color: #c6d7df; font-size: .78rem; line-height: 1.8; margin-top: 7px; }
+  .project-tech { display: flex; flex-wrap: wrap; gap: 6px 8px; list-style: none; padding: 0; margin: 19px 0 17px; font-size: .62rem; color: var(--muted); }
   .project-tech li { border: 1px solid var(--line); border-radius: 3px; padding: 2px 7px; }
-  .project-links { display: flex; flex-wrap: wrap; align-items: center; }
-  .project-visual { min-width: 0; grid-column: 1; grid-row: 2; align-self: start; padding-top: 4px; }
-  .project-preview { display: block; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); }
-  .project-preview img { width: 100%; height: auto; transition: transform .25s ease; }
-  .project-preview:hover img { transform: scale(1.025); }
+  .project-links { display: flex; flex-wrap: wrap; align-items: center; font-size: .78rem; }
+  .project-visual { min-width: 0; grid-column: 1; grid-row: 2; align-self: center; padding-top: 0; }
+  .project-preview { display: block; position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 4px; background: var(--soft); }
+  .project-preview img { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; transition: transform .5s ease, filter .5s; filter: saturate(.8); }
+  .project-preview:hover img { transform: scale(1.035); filter: saturate(1); }
+  .preview-open { position: absolute; bottom: 14px; right: 14px; display: grid; place-items: center; width: 35px; height: 35px; border: 1px solid #a8c9c35c; border-radius: 50%; background: #071019cf; color: var(--ink); font-size: 1rem; transition: background .2s; }
+  .project-preview:hover .preview-open { background: var(--accent); color: var(--paper); }
   .project-preview:focus-visible { outline-offset: 5px; }
-  .project-visual figcaption { font-size: .68rem; margin-top: 10px; }
+  .project-visual figcaption { font-size: .65rem; margin-top: 11px; color: var(--muted); }
+  .project-entry:nth-child(even) .project-summary { grid-column: 1; }
+  .project-entry:nth-child(even) .project-visual { grid-column: 2; }
   .background-sections { display: grid; grid-template-columns: 1.15fr 1fr; gap: 70px; }
   .background-sections .home-section { margin-bottom: 0; border-top: 1px solid var(--line); }
-  .background-sections h2 { font-size: 1.55rem; margin-top: 8px; }
-  .background-sections .eyebrow { font-family: var(--font); font-size: .65rem; }
+  .background-sections h2 { font-size: 1.75rem; margin-top: 9px; }
+  .background-sections .eyebrow { font-size: .6rem; }
   .award-row { grid-template-columns: 42px minmax(0, 1fr); gap: 18px; }
-  .award-row .year { color: var(--muted); font-size: .75rem; }
-  .award-row h3 { font-size: .98rem; line-height: 1.5; }
-  .award-row p { font-size: .8rem; }
-  .award-row p.small-muted { margin-top: 5px; font-size: .73rem; }
-  .skills-list > div { display: block; padding: 16px 0; }
+  .award-row .year { color: var(--accent); font: .69rem var(--mono); }
+  .award-row h3 { font-size: .96rem; line-height: 1.5; font-weight: 500; }
+  .award-row p { font-size: .77rem; }
+  .award-row p.small-muted { margin-top: 5px; font-size: .7rem; }
+  .skills-list > div { display: block; padding: 17px 0; }
   .skills-list > div:first-child { padding-top: 20px; }
   .skills-list > div:last-child { border: 0; }
-  .skills-list dt { font-size: .8rem; }
-  .skills-list dd { margin-top: 5px; font-size: .84rem; line-height: 1.8; }
+  .skills-list dt { color: var(--accent); font: .64rem var(--mono); letter-spacing: .04em; }
+  .skills-list dd { margin-top: 7px; font-size: .84rem; line-height: 1.8; }
   @media (max-width: 1000px) {
-    .intro { grid-template-columns: 190px minmax(0, 1fr); gap: 40px; padding: 52px 0 60px; }
-    .intro-profile { width: 190px; }
-    .project-list > .has-media { gap: 20px 30px; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
+    .intro { grid-template-columns: 210px minmax(0, 1fr); gap: 30px 42px; padding-top: 45px; }
+    .intro-profile { width: 210px; }
+    .intro h1 { font-size: 3.2rem; }
+    .intro h1 .korean-name { display: block; margin: 12px 0 0; font-size: .85rem; }
+    .project-list > .has-media { gap: 24px 30px; }
     .project-summary h3 { font-size: 1.4rem; }
     .background-sections { gap: 36px; }
   }
   @media (max-width: 760px) {
-    .intro { display: grid; grid-template-columns: 142px minmax(0, 1fr); gap: 25px; padding: 38px 0 44px; align-items: start; }
-    .intro-profile { width: 142px; padding-top: 6px; }
-    .intro-profile figcaption { font-size: .65rem; }
-    .intro h1 { font-size: 2.3rem; }
-    .intro h1 span { font-size: .875rem; margin: 10px 0 0; }
-    .intro-copy > .eyebrow { font-size: .64rem; }
-    .intro-field { font-size: .875rem; }
-    .intro-summary { font-size: .9rem; }
-    .intro-links { gap: 17px; }
-    .project-list > .project-entry { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 30px 0 38px; }
+    .intro { grid-template-columns: 150px minmax(0, 1fr); gap: 30px; padding: 38px 0 48px; align-items: start; }
+    .intro-orbit { max-width: 85%; right: 0; }
+    .intro-profile { width: 150px; padding-top: 5px; }
+    .intro-profile figcaption { font-size: .57rem; gap: 6px; }
+    .profile-caption-line { width: 12px; }
+    .intro h1 { font-size: 2.6rem; margin-top: 14px; }
+    .intro-copy > .eyebrow { font-size: .55rem; }
+    .intro-field { font-size: .78rem; }
+    .intro-summary { font-size: .85rem; }
+    .intro-details { font-size: .67rem; }
+    .intro-links { gap: 15px; font-size: .7rem; }
+    .project-list > .project-entry { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 29px 0 38px; }
     .project-heading { grid-row: 1; gap: 8px 10px; }
-    .project-visual { grid-column: 1; grid-row: 2; padding-top: 0; width: 100%; }
-    .project-summary { grid-column: 1; grid-row: 3; }
-    .project-summary h3 { font-size: 1.45rem; }
-    .project-summary > .project-description { font-size: .9375rem; }
-    .project-evidence p { font-size: .875rem; }
-    .section-heading h2 { font-size: 1.8rem; }
-    .section-note { margin-top: 9px; }
+    .project-visual, .project-entry:nth-child(even) .project-visual { grid-column: 1; grid-row: 2; width: 100%; }
+    .project-summary, .project-entry:nth-child(even) .project-summary { grid-column: 1; grid-row: 3; }
+    .project-summary h3 { font-size: 1.55rem; }
+    .project-summary > .project-description { font-size: .9rem; }
+    .project-evidence p { font-size: .83rem; }
+    .section-heading h2 { font-size: 2.2rem; }
+    .section-note { margin-top: 11px; }
     .home-section { margin-bottom: 50px; padding-top: 20px; }
     .background-sections { grid-template-columns: 1fr; gap: 40px; }
   }
   @media (max-width: 520px) {
-    .intro { grid-template-columns: minmax(0, 1fr); gap: 25px; }
-    .intro-profile { width: 132px; margin-inline: auto; }
+    .intro { grid-template-columns: minmax(0, 1fr); gap: 29px; padding-top: 30px; }
+    .intro-profile { width: 142px; margin-inline: auto; }
     .intro-profile figcaption { display: none; }
     .intro-copy > .eyebrow, .intro h1, .intro-field { text-align: center; }
-    .intro h1 { font-size: 2.45rem; }
-    .intro h1 span { display: block; margin: 10px 0 0; }
-    .intro-links { align-items: flex-start; flex-direction: column; }
+    .intro h1 { font-size: 2.75rem; }
+    .intro h1 .korean-name { display: inline-block; margin: 12px 0 0 8px; font-size: .8rem; }
+    .intro-summary { margin-top: 20px; }
+    .intro-details { justify-content: center; gap: 8px 17px; }
+    .intro-links { justify-content: center; gap: 20px; }
     .project-context { min-width: 120px; }
   }
-  @media (prefers-reduced-motion: reduce) { .project-preview img { transition: none; } }
-  @media print { .intro-links .primary-link { display: none; } .background-sections { display: block; } .project-preview img { transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .project-preview img, .preview-open, .primary-link { transition: none; } .primary-link:hover, .project-preview:hover img { transform: none; } }
+  @media print { .intro-orbit, .intro-links .primary-link { display: none; } .intro-profile figcaption { color: #444; } .intro-portrait { box-shadow: none; } .background-sections { display: block; } .project-preview img { transform: none; filter: none; } .intro-field, .project-evidence p { color: #333; } .project-evidence { background: none; } }
 </style>

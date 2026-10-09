@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import MotionEnhancements from '../components/MotionEnhancements.astro';
 import type { Language } from '../lib/projects';
 interface Props { title: string; description: string; lang?: Language; noindex?: boolean; }
 const { title, description, noindex = false } = Astro.props;
@@ -17,18 +18,20 @@ const nav = [['research','Research'],['projects','Projects'],['awards','Awards']
     <meta property="og:description" content={description} /><meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="Junghun Hwang — Engineering Portfolio" />
     <meta property="og:locale" content="en_US" />
-    <meta name="twitter:card" content="summary" /><meta name="theme-color" content="#ffffff" />
+    <meta name="twitter:card" content="summary" /><meta name="theme-color" content="#070d14" />
+    <meta name="color-scheme" content="dark" />
     {noindex && <meta name="robots" content="noindex" />}
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
     <header class="site-header"><div class="header-inner">
-      <a class="wordmark" href={home}><span class="monogram" aria-hidden="true">JH</span>Junghun Hwang</a>
+      <a class="wordmark" href={home}><span class="monogram" aria-hidden="true">JH</span><span class="wordmark-name">Junghun Hwang</span></a>
       <nav aria-label="Main navigation" class="global-nav">
         {nav.map(([id,label]) => <a href={`${home}#${id}`}>{label}</a>)}
       </nav>
     </div></header>
     <slot />
-    <footer class="site-footer"><div><span>Junghun Hwang <span lang="ko">황정헌</span></span><a href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com</a></div><p>Autonomous driving · AI · Autonomous systems</p></footer>
+    <footer class="site-footer"><div><span class="footer-name">Junghun Hwang <span lang="ko">황정헌</span></span><a href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a></div><p>Autonomous driving · AI · Autonomous systems</p></footer>
+    <MotionEnhancements />
   </body>
 </html>
