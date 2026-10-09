@@ -6,17 +6,18 @@ title: Camera-Based V2I Cooperative End-to-End Autonomous Driving
 titleEn: Camera-Based V2I Cooperative End-to-End Autonomous Driving
 context: Capstone Design Project
 period: 2026 – Ongoing
-role: Requirements & System Design
+team: 5 members
+role: Literature Review & Project Scoping
 status: design
-summary: "A proposed camera-based V2I system for a 1/5-scale test vehicle, comparing E2E driving with and without infrastructure information in an occluded-pedestrian scenario."
-outcome: "Defined the pedestrian-occlusion scenario and operating conditions. The current design covers camera-to-vehicle information flow, geometry, latency, and stopping-distance requirements; implementation and vehicle testing are planned."
-teamScope: "The capstone uses the V-model to develop a camera-based V2I driving system. My design work focuses on the occlusion scenario, infrastructure-to-vehicle information flow, and a controlled comparison of perception and braking response."
+summary: "A five-member capstone project exploring how infrastructure-camera information can support camera-based E2E planning when a parked vehicle hides a pedestrian. The goal is a closed-loop comparison on a small-scale vehicle."
+outcome: "Current design work covers the occlusion scenario, system requirements, and preliminary architecture, including coordinate conversion and time correction. This semester is devoted to research and design."
+teamScope: "This year-long capstone brings together infrastructure perception, communication, and vehicle planning. The architecture and evaluation plan below are team design proposals. My current work covers literature review and project scoping; final subsystem responsibilities have not yet been assigned."
 contributions:
-  - Defined a school-zone pedestrian-occlusion scenario and an initial daytime, dry-road, low-speed operating domain for the test vehicle.
-  - Specified roadside pedestrian detection, road-plane homography, and direct transmission of position, confidence, and timestamps to the vehicle.
-  - Designed a matched camera-only and V2I-assisted E2E comparison with the same platform, operating domain, speed, training conditions, and low-level controller.
-  - Formulated a minimum detection-distance budget and a stagewise latency measurement plan, alongside perception lead, deceleration lead, minimum TTC, and collision evaluation.
-technologies: [Camera V2I, E2E Driving, Homography, V-Model]
+  - Reviewed UniV2X's vehicle–infrastructure fusion framework and open-loop evaluation limitations, and prepared a literature summary to inform project scoping.
+  - Proposed a simplified vehicle–infrastructure fusion direction, with closed-loop evaluation on a small-scale vehicle as a subsequent stage.
+  - Suggested dividing the work into hardware, communication, E2E planning, infrastructure perception, and E2E–infrastructure integration.
+  - Reviewed presentation drafts and scripts, and collected earlier presentation materials and faculty feedback for the team's next design discussions.
+technologies: [Camera V2I, E2E Planning, Homography, System Design]
 featured: true
 ---
 
@@ -25,97 +26,70 @@ import SystemFlow from '../../../components/SystemFlow.astro';
 
 ## Research question
 
-**How much earlier can infrastructure-camera information enable pedestrian detection and deceleration when parked vehicles block the ego camera?**
+**Can infrastructure-camera information help an E2E driving system respond earlier to a pedestrian hidden behind a parked vehicle?**
 
-The proposed system uses a **1/5-scale test vehicle**. A roadside camera observes the occluded area and sends pedestrian state to the vehicle, where an E2E planner combines it with the ego-camera input. The current work defines the requirements and comparison structure; implementation, training, and vehicle trials are planned.
+The team plans to compare camera-only driving with V2I-assisted E2E driving on a small-scale vehicle. A roadside camera would observe the occluded area and send pedestrian object state to the vehicle, where it would be combined with vehicle-camera input for planning.
 
-## Current design
+The latest design work focuses on infrastructure-camera placement, pedestrian position, risk zones, coordinate conversion, and time correction. These are foundations for the E2E comparison, which remains the project's final goal.
 
-| V-model stage | Current output | Status |
-| --- | --- | --- |
-| L1: user needs and operating domain | School-zone occlusion scenario and initial operating conditions | Defined |
-| L2: system requirements and high-level design | Function allocation, information flow, interfaces, and safety requirements | In progress |
-| L3: preliminary design | Homography approach, detection-distance budget, and latency measurement boundaries | Initial definition |
-| L4: detailed design and implementation | Computing hardware, MCU, message details, power, mounting, and proof of concept | Planned |
+## Literature review and project scope
 
-The current work focuses on requirements and system architecture. Implementation will include measuring vehicle speed, braking distance, and system latency to evaluate stopping performance.
+I reviewed parts of UniV2X to understand its purpose, vehicle–infrastructure fusion structure, and the limits of open-loop evaluation. I then summarized those points in my own words to help define a feasible scope for our capstone.
 
-## Occlusion scenario and operating domain
+From this review, I proposed a simplified fusion approach, with a small-scale closed-loop comparison as a later stage. This would connect the literature review to a concrete question: whether infrastructure information changes the vehicle's response before its camera can see the pedestrian.
 
-A stopped or parked vehicle hides a pedestrian from the ego camera near a school or on campus. The infrastructure camera is proposed on the opposite side of the occluded area, where it can observe the pedestrian earlier.
+## Occlusion scenario and operating conditions
 
-| Operating condition | Initial scope |
+The representative scenario is a pedestrian emerging between parked vehicles. The team selected a camera as the main infrastructure sensor after comparing camera, radar, LiDAR, and smartphone-based approaches. Possible extension to existing CCTV and traffic cameras was one reason for the choice.
+
+| Condition | Initial scope |
 | --- | --- |
-| Location | A controllable road near a school or on campus |
-| Lighting | Daytime with sufficient visibility |
-| Weather and surface | Clear weather and dry pavement |
+| Visibility | Daytime, clear weather |
+| Road surface | Dry pavement |
 | Vehicle motion | Low-speed driving on a straight section |
-| Outside the initial scope | Night, adverse weather, intersections, and mixed traffic |
+| Occlusion | A parked vehicle blocks the vehicle camera's view of a pedestrian |
 
-The **operational design domain (ODD)** specifies the conditions in which the system is intended to operate.
+These conditions define the initial **operational design domain (ODD)**: the setting in which the proposed system would be evaluated.
 
 <MediaSlot id="v2i-scenario" />
 
-## Proposed system and object-state interface
+## Proposed perception and planning system
 
-<SystemFlow title="Proposed camera-to-vehicle information path" steps={[
-  { label: 'Infrastructure camera and edge perception', detail: 'Detect a pedestrian and project the bounding-box bottom center onto the road plane.' },
-  { label: 'Direct V2I communication', detail: 'Send pedestrian x, y, confidence, and timestamp from the edge device to the vehicle, without a central server.' },
-  { label: 'E2E fusion and planning', detail: 'Combine ego images and vehicle state with encoded V2I object state through lightweight fusion.' },
-  { label: 'Vehicle control', detail: 'Generate waypoints and target speed for a low-level controller that produces drive and steering commands.' },
-]} caption="Proposed architecture for combining vehicle-camera input with roadside pedestrian information." />
+<SystemFlow title="Proposed vehicle–infrastructure information flow" steps={[
+  { label: 'Infrastructure perception', detail: 'Observe pedestrians with a roadside camera and estimate their object state.' },
+  { label: 'V2I information delivery', detail: 'Transmit object state to the vehicle, accounting for coordinates and observation time.' },
+  { label: 'E2E fusion and planning', detail: 'Combine vehicle-camera input and vehicle state with encoded infrastructure object state through lightweight fusion.' },
+  { label: 'Vehicle control', detail: 'Pass waypoints and target speed to a low-level controller.' },
+]} caption="Team design proposal. The object-state message format and communication method remain under discussion." />
 
-The current message scope is **`x`, `y`, `confidence`, and `timestamp`**. The edge device sends these object-state fields directly to the vehicle. The exact message format, coordinate conventions, synchronization, and communication protocol remain to be finalized.
+YOLO, ByteTrack, OpenCV, and ROS 2 are being considered for the perception and integration work. The planning design includes a visual encoder, an object-state encoder, and lightweight fusion. These are proposed components for later implementation.
 
-## Pedestrian position from homography
+## Infrastructure geometry and time handling
 
-The proposed geometry pipeline detects a pedestrian bounding box, selects its **bottom-center image point `(u, v)`** as an estimate of ground contact, and projects that point into road coordinates `(x, y)` using a calibrated homography:
+The team is developing the steps needed to turn an infrastructure-camera observation into information the vehicle can use:
 
-<p class="design-equation"><code>s [x, y, 1]ᵀ = H [u, v, 1]ᵀ</code></p>
+- **Position estimation:** use homography to map an image observation to the road plane.
+- **Coordinate conversion:** express the road position in the vehicle's coordinate frame.
+- **Time correction:** use timestamps to account for the gap between observation and use.
+- **Risk zones:** relate the pedestrian's position to areas that call for a warning, deceleration, or a stop.
 
-Calibration pairs image reference points with road-plane reference points to estimate `H`. The approach assumes that the pedestrian's ground-contact point lies on the calibrated road plane. Calibration and position-error measurements are planned.
+Camera installation, calibration, position accuracy, and communication timing still need to be resolved through design and later measurement.
 
-## Matched E2E comparison
+## Planned E2E comparison
 
 <MediaSlot id="v2i-comparison" />
 
 | Element | Camera-only baseline | V2I-assisted proposal |
 | --- | --- | --- |
-| Inputs | Ego camera and vehicle state | Ego camera, vehicle state, and infrastructure object state |
-| Planning structure | Visual encoder and E2E planner | Visual encoder, object-state encoder, lightweight fusion, and E2E planner |
+| Inputs | Vehicle camera and vehicle state | Vehicle camera, vehicle state, and infrastructure object state |
+| Planning | Visual encoder and E2E planner | Visual and object-state encoders, lightweight fusion, and E2E planner |
 | Outputs | Waypoints and target speed | Waypoints and target speed |
-| Controlled conditions | Same test vehicle, ODD, speed, training conditions, and controller | Same conditions |
+| Controlled conditions | Same platform, ODD, speed, training conditions, and low-level controller | Same conditions |
 
-The comparison isolates the effect of adding infrastructure object state. The base model, training recipe, trial counts, and numerical operating limits will be specified before experiments.
+The comparison is intended to isolate the effect of infrastructure information. Planned measures cover how early the pedestrian becomes observable, information delay, deceleration timing, minimum time to collision, and collision occurrence.
 
-## Minimum detection-distance requirement
+The preliminary stopping-distance budget links vehicle speed, system delay, braking distance, and a safety margin. The timing plan separates perception, coordinate conversion, transmission, planning, and command generation so that their contributions can later be measured. These are evaluation plans; no driving or model-performance results are available yet.
 
-The preliminary design links available response distance to system latency, braking distance, and a safety margin:
+## Next design work
 
-<p class="design-equation"><code>d_req = v · T_system + D_brake(v) + M</code></p>
-
-| Term | Meaning in the design budget |
-| --- | --- |
-| `v · T_system` | Distance traveled during the end-to-end system delay |
-| `D_brake(v)` | Braking distance at the selected speed, to be measured on the test vehicle |
-| `M` | Required safety clearance from the pedestrian |
-| `d_req` | Minimum distance budget for timely pedestrian information and stopping |
-
-Speed and latency limits will be set alongside measurement methods for braking distance and clearance. Vehicle measurements will then be used to check whether the system can meet the required stopping distance.
-
-## Latency and evaluation plan
-
-The timing plan follows **camera acquisition → pedestrian detection → homography → V2I transmission → fusion/E2E planning → control-command generation**. Each stage records input and output timestamps, giving an overall interval of **`T_system = t6 − t0`**. Planned summaries include **P50, P95, and maximum latency** for use in the distance budget.
-
-| Evaluation area | Planned measurement |
-| --- | --- |
-| Perception lead | How much earlier, in distance and time, the infrastructure camera detects the pedestrian |
-| Information delivery | Stagewise and end-to-end latency from camera acquisition to control-command generation |
-| Response lead | Difference in deceleration-onset distance and time between the two systems |
-| Safety outcome | Minimum time to collision (TTC) and collision occurrence |
-
-## Planned vehicle integration
-
-The proposed vehicle interfaces are front-camera input, a V2I object-state receiver, and waypoint/target-speed outputs. Safety requirements include **E-stop, command timeout, zero default output, and a watchdog**. These safety functions are planned for implementation and testing.
-
-The next stage is to finalize subsystem interfaces, camera calibration, timestamp conventions, and test conditions. Hardware selection and mounting will support a proof of concept, followed by matched camera-only and V2I-assisted driving trials.
+The semester's remaining work is to refine subsystem boundaries, object-state fields, communication and timestamp conventions, camera calibration, and the evaluation procedure. Implementation, training, vehicle integration, and closed-loop trials are subsequent stages.
