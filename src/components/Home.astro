@@ -24,7 +24,7 @@ const projectCopy: Record<string, HomeProject> = {
   'kookmin-ai-edge': {
     title: 'Kookmin AI-Edge Challenge',
     summary: 'Built an imitation-learning pipeline, trained a YOLO detector, and integrated mission logic on the competition vehicle.',
-    result: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award.',
+    result: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award. The competition used rule-based driving after steering oscillation remained in the learned policy.',
     visual: {
       src: '/media/projects/kookmin-ai-edge/01-competition-vehicle.jpg',
       alt: 'Team KAI competition vehicle on the Kookmin course',
@@ -34,7 +34,7 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision-Making & AEB',
-    summary: 'Presented a Pure Pursuit–Stanley blending strategy, then wrote and revised the controller code. My work also covers ROS 2 path generation, AEB stop logic, comparison tests, and the high-level control section of the team report.',
+    summary: 'Implemented Pure Pursuit–Stanley tracking, ROS 2 decision and AEB logic, and authored the high-level control report section. In the initial report comparison on matched Gazebo segments at 6 m/s, heading-error p95 was about 14% lower and steering-command total variation about 10% lower than Stanley alone. The revised controller awaits matched retesting.',
     result: 'Completed waypoint runs on both courses at 10 m/s during venue practice. AEB commands triggered at 50 km/h, but a brake fault prevented stopping within the zone.',
     resultLabel: 'Vehicle trials',
     visual: {
@@ -54,7 +54,7 @@ const projectCopy: Record<string, HomeProject> = {
   'uav-waypoint': {
     title: 'UAV Waypoint Mission',
     summary: 'A ROS 2 mission package for sequential 3D waypoints, TF2 arrival checks, and PX4 offboard integration.',
-    result: 'Waypoint tracking and final landing completed in the PX4 SITL/Gazebo demonstration.',
+    result: 'Waypoint tracking and final landing completed in the integrated course simulation using PX4 SITL/Gazebo. Replaying the public source requires matching coordinate, landing, and simulator interfaces.',
     resultLabel: 'Simulation result',
     visual: {
       src: '/media/projects/uav-waypoint/01-waypoint-flight-poster.jpg',

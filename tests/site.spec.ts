@@ -67,7 +67,7 @@ test('keyboard, English-only navigation, project repositories and development sl
   await expect(privateCard.getByRole('link')).toHaveCount(2);
   await expect(privateCard.locator('a[href^="https://github.com/"]')).toHaveCount(0);
   await expect(privateCard).toContainText('competition is ongoing');
-  const capstoneCard = cards.filter({ has: page.getByRole('heading', { level: 3, name: 'Camera-Based V2I & End-to-End Driving', exact: true }) });
+  const capstoneCard = cards.filter({ has: page.getByRole('heading', { level: 3, name: 'Camera-Based V2I Cooperative End-to-End Autonomous Driving', exact: true }) });
   await expect(capstoneCard).toHaveCount(1);
   await expect(capstoneCard.getByRole('link')).toHaveCount(2);
   await expect(capstoneCard.locator('a[href^="https://github.com/"]')).toHaveCount(0);

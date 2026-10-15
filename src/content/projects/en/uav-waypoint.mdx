@@ -10,7 +10,7 @@ team: 4 members
 role: UAV Waypoint Development
 status: completed
 summary: "A ROS 2 waypoint-mission package with TF2 arrival checks and PX4 offboard integration, demonstrated in SITL/Gazebo."
-outcome: "Sequential waypoint tracking and final landing were completed in the PX4 SITL / Gazebo course demonstration using my waypoint package."
+outcome: "Sequential waypoint tracking and final landing were completed in the integrated PX4 SITL / Gazebo course demonstration using my waypoint package. A fresh replay of the public source still requires the matching course interfaces and simulator assets."
 teamScope: "A four-member course team integrated the autonomous-system platform. My focus was the UAV waypoint package and its interface to the existing offboard controller."
 contributions:
   - Developed uav_waypoint_mission with CSV x/y/z/yaw waypoints, optional gimbal pitch, TF2 pose tracking, 3D goal distance, and arrival tolerance.
@@ -53,8 +53,9 @@ The repository configuration defines **nine waypoints** and a default **1.0 m ar
 | Item | Result |
 | --- | --- |
 | Environment | PX4 SITL / Gazebo course simulation |
-| Course demonstration outcome | Sequential waypoint tracking and final landing completed using the waypoint package |
+| Course demonstration outcome | Sequential waypoint tracking and final landing completed using the waypoint package in the integrated course system; confirmed by the project author |
 | Recording below | Takeoff and waypoint flight during simulation testing |
+| Public-source replay | A fresh replay requires the matching simulator assets, coordinate configuration, and landing-request receiver |
 
 <MediaSlot id="uav-demo" />
 
@@ -63,6 +64,8 @@ The repository configuration defines **nine waypoints** and a default **1.0 m ar
 The mission node supplies pose targets, and the offboard controller converts them from ENU to NED before publishing PX4 commands. The mission output mode and origin must match this conversion.
 
 The package implements `hold`, `land`, `disarm`, and `land_then_disarm` finish options. The final simulation demonstrated waypoint tracking followed by landing.
+
+The archived mission publishes a landing request, but the receiver is not identified in the collected offboard controller. The completed course demonstration used the integrated course environment; the public packages alone do not yet establish a reproducible landing sequence. A fresh replay needs the matching landing receiver, ENU/NED and origin configuration, and Gazebo world/models. The repository's setup guide documents these integration dependencies.
 
 ## What I learned
 
