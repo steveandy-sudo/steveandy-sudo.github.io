@@ -21,9 +21,10 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision & AEB',
     work: 'Proposed and implemented Pure Pursuit–Stanley tracking, developed ROS 2 decision and AEB logic, and authored the high-level control report section.',
-    resultLabel: 'Vehicle trials',
-    result: 'Waypoint runs completed both courses at 10 m/s. A 50 km/h AEB trial confirmed the stop command; in-zone stopping was not achieved.',
+    resultLabel: 'Initial comparison & vehicle trials',
+    result: 'The initial report comparison on matched Gazebo segments at 6 m/s found about 14% lower heading-error p95 and 10% lower steering-command total variation than Stanley alone; the revised controller awaits matched retesting. Vehicle waypoint runs completed both courses at 10 m/s. A 50 km/h AEB trial confirmed the stop command; in-zone stopping was not achieved.',
     evidence: [
+      { label: 'Initial simulation comparison', anchor: 'initial-simulation-results' },
       { label: 'Presentation to implementation', anchor: 'from-presentation-to-implementation' },
       { label: 'Vehicle trials', anchor: 'real-vehicle-trials' },
     ],
@@ -42,7 +43,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
     title: 'ROS 2 UAV Waypoint Mission',
     work: 'Developed CSV waypoint sequencing, TF2 arrival checks, coordinate modes, and finish-state controls, and connected pose commands to an existing PX4 offboard controller.',
     resultLabel: 'Simulation result',
-    result: 'The PX4 SITL/Gazebo course demonstration completed sequential waypoint flight and final landing. The recording shows takeoff and waypoint flight.',
+    result: 'The integrated PX4 SITL/Gazebo course demonstration completed sequential waypoint flight and final landing. The recording shows takeoff and waypoint flight. Public-source replay requires the course landing, coordinate, and simulator interfaces.',
     evidence: [
       { label: 'Simulation demonstration', anchor: 'simulation-demonstration' },
       { label: 'Mission architecture', anchor: 'mission-architecture' },

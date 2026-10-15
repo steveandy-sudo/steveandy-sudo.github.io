@@ -193,14 +193,14 @@ import Video from '../../../components/Video.astro';
 
 ## CV PDF
 
-`public/cv/`에 다음 이름으로 실제 PDF를 넣습니다.
+모든 표준 V1/V2 CV는 최신 연구실 연락용 CV와 동일하게 학점을 표기하지 않습니다. V1은 기존 파일명을 유지하기 위한 버전 이름이며, 학점 포함 여부를 뜻하지 않습니다.
 
-- `Junghun_Hwang_CV_V1_EN.pdf` — 영어, 학점 포함
-- `Junghun_Hwang_CV_V1_KO.pdf` — 한국어, 학점 포함
+사이트의 `public/cv/`에는 다음 PDF 2종만 동기화합니다.
+
 - `Junghun_Hwang_CV_V2_EN.pdf` — 영어, 학점 미표기
 - `Junghun_Hwang_CV_V2_KO.pdf` — 한국어, 학점 미표기
 
-홈페이지의 CV 섹션과 상단 CV 메뉴는 제거했습니다. V2 PDF 2종은 직접 주소로 접근할 수 있도록 유지합니다. V1은 학점 미확정 때문에 포함하지 않았습니다. 공통 GitHub 링크 대신 프로젝트별 저장소를 홈과 상세 페이지에서 안내합니다. AI·SW 저장소는 대회 진행 중 비공개이므로 `githubVisibility: private`와 `githubPrivateReason`으로 사유를 표시하며, 공개 페이지에 접근 불가능한 저장소 링크를 만들지 않습니다. 상태 표시는 `RepositoryAccess.astro`에서 공통으로 관리합니다.
+홈페이지의 CV 섹션과 상단 CV 메뉴는 제거한 상태로 유지합니다. V2 PDF 2종은 직접 주소로 접근할 수 있도록 유지하며, V1은 사이트에 포함하지 않습니다. 공통 GitHub 링크 대신 프로젝트별 저장소를 홈과 상세 페이지에서 안내합니다. AI·SW 저장소는 대회 진행 중 비공개이므로 `githubVisibility: private`와 `githubPrivateReason`으로 사유를 표시하며, 공개 페이지에 접근 불가능한 저장소 링크를 만들지 않습니다. 상태 표시는 `RepositoryAccess.astro`에서 공통으로 관리합니다.
 
 ## GitHub Pages 배포
 
