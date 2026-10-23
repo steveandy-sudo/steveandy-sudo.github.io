@@ -20,13 +20,13 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision & AEB',
-    work: 'Proposed and implemented Pure Pursuit–Stanley tracking, developed ROS 2 decision and AEB logic, and authored the high-level control report section.',
-    resultLabel: 'Initial comparison & vehicle trials',
-    result: 'The initial report comparison on matched Gazebo segments at 6 m/s found about 14% lower heading-error p95 and 10% lower steering-command total variation than Stanley alone; the revised controller awaits matched retesting. Vehicle waypoint runs completed both courses at 10 m/s. A 50 km/h AEB trial confirmed the stop command; in-zone stopping was not achieved.',
+    work: 'Developed decision and control software, diagnosed a cached-path coordinate error, added odometry-based reprojection and regression tests, and analyzed four drive recordings.',
+    resultLabel: 'Software correction & field testing',
+    result: 'The path-reuse fix was merged into the team’s main branch. I operated the vehicle during tests of the updated software, confirming successful obstacle avoidance and return to the reference route.',
     evidence: [
-      { label: 'Initial simulation comparison', anchor: 'initial-simulation-results' },
-      { label: 'Presentation to implementation', anchor: 'from-presentation-to-implementation' },
+      { label: 'Path diagnosis & correction', anchor: 'obstacle-avoidance-diagnosis-and-correction' },
       { label: 'Vehicle trials', anchor: 'real-vehicle-trials' },
+      { label: 'Initial simulation comparison', anchor: 'initial-simulation-results' },
     ],
   },
   'camera-v2i-e2e': {
