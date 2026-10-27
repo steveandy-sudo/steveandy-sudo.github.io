@@ -10,7 +10,7 @@ interface ProjectHighlight {
 export const projectHighlights: Record<string, ProjectHighlight> = {
   'kookmin-ai-edge': {
     title: 'Kookmin AI-Edge Autonomous Driving',
-    work: 'Built the imitation-learning pipeline and YOLO perception, integrated mission commands, and developed parking waypoints and reverse recovery.',
+    work: 'Developed the ResNet18–LiDAR CNN pipeline, trained and compared YOLOv8n and YOLO11n, and integrated mission transitions, parking waypoints, and reverse recovery.',
     resultLabel: 'Competition result',
     result: 'Team: preliminary 2nd, finals 13th with course completion, and a parking Special Award. Rule-based driving was used in the competition.',
     evidence: [
@@ -19,24 +19,25 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
     ],
   },
   'ai-sw-mobility': {
-    title: 'AI·SW Mobility: Decision & AEB',
-    work: 'Focused on obstacle avoidance: diagnosed a cached-path coordinate error, implemented odometry-based reprojection and regression tests, and combined drive-log analysis with team troubleshooting discussions.',
-    resultLabel: 'Software correction & field testing',
-    result: 'The path-reuse fix was merged into the team’s main branch. I operated the vehicle during tests of the updated software, confirming successful obstacle avoidance and return to the reference route.',
+    title: 'AI·SW Mobility: Behavior Planning & Control',
+    work: 'Designed FSM states and transitions with teammates, collected GNSS route waypoints, and connected PP–Stanley implementation with Foxglove analysis and vehicle operation.',
+    resultLabel: 'Vehicle trial results',
+    result: 'Both courses reached up to 11 m/s during venue practice. Separate obstacle-avoidance tests confirmed deceleration, collision-free passage, route return, and acceleration.',
     evidence: [
-      { label: 'Path diagnosis & correction', anchor: 'obstacle-avoidance-diagnosis-and-correction' },
+      { label: 'FSM & mission transitions', anchor: 'fsm-based-behavior-planning' },
       { label: 'Vehicle trials', anchor: 'real-vehicle-trials' },
       { label: 'Initial simulation comparison', anchor: 'initial-simulation-results' },
     ],
   },
   'camera-v2i-e2e': {
     title: 'Camera-Based V2I & E2E Driving',
-    work: 'Reviewed UniV2X, prepared a literature summary, and proposed simplified vehicle–infrastructure fusion and a small-scale closed-loop evaluation direction.',
+    work: 'Reviewed UniV2X, prepared preliminary-design presentation materials from team discussions, and began investigating V2I communication options.',
     resultLabel: 'Current stage',
-    result: 'Research and design are in progress. A small-scale closed-loop comparison of camera-only and V2I-assisted E2E driving is planned.',
+    result: 'The preliminary design covers pedestrian risk, braking-aware training targets, and a planned comparison using shared driving records and labels. Communication research is in progress.',
     evidence: [
       { label: 'Literature & scope', anchor: 'literature-review-and-project-scope' },
       { label: 'Planned comparison', anchor: 'planned-e2e-comparison' },
+      { label: 'Communication research', anchor: 'v2i-communication-research' },
     ],
   },
   'uav-waypoint': {

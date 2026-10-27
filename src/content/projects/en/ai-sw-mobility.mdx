@@ -7,21 +7,19 @@ titleEn: 2026 Student AI·SW Mobility Competition
 context: Student AI·SW Mobility Competition
 period: 2026 – Ongoing
 team: 27 members / decision team of 5
-role: Decision-Making / High-Level Control / AEB
+role: FSM Design / Decision-Making / Vehicle Testing
 status: ongoing
-summary: "Developing ROS 2 decision and control software, diagnosing path-reuse errors, and evaluating obstacle avoidance through recorded-drive analysis and vehicle testing."
-outcome: "The odometry-based path-reuse fix and 45 m planning-horizon setting were incorporated into the team's main branch. In field tests with both changes applied, the updated software completed obstacle avoidance and return to the reference route; I was responsible for vehicle operation."
-teamScope: "I work in the five-member decision-making group of a 27-member vehicle team. My focus is obstacle avoidance, combining software corrections, recorded-drive analysis, field vehicle operation, and troubleshooting discussions with teammates."
+summary: "ROS 2 FSM-based behavior planning, GNSS waypoint trials, Pure Pursuit–Stanley implementation, and data-driven obstacle-avoidance debugging."
+outcome: "Waypoint driving on both competition courses reached up to 11 m/s (39.6 km/h) during venue practice. Separate field tests confirmed deceleration before avoidance, collision-free passage, return to the reference route, and subsequent acceleration."
+teamScope: "I work in the five-member decision-making group of a 27-member vehicle team. My contribution connects FSM design, control implementation, recorded-drive analysis, and field vehicle operation, with obstacle avoidance as a main focus."
 contributions:
-  - Identified a coordinate–timestamp inconsistency in cached-path reuse, implemented odometry-based reprojection, and added regression tests; the changes were merged into the team's main branch.
-  - Analyzed four drive recordings to compare planning horizon, return distance, curvature, and obstacle clearance using synchronized MCAP/Foxglove visualizations; proposed corrections through discussions with teammates.
-  - Operated the vehicle during field tests of the updated software, confirming successful obstacle avoidance and return to the reference route.
-  - Presented a Pure Pursuit–Stanley blending strategy, then wrote and revised controller code to implement it; parameter tuning is ongoing.
-  - Developed ROS 2 path-generation and AEB logic, including a cone-boundary center path, a latched red-cone stop request, and stale-input checks.
-  - Conducted matched Gazebo tests against Stanley alone at 6 m/s and used Foxglove and recorded logs to analyze tracking, steering, and stop behavior.
-  - Completed real-vehicle waypoint runs on both competition courses and tested AEB stop-command behavior during venue practice.
-  - Authored the high-level control section of Team K.A.I.'s competition technical report, documenting path tracking, steering constraints, and vehicle-command integration.
-technologies: [ROS 2, Pure Pursuit + Stanley, MCAP / Foxglove, Gazebo, AEB]
+  - Designed FSM states and transition conditions with teammates for traffic-light handling, timed stops, obstacle avoidance, and mission completion.
+  - Recorded GNSS coordinates while driving to establish route waypoints and conducted vehicle trials using GNSS/IMU-based localization; both courses reached up to 11 m/s during venue practice.
+  - Analyzed ROS 2 recordings in Foxglove, tracing perception outputs, FSM transitions, planned paths, and vehicle state across timestamps and coordinate frames; reviewed findings and corrective actions with teammates.
+  - Operated the vehicle during obstacle-avoidance tests and confirmed approach deceleration, collision-free passage, route return, and acceleration afterward.
+  - Presented a Pure Pursuit–Stanley hybrid strategy at a symposium sponsored by Hyundai Mobis, then implemented steering blending by driving phase in ROS 2.
+  - Compared hybrid tracking with Stanley alone on matched Gazebo course segments at 6 m/s; the initial comparison showed approximately 14% lower heading-error p95 and 10% lower steering-command total variation.
+technologies: [ROS 2, FSM Behavior Planning, Pure Pursuit + Stanley, MCAP / Foxglove, Gazebo]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
 githubVisibility: private
 githubPrivateReason:
@@ -35,30 +33,61 @@ import AcademicPresentationMaterials from '../../../components/AcademicPresentat
 
 ## Driving task
 
-The vehicle follows a route, avoids obstacles, returns to its reference path, and responds to stop conditions. My work connects ROS 2 decision and control software with recorded-drive analysis and field operation. Obstacle avoidance is my main area of contribution: tracing path behavior, implementing coordinate corrections, and discussing further changes with teammates.
+The vehicle follows a recorded route, handles traffic lights and stop events, avoids obstacles, and returns to its reference path. My work connects behavior planning with the vehicle: defining FSM states with teammates, implementing hybrid tracking, examining recorded driving data, and operating field tests.
 
-## Decision and control architecture
+## FSM-based behavior planning
 
-<SystemFlow title="Decision-to-vehicle command path" steps={[
-  { label: 'Route and perception', detail: 'Route zones, cone boundaries, traffic state, and vehicle feedback provide the driving context.' },
-  { label: 'Behavior and target selection', detail: 'The planning engine selects a driving state, target path, and desired speed.' },
-  { label: 'Tracking and stop logic', detail: 'The current team implementation uses Pure Pursuit + Stanley for route tracking and Stanley for avoidance paths; stop logic can request zero speed and braking.' },
-  { label: 'Command gate and vehicle control', detail: 'The test workflow passes the selected command through a gate to the external vehicle-control stack.' },
-]} caption="Route driving and cone-course AEB use separate trial workflows." />
+I worked with teammates to define the **states and transition conditions** used by the ROS 2 behavior planner. The design connects the current mission and perception inputs with a target path, target speed, and stop request.
+
+| Driving task | Behavior managed by the decision software |
+| --- | --- |
+| Route following | Follow the route and apply the active course and speed constraints |
+| Traffic-light handling | Approach, decide whether to pass or brake, wait, and restart |
+| Timed stops | Approach, stop, hold for the required period, and release |
+| Obstacle avoidance | Reduce speed, follow an avoidance path, and return to the reference route |
+| Mission completion | Approach the finish and complete the stopping sequence |
+
+The team implementation uses a shared stop-point state machine for signal, timed-stop, and finish events. Obstacle behavior manages its path and speed requests alongside these mission events. An arbiter combines the module outputs before motion control produces vehicle commands.
+
+<SystemFlow title="From mission state to vehicle response" steps={[
+  { label: 'Route and perception', detail: 'Route context, traffic observations, obstacle information, and vehicle state describe the current situation.' },
+  { label: 'FSM and behavior planning', detail: 'Mission states and transition conditions determine path, speed, and stop requests.' },
+  { label: 'Path and speed selection', detail: 'Module outputs are combined into the target path and speed sent to motion control.' },
+  { label: 'Tracking and vehicle command', detail: 'The control pipeline follows the selected path and applies steering, acceleration, and braking commands.' },
+]} caption="Mission driving and the cone-course AEB trial use separate workflows." />
+
+## GNSS waypoint collection and driving
+
+I recorded **GNSS coordinates while driving the course** to establish route waypoints, then conducted vehicle trials using GNSS/IMU-based localization. This connected route preparation with waypoint following on the vehicle.
+
+During venue practice, waypoint-following runs on **both the preliminary and final courses reached up to 11 m/s (39.6 km/h)**.
+
+## Recorded-drive analysis and debugging
+
+I used **Foxglove and ROS 2 rosbag2/MCAP recordings** to investigate driving behavior. I traced perception outputs, behavior-state transitions, planned paths, and vehicle feedback together, checking their timestamps and coordinate frames.
+
+The review followed the full sequence:
+
+1. Locate the observed behavior in the recorded run.
+2. Follow the relevant perception, FSM, path, and vehicle-state topics.
+3. Review the evidence and discuss corrective actions with teammates.
+4. Return to field testing and inspect the resulting vehicle behavior.
+
+My main contribution to obstacle-avoidance work combined **log analysis, proposals for corrections, and field operation**. Recorded data helped narrow down issues and made debugging more systematic and efficient.
 
 ## From presentation to implementation
 
 ### Presenting the control strategy
 
-I presented a strategy for **combining Pure Pursuit and Stanley** at a Team K.A.I. technical symposium sponsored by Hyundai Mobis. The presentation, prepared with Woojin Hwang, compared Pure Pursuit's lookahead-based steering with Stanley's heading- and cross-track-error feedback.
+I presented a **Pure Pursuit–Stanley hybrid tracking strategy** at a Team K.A.I. technical symposium sponsored by Hyundai Mobis. The presentation, prepared with Woojin Hwang, compared Pure Pursuit's lookahead-based steering with Stanley's heading- and cross-track-error feedback.
 
-Our proposal was to combine their steering outputs and adjust the balance as driving conditions change. We discussed curvature and speed as inputs to this decision, gradual changes between controller weights, and a plan to evaluate the approach in ROS 2 simulation.
+The proposal combined their steering outputs, using driving conditions to guide the balance between them. It also considered gradual changes in the controller weights and a ROS 2 simulation comparison.
 
-### Implementing the controller
+### Applying the strategy in ROS 2
 
-After the presentation, I wrote and revised code for the combined controller. The implementation calculates both steering commands and blends them according to the driving phase: straight driving, corner approach, turning, or corner exit. Speed and upcoming path geometry also influence lookahead and the individual steering calculations.
+After the presentation, I wrote and revised code for the combined controller. The implementation calculates both steering commands and blends them by driving phase: straight driving, corner approach, turning, and corner exit. Weight changes are limited from one control step to the next; speed and upcoming path geometry also influence lookahead and the individual steering calculations.
 
-Weight changes are gradual, and steering-angle and steering-rate limits constrain the final command. **Parameter tuning is ongoing**, with comparison tests and log analysis guiding the next revisions.
+This work connected the strategy discussed in the presentation with **controller implementation, comparison tests, and log analysis**.
 
 ### Recognition
 
@@ -66,80 +95,44 @@ The presentation by **Woojin Hwang and Junghun Hwang** received the **Hyundai Mo
 
 <AcademicPresentationMaterials />
 
-## Obstacle avoidance: diagnosis and correction
-
-### Finding a coordinate–timestamp inconsistency
-
-A cached path was stored relative to the vehicle at the time it was generated. Reusing those points after the vehicle moved, while assigning a new timestamp, made an old path appear to belong to the current vehicle frame.
-
-I identified the problem, set the analysis direction, modified the code, and ran tests. The investigation used **four recorded drives** to compare planning horizon, return distance, path curvature, and clearance from obstacles. Synchronized MCAP/Foxglove visualizations placed recomputed candidate paths alongside the original camera and vehicle data. These comparisons were offline analyses of recorded conditions.
-
-### Correcting reuse and checking regressions
-
-I implemented **odometry-based reprojection** so a cached path is transformed from its saved vehicle pose into the current vehicle frame. The reuse logic preserves the original path as its reference and retains the original timestamp during pose-history gaps.
-
-Regression tests cover reprojection, repeated reuse, and pose-history gaps, including a fixture built from recorded path and odometry samples. The fix was incorporated into the **team's main branch**.
-
-I also updated the local planning horizon from 35 m to **45 m** based on the recorded-drive comparisons. The setting controls the planner's forward horizon, while return distance is configured separately. Both the reprojection correction and the horizon setting remain in the team's current main branch.
-
-### Field troubleshooting with the team
-
-My recent work combines **vehicle operation, log analysis, and proposals for software corrections** discussed with teammates. This brings observations from field runs into the team's review of obstacle behavior and path generation.
-
-The team's latest integration work covers input-age checks before departure, stop-state and finish-line braking behavior, and steering alignment. Within that work, my main contribution continues to be obstacle-avoidance diagnosis and the link between recorded evidence, code changes, and field operation.
-
-## AEB and vehicle integration
-
-For the AEB course, perceived cone boundaries define a center path for the vehicle to follow. Detecting the red-cone entrance latches the stop request across perception updates. Input-age checks also trigger a stop request during stale-input conditions.
-
-I tested the pipeline in Gazebo and used Foxglove to inspect the generated path, steering command, and stop state. Steering limits and the command interface connect the decision software to the vehicle's low-level control system.
-
-## Technical report
-
-I authored the **High-Level Control** section of Team K.A.I.'s competition technical report. It explains how the controller converts a target path, target speed, and stop request into commands for the vehicle.
-
-The section covers the **50 Hz** control loop, hybrid steering, adaptive lookahead, steering constraints, and the interface to the low-level controller. I also conducted comparison tests and analyzed tracking errors and steering-command variation for the report.
-
 ## Initial simulation results
 
-I conducted the comparison tests and analyzed the logs for **hybrid Pure Pursuit + Stanley versus Stanley alone**. The comparison used **the same Gazebo course segments at 6 m/s**, with route progress aligned to reduce differences in segment composition and travel distance.
+I compared hybrid tracking with Stanley alone on **matched Gazebo course segments at 6 m/s** and analyzed the recorded results.
 
-| Metric | Change with hybrid tracking versus Stanley alone |
+| Metric | Initial hybrid-tracking result versus Stanley alone |
 | --- | --- |
 | Heading-error p95 | Approximately **14% lower** |
-| Steering-error p95 | Approximately **7% lower** |
 | Steering-command total variation | Approximately **10% lower** |
-| Curved-section lateral-error p95 | Approximately **8% lower** |
 
-Here, **p95** is the 95th percentile of the recorded error values. Steering-command total variation measures the accumulated changes in the steering command over the comparison segment.
-
-These figures come from the **initial matched Gazebo comparison** documented in the team technical report. Subsequent development includes controller tuning, cached-path reprojection, regression tests, and vehicle trials.
+Here, **p95** is the 95th percentile of the recorded error values. Steering-command total variation measures accumulated changes in the steering command over the comparison segment. These figures describe the initial matched simulation comparison.
 
 ## Real-vehicle trials
 
 ### Obstacle avoidance and route return
 
-I was responsible for **vehicle operation** during field tests of the updated software. With the cached-path reprojection and 45 m planning-horizon setting both applied, the vehicle **successfully avoided the obstacle and returned to the reference route**.
+I operated the vehicle during obstacle-avoidance field tests and checked the complete behavior sequence: **deceleration before avoidance, collision-free passage, return to the reference route, and acceleration afterward**. Each part of this sequence was observed to work in the field tests.
 
-Recorded-drive analysis and team discussions connect this field work with the next round of path-planning and control adjustments.
+Foxglove analysis and discussions with teammates connected observations from these runs with the next round of software adjustments.
 
-### Earlier waypoint and AEB trials
+### Venue-practice waypoint and AEB trials
 
 | Test | Course or reference | Observed behavior |
 | --- | --- | --- |
-| Waypoint driving | Preliminary course | Successful driving at **10 m/s (36 km/h)** |
-| Waypoint driving | Final course | Successful driving at **10 m/s (36 km/h)** |
+| Waypoint driving | Preliminary course | Successful driving at speeds up to **11 m/s (39.6 km/h)** |
+| Waypoint driving | Final course | Successful driving at speeds up to **11 m/s (39.6 km/h)** |
 | AEB command trial | Approach speed: **50 km/h** | Red-cone detection triggered the stop request at the stopping-zone entrance |
 
-The trials took place during the organizer's open-practice period at the competition venue, with repeated waypoint runs on both courses and separate AEB tests.
+The waypoint and AEB trials took place during the organizer's open-practice period at the competition venue. The AEB footage documents **red-cone recognition and stop-command triggering**.
 
-The AEB command trial examined **red-cone recognition and stop-request timing**. I used Gazebo, Foxglove, and vehicle tests to connect the generated path and stop state with the vehicle-command interface.
+The cone-course AEB workflow forms a path from perceived cone boundaries and latches the red-cone stop request. I used Gazebo, Foxglove, and vehicle tests to inspect the generated path, steering command, and stop state.
 
 <MediaSlot id="mobility-waypoint" />
 <MediaSlot id="mobility-aeb-stop" />
 <MediaSlot id="mobility-aeb-replay" />
 <MediaSlot id="mobility-monitor" />
 
-## Next steps
+## What I learned
 
-Ongoing work focuses on hybrid-controller parameters, recorded path and vehicle-response analysis, and correction proposals discussed with the team. Field operation and regression tests support this cycle of observation, diagnosis, and implementation.
+The project made **recorded driving data** central to my debugging process. Tracing the inputs, decision states, and measured vehicle response together helped me narrow down problems and discuss concrete corrections with the team.
+
+Working through both software review and field operation also connected FSM transitions with the behavior I checked on the vehicle: when it slows, how it passes an obstacle, and how it resumes route driving.
