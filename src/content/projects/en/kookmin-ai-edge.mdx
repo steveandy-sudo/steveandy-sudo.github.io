@@ -9,14 +9,14 @@ period: Apr 2026 – Aug 2026
 team: 5 members
 role: Team Lead
 status: completed
-summary: "Learning-pipeline development, unified YOLO perception, and mission-level vehicle integration for the Kookmin AI-Edge Challenge."
+summary: "ResNet18–LiDAR imitation learning, YOLO model comparison, and ROS 2 mission and parking integration for the Kookmin AI-Edge Challenge."
 outcome: "Team result: preliminary 2nd place; finals 13th place with course completion; Special Award in the parking event."
 teamScope: "A five-member team developed the XYCAR driving and parking system. I led the team and worked across learning, perception, mission integration, and parking logic."
 contributions:
-  - Built the ROS 2 imitation-learning pipeline, from driving-data collection and model training to TorchScript deployment and real-time inference.
+  - Developed a ROS 2 imitation-learning pipeline using ResNet18 and a LiDAR 1D CNN, covering data collection, model training, TorchScript inference, and switching between learned and rule-based control.
   - Implemented learning/rule hybrid driving and traffic-light and mission-state handling.
-  - Managed the full Roboflow workflow and trained the unified YOLO object-detection model for traffic lights, vehicles, obstacles, and cones.
-  - Implemented Mission Manager / Final Driver integration, applied it to the competition vehicle, and participated in system integration and parameter tuning.
+  - Prepared and reviewed Roboflow datasets, trained YOLOv8n and YOLO11n detectors, and selected a model using validation mAP50 and mAP50–95.
+  - Integrated mission-management and driving modules, adjusted lane-following parameters, and configured mission transitions on the competition vehicle.
   - Defined SLAM-map waypoints and implemented reverse recovery logic for parking.
 technologies: [ROS 2, PyTorch, TorchScript, YOLO, Roboflow]
 github: https://github.com/steveandy-sudo/kookmin-autonomous-portfolio
@@ -46,11 +46,11 @@ The XYCAR system combined camera perception, mission decisions, vehicle control,
 
 I built the workflow from driving-data collection to model training, TorchScript export, and ROS 2 inference. Development included switching between learning-based driving and deterministic traffic-light or mission handling. **The final competition strategy used the integrated rule-based driving controller.**
 
-The steering policy combines image and LiDAR features:
+The steering policy combines a **ResNet18 image encoder** with a **LiDAR 1D CNN**:
 
 <SystemFlow title="Multimodal steering policy" steps={[
   { label: 'Image features', detail: 'A ResNet18 encoder extracts features from the processed road image, using a canonical bird\'s-eye-view input in this pipeline.' },
-  { label: 'LiDAR features', detail: 'A one-dimensional encoder processes range and validity information.' },
+  { label: 'LiDAR features', detail: 'A 1D CNN processes LiDAR range and validity information.' },
   { label: 'Feature fusion', detail: 'The image and LiDAR features are concatenated for steering prediction.' },
   { label: 'Runtime integration', detail: 'A normalized steering output is converted to a vehicle command with runtime limits and smoothing.' },
 ]} />
@@ -66,7 +66,13 @@ I compared steering predictions with recorded commands offline and examined stee
 
 ## Perception and dataset workflow
 
-I managed Roboflow annotation, class organization, data splits, augmentation, and export, and trained the unified YOLO object detector. The detector covered traffic lights, vehicles, obstacles, and cones; lane perception was handled separately.
+I prepared and reviewed datasets in Roboflow, including annotation, class organization, data splits, augmentation, and export. I trained **YOLOv8n and YOLO11n** object detectors and selected a model based on validation **mAP50 and mAP50–95**. Detection work covered traffic lights, vehicles, obstacles, and cones.
+
+| Component | Model or method | Evaluation focus |
+| --- | --- | --- |
+| Learned steering | ResNet18 + LiDAR 1D CNN | Steering prediction against recorded commands |
+| Object detection | YOLOv8n and YOLO11n | Validation mAP50 and mAP50–95 |
+| Deployment | TorchScript inference in ROS 2 | Connection between policy output and vehicle commands |
 
 <MediaSlot id="kookmin-annotation" />
 <MediaSlot id="kookmin-yolo" />
@@ -75,7 +81,7 @@ The annotation example comes from the preliminary simulation dataset. The rosbag
 
 ## Mission Manager & Final Driver
 
-I connected lane following, traffic-light handling, and course missions to the final vehicle command path, then participated in vehicle integration and parameter tuning.
+I connected lane following, traffic-light handling, and course missions to the final vehicle command path. Vehicle work included adjusting lane-following parameters and configuring mission transitions.
 
 <MediaSlot id="kookmin-driving" />
 
@@ -109,3 +115,9 @@ My parking work focused on SLAM-map waypoints and reverse recovery. The parking 
 The team used rule-based driving in the competition. Vehicle integration brought together mission priorities, drive gating, perception, and steering commands. Perception and hardware considerations also informed the focus on yellow lane markings.
 
 My work spanned the development cycle: collecting and annotating data, training and evaluating models, connecting ROS 2 mission modules, and tuning the vehicle for the driving and parking events.
+
+## What I learned
+
+The learned policy drove smoothly in the simulator. Moving from simulation toward vehicle operation highlighted the importance of **training-data coverage and quality** and of examining how perception, decision-making, and control interact.
+
+Working across model training and ROS 2 integration gave me a practical view of the full driving pipeline: how data becomes a prediction, how a mission selects an action, and how that action reaches the vehicle.

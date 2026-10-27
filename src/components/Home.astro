@@ -6,8 +6,8 @@ import RepositoryAccess from './RepositoryAccess.astro';
 import { allProjects, projectUrl, statusLabel } from '../lib/projects';
 
 const research = {
-  lead: 'How can perception and learned planning improve vehicle decisions under occlusion and delay?',
-  summary: 'My interests lie in autonomous-driving perception, decision-making, and deep learning. Building an imitation-learning pipeline and integrating ROS 2 controllers led me to look more closely at how predictions translate into vehicle behavior. I want to pursue end-to-end driving research through implementation and experiments, especially under occlusion and input delay. In my capstone, I am reviewing vehicle–infrastructure fusion research and helping define a planned comparison of camera-only and V2I-assisted E2E driving.',
+  lead: 'Perception and decision-making for learning-based and end-to-end driving.',
+  summary: 'My research interests include perception and decision-making for autonomous driving, with a focus on learning-based and end-to-end driving. Competition projects have given me experience in model training, ROS 2 behavior planning, and vehicle testing. Developing a learned steering pipeline highlighted the importance of training-data coverage and quality, while field work made recorded driving data central to my debugging process. My capstone connects these interests with vehicle–infrastructure information and a planned E2E comparison.',
   topics: [
     { title: 'Perception under occlusion', description: 'How can infrastructure sensing support earlier responses to occluded pedestrians?' },
     { title: 'Decisions and vehicle response', description: 'How do input and steering delays change driving behavior?' },
@@ -23,7 +23,7 @@ type HomeProject = {
 const projectCopy: Record<string, HomeProject> = {
   'kookmin-ai-edge': {
     title: 'Kookmin AI-Edge Challenge',
-    summary: 'Built an imitation-learning pipeline, trained a YOLO detector, and integrated mission logic on the competition vehicle.',
+    summary: 'Developed a ResNet18–LiDAR CNN imitation-learning pipeline, compared YOLOv8n and YOLO11n detectors, and integrated mission transitions and parking logic on the competition vehicle.',
     result: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award. Final competition driving used the integrated rule-based controller.',
     visual: {
       src: '/media/projects/kookmin-ai-edge/01-competition-vehicle.jpg',
@@ -33,10 +33,10 @@ const projectCopy: Record<string, HomeProject> = {
     },
   },
   'ai-sw-mobility': {
-    title: 'AI·SW Mobility: Decision-Making & AEB',
-    summary: 'Focused on obstacle avoidance through ROS 2 log analysis, odometry-based path reprojection, and regression tests. Combined vehicle operation with correction proposals discussed with teammates, alongside Pure Pursuit–Stanley tracking and AEB development.',
-    result: 'The path-reuse correction was adopted in the team’s main branch. Field tests with the updated software completed obstacle avoidance and return to the reference route; I was responsible for vehicle operation.',
-    resultLabel: 'Software correction & field testing',
+    title: 'AI·SW Mobility: Behavior Planning & Control',
+    summary: 'Designed FSM states and transitions with teammates, implemented Pure Pursuit–Stanley tracking, and used Foxglove recordings to guide obstacle-avoidance debugging and field testing.',
+    result: 'Waypoint runs on both courses reached up to 11 m/s (39.6 km/h) during venue practice. Separate obstacle-avoidance tests confirmed deceleration, collision-free passage, route return, and acceleration.',
+    resultLabel: 'Vehicle trials & behavior planning',
     visual: {
       src: '/media/projects/ai-sw-mobility/03-final-course-waypoint-poster.jpg',
       alt: 'Onboard view of final-course waypoint driving',
@@ -46,8 +46,8 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'camera-v2i-e2e': {
     title: 'Camera-Based V2I Cooperative End-to-End Autonomous Driving',
-    summary: 'Reviewed UniV2X and proposed a simplified vehicle–infrastructure fusion direction for a five-member capstone, with a small-scale closed-loop comparison planned for a later stage.',
-    result: 'This semester focuses on research and design. The team is developing infrastructure position estimation, coordinate conversion, and time correction toward a camera-only versus V2I-assisted E2E comparison.',
+    summary: 'Reviewed UniV2X and prepared midterm materials from team design discussions, documenting an E2E comparison and target-speed labeling based on pedestrian risk and braking margins.',
+    result: 'Research and preliminary design cover an occluded-pedestrian scenario, shared training targets, and a planned small-scale E2E comparison. I am also investigating V2I communication options and message freshness.',
     resultLabel: 'Research & design',
     visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: 'Team proposal for comparing camera-only and V2I-assisted E2E planning', title: 'Proposed E2E comparison', caption: 'Team design proposal · Camera-only and V2I-assisted E2E planning', kind: 'image' },
   },
@@ -80,9 +80,10 @@ const projectCopy: Record<string, HomeProject> = {
 };
 const skills = [
   { label: 'Programming', tools: 'Python, C++' },
-  { label: 'Autonomous systems', tools: 'ROS 2, CARLA, Gazebo, PX4 SITL' },
-  { label: 'AI & computer vision', tools: 'PyTorch, YOLO, OpenCV, Roboflow' },
-  { label: 'Development & inspection', tools: 'Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2 / MCAP, QGroundControl' },
+  { label: 'Autonomy & control', tools: 'ROS 2, FSM-based behavior planning, Pure Pursuit–Stanley tracking' },
+  { label: 'Learning & perception', tools: 'PyTorch, imitation learning, YOLO, TorchScript, OpenCV, Roboflow' },
+  { label: 'Simulation & UAV', tools: 'CARLA, Gazebo, PX4 SITL, QGroundControl' },
+  { label: 'Data & development', tools: 'ROS 2 log analysis, Foxglove, rosbag2 / MCAP, RViz2, Ubuntu, Git/GitHub' },
 ];
 ---
 <BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'}>
