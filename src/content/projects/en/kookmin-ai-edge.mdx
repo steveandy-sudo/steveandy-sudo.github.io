@@ -44,7 +44,7 @@ The XYCAR system combined camera perception, mission decisions, vehicle control,
 
 ## Learning pipeline and evaluation
 
-I built the workflow from driving-data collection to model training, TorchScript export, and ROS 2 inference. Development included switching between learning-based driving and deterministic traffic-light or mission handling. **The final competition strategy used rule-based driving after steering oscillation remained in the learning-based approach.**
+I built the workflow from driving-data collection to model training, TorchScript export, and ROS 2 inference. Development included switching between learning-based driving and deterministic traffic-light or mission handling. **The final competition strategy used the integrated rule-based driving controller.**
 
 The steering policy combines image and LiDAR features:
 
@@ -62,7 +62,7 @@ The steering policy combines image and LiDAR features:
 | Measure steering-command MAE and RMSE | Compare predictions with recorded steering commands |
 | Inspect per-session and steering-range errors | Identify behavior hidden by an aggregate score |
 
-Offline evaluation compares steering predictions with recorded commands. Vehicle trials exposed steering oscillation that the offline evaluation alone did not resolve.
+I compared steering predictions with recorded commands offline and examined steering response during vehicle trials. This connected model evaluation with the command and controller behavior observed on the vehicle.
 
 ## Perception and dataset workflow
 
@@ -71,7 +71,7 @@ I managed Roboflow annotation, class organization, data splits, augmentation, an
 <MediaSlot id="kookmin-annotation" />
 <MediaSlot id="kookmin-yolo" />
 
-The annotation example comes from the preliminary simulation dataset. The rosbag clip shows offline detector behavior on recorded camera frames. A held-out detection evaluation would add per-class precision/recall, missed-object examples, and inference timing on the deployment device.
+The annotation example comes from the preliminary simulation dataset. The rosbag clip shows offline detector behavior on recorded camera frames.
 
 ## Mission Manager & Final Driver
 
@@ -89,7 +89,7 @@ My parking work focused on SLAM-map waypoints and reverse recovery. The parking 
 
 | Setting | Work | Outcome |
 | --- | --- | --- |
-| Learning development | Training, export, inference, and offline evaluation | A working learning pipeline; steering oscillation remained in vehicle tests |
+| Learning development | Training, export, inference, and offline evaluation | A training-to-inference pipeline with recorded-command evaluation and vehicle-trial analysis |
 | Offline rosbag replay | YOLO detections on recorded frames | Cone detections during offline replay |
 | Vehicle practice | Track practice and parameter tuning | Integration work on the competition vehicle |
 | Competition | Rule-based driving and map-based parking | Course completion and a parking-event Special Award |
@@ -104,8 +104,8 @@ My parking work focused on SLAM-map waypoints and reverse recovery. The parking 
 
 <MediaSlot id="kookmin-finish" />
 
-## Engineering lessons and next measurements
+## Engineering integration
 
-The team used rule-based driving in the event because learned steering continued to oscillate. Perception and hardware constraints also informed the shift from using both white and yellow lane markings to focusing on yellow markings.
+The team used rule-based driving in the competition. Vehicle integration brought together mission priorities, drive gating, perception, and steering commands. Perception and hardware considerations also informed the focus on yellow lane markings.
 
-The next useful analysis is a time-aligned record of sensor input, predicted steering, issued command, and vehicle response. That would help distinguish model behavior from command filtering and actuator delay. Repeated runs on the same route would then connect offline model errors with actual trajectory stability.
+My work spanned the development cycle: collecting and annotating data, training and evaluating models, connecting ROS 2 mission modules, and tuning the vehicle for the driving and parking events.

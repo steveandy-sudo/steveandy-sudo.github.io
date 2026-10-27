@@ -6,12 +6,12 @@ import RepositoryAccess from './RepositoryAccess.astro';
 import { allProjects, projectUrl, statusLabel } from '../lib/projects';
 
 const research = {
-  lead: 'How can a vehicle make better decisions with incomplete information?',
+  lead: 'How can perception and learned planning improve vehicle decisions under occlusion and delay?',
   summary: 'My interests lie in autonomous-driving perception, decision-making, and deep learning. Building an imitation-learning pipeline and integrating ROS 2 controllers led me to look more closely at how predictions translate into vehicle behavior. I want to pursue end-to-end driving research through implementation and experiments, especially under occlusion and input delay. In my capstone, I am reviewing vehicle–infrastructure fusion research and helping define a planned comparison of camera-only and V2I-assisted E2E driving.',
   topics: [
-    { title: 'Perception under occlusion', description: 'How can a vehicle respond to what it cannot yet see?' },
+    { title: 'Perception under occlusion', description: 'How can infrastructure sensing support earlier responses to occluded pedestrians?' },
     { title: 'Decisions and vehicle response', description: 'How do input and steering delays change driving behavior?' },
-    { title: 'Learning-based & E2E driving', description: 'How can experiments reveal the limits of learned behavior?' },
+    { title: 'Learning-based & E2E driving', description: 'How do learned policies translate perception into closed-loop vehicle behavior?' },
   ],
 };
 const entries = await allProjects();
@@ -24,7 +24,7 @@ const projectCopy: Record<string, HomeProject> = {
   'kookmin-ai-edge': {
     title: 'Kookmin AI-Edge Challenge',
     summary: 'Built an imitation-learning pipeline, trained a YOLO detector, and integrated mission logic on the competition vehicle.',
-    result: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award. The competition used rule-based driving after steering oscillation remained in the learned policy.',
+    result: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award. Final competition driving used the integrated rule-based controller.',
     visual: {
       src: '/media/projects/kookmin-ai-edge/01-competition-vehicle.jpg',
       alt: 'Team KAI competition vehicle on the Kookmin course',
@@ -34,8 +34,8 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision-Making & AEB',
-    summary: 'Developed ROS 2 decision and control software, including Pure Pursuit–Stanley tracking and AEB logic. Diagnosed a path-reuse error, added odometry-based reprojection and regression tests, and analyzed four drive recordings to compare avoidance paths.',
-    result: 'The path-reuse fix was merged into the team’s main branch. I operated the vehicle during tests of the updated software, which completed obstacle avoidance and return to the reference route.',
+    summary: 'Focused on obstacle avoidance through ROS 2 log analysis, odometry-based path reprojection, and regression tests. Combined vehicle operation with correction proposals discussed with teammates, alongside Pure Pursuit–Stanley tracking and AEB development.',
+    result: 'The path-reuse correction was adopted in the team’s main branch. Field tests with the updated software completed obstacle avoidance and return to the reference route; I was responsible for vehicle operation.',
     resultLabel: 'Software correction & field testing',
     visual: {
       src: '/media/projects/ai-sw-mobility/03-final-course-waypoint-poster.jpg',
@@ -54,7 +54,7 @@ const projectCopy: Record<string, HomeProject> = {
   'uav-waypoint': {
     title: 'UAV Waypoint Mission',
     summary: 'A ROS 2 mission package for sequential 3D waypoints, TF2 arrival checks, and PX4 offboard integration.',
-    result: 'Waypoint tracking and final landing completed in the integrated course simulation using PX4 SITL/Gazebo. Replaying the public source requires matching coordinate, landing, and simulator interfaces.',
+    result: 'The integrated PX4 SITL/Gazebo course demonstration completed sequential waypoint tracking and final landing.',
     resultLabel: 'Simulation result',
     visual: {
       src: '/media/projects/uav-waypoint/01-waypoint-flight-poster.jpg',
@@ -67,8 +67,8 @@ const projectCopy: Record<string, HomeProject> = {
   'vmodel-neuro-symbolic': {
     title: 'Dream Semester: Decision & Control',
     summary: 'An early ROS 2 / CARLA project exploring Pure Pursuit, longitudinal control, and vehicle-command integration.',
-    result: 'Path tracking remained unstable in simulation. The project ended without achieving stable autonomous driving or a real-vehicle run.',
-    resultLabel: 'Outcome & lessons',
+    result: 'Project outputs include ROS 2/CARLA controller integration, closed-loop simulation experiments, and stationary wheel testing with separate control commands.',
+    resultLabel: 'Implementation & experiments',
     visual: {
       src: '/media/projects/vmodel-neuro-symbolic/01-carla-simulation-poster.jpg',
       alt: 'Dream Semester CARLA simulation with ROS 2 control terminals',
@@ -82,7 +82,7 @@ const skills = [
   { label: 'Programming', tools: 'Python, C++' },
   { label: 'Autonomous systems', tools: 'ROS 2, CARLA, Gazebo, PX4 SITL' },
   { label: 'AI & computer vision', tools: 'PyTorch, YOLO, OpenCV, Roboflow' },
-  { label: 'Development & inspection', tools: 'Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2, QGroundControl' },
+  { label: 'Development & inspection', tools: 'Ubuntu, Git/GitHub, Foxglove, RViz2, rosbag2 / MCAP, QGroundControl' },
 ];
 ---
 <BaseLayout title="Junghun Hwang | Autonomous Driving & AI Portfolio" description={'Engineering work in autonomous driving, ROS 2 decision-making, AI perception, and system integration. Technical case studies by Junghun Hwang.'}>

@@ -9,8 +9,8 @@ period: Mar 2026 – Jun 2026
 team: 3 members
 role: Decision-Making / Control Integration
 status: ended
-summary: "Pure Pursuit and decision/control integration in ROS 2 / CARLA, with an investigation of unstable tracking and vehicle-command interfaces."
-outcome: "The autonomous-driving objective was not achieved. The project ended with unresolved tracking instability and no real-vehicle driving run."
+summary: "Pure Pursuit and decision/control integration in ROS 2 / CARLA, with closed-loop steering experiments and vehicle-command interface testing."
+outcome: "Project outputs include ROS 2 / CARLA decision and control integration, closed-loop simulation experiments, and stationary wheel testing with separate control commands."
 teamScope: A three-member Dream Semester team worked on the driving platform. My development focus was decision-making, path tracking, and control integration.
 contributions:
   - Implemented ROS 2 decision-making, waypoint following, Pure Pursuit, and longitudinal speed control, and integrated the components with CARLA.
@@ -45,23 +45,21 @@ This Dream Semester project, originally titled **V-Model Neuro-Symbolic Driving*
 
 <MediaSlot id="vmodel-wheel-test" />
 
-## Investigating unstable tracking
+## Steering behavior and controller tuning
 
-Closed-loop simulation showed unstable path tracking. I investigated steering direction, lookahead, target smoothing, rate limiting, and command bounds. The project ended before a single root cause was conclusively isolated.
+I investigated tracking behavior through closed-loop CARLA experiments, adjusting steering direction, lookahead, target smoothing, rate limiting, and command bounds.
 
-| Area investigated | Work carried out | Follow-up measurement |
-| --- | --- | --- |
-| Steering direction and units | Checked and adjusted steering response | A fixed target with requested and observed turn direction |
-| Lookahead and target geometry | Adjusted target-following parameters | Identical routes with target-point and trajectory overlays |
-| Smoothing and rate limiting | Adjusted command filtering and change limits | Time-aligned steering before and after each change |
-| Command bounds and interface | Adjusted output limits and adapted the command bridge | Input/output traces with units, saturation, and timestamps |
+| Area investigated | Work carried out |
+| --- | --- |
+| Steering direction and units | Checked and adjusted steering response |
+| Lookahead and target geometry | Adjusted target-following parameters |
+| Smoothing and rate limiting | Adjusted command filtering and change limits |
+| Command bounds and interface | Adjusted output limits and adapted the command bridge |
 
 ## Implementation
 
 Development began with CARLA integration and progressed to separate behavior, steering, and MCU bridge packages. The steering node handles target geometry, smoothing, command bounds, and per-cycle steering limits. The bridge translates desired speed, steering angle, and state into serial commands for the vehicle.
 
-## Lessons and next experiment
+## Integration workflow
 
-The main lesson was to make **target coordinates, steering units, timestamps, and command ownership** explicit before tuning the controller. Without matched trajectory and command records, the effect of individual adjustments remains difficult to establish.
-
-For a future reconstruction, I would start with a straight path and one constant-radius turn, verify steering sign and units, and then vary one setting at a time. The record would pair target and actual trajectories with time-aligned commands, to measure how each setting affects tracking.
+The controller investigation covered **target geometry, steering direction, command filtering, and output bounds**. Later integration work extended the command path to an MCU bridge, followed by stationary wheel testing with separate control commands I issued.

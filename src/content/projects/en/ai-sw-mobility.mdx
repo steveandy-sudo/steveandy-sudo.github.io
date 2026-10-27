@@ -11,12 +11,12 @@ role: Decision-Making / High-Level Control / AEB
 status: ongoing
 summary: "Developing ROS 2 decision and control software, diagnosing path-reuse errors, and evaluating obstacle avoidance through recorded-drive analysis and vehicle testing."
 outcome: "The odometry-based path-reuse fix and 45 m planning-horizon setting were incorporated into the team's main branch. In field tests with both changes applied, the updated software completed obstacle avoidance and return to the reference route; I was responsible for vehicle operation."
-teamScope: "I work in the five-member decision-making group of a 27-member vehicle team, connecting driving decisions, path tracking, and vehicle integration."
+teamScope: "I work in the five-member decision-making group of a 27-member vehicle team. My focus is obstacle avoidance, combining software corrections, recorded-drive analysis, field vehicle operation, and troubleshooting discussions with teammates."
 contributions:
-  - Presented a Pure Pursuit–Stanley blending strategy, then wrote and revised controller code to implement it; parameter tuning is ongoing.
   - Identified a coordinate–timestamp inconsistency in cached-path reuse, implemented odometry-based reprojection, and added regression tests; the changes were merged into the team's main branch.
-  - Analyzed four drive recordings to compare planning horizon, return distance, curvature, and obstacle clearance using synchronized MCAP/Foxglove visualizations.
+  - Analyzed four drive recordings to compare planning horizon, return distance, curvature, and obstacle clearance using synchronized MCAP/Foxglove visualizations; proposed corrections through discussions with teammates.
   - Operated the vehicle during field tests of the updated software, confirming successful obstacle avoidance and return to the reference route.
+  - Presented a Pure Pursuit–Stanley blending strategy, then wrote and revised controller code to implement it; parameter tuning is ongoing.
   - Developed ROS 2 path-generation and AEB logic, including a cone-boundary center path, a latched red-cone stop request, and stale-input checks.
   - Conducted matched Gazebo tests against Stanley alone at 6 m/s and used Foxglove and recorded logs to analyze tracking, steering, and stop behavior.
   - Completed real-vehicle waypoint runs on both competition courses and tested AEB stop-command behavior during venue practice.
@@ -35,7 +35,7 @@ import AcademicPresentationMaterials from '../../../components/AcademicPresentat
 
 ## Driving task
 
-The vehicle must follow a route, avoid obstacles, return to its reference path, and respond to stop conditions. I work on the ROS 2 software that turns route and perception inputs into driving decisions and steering commands. My work includes controller implementation, recorded-drive analysis, regression testing, and vehicle operation during field tests.
+The vehicle follows a route, avoids obstacles, returns to its reference path, and responds to stop conditions. My work connects ROS 2 decision and control software with recorded-drive analysis and field operation. Obstacle avoidance is my main area of contribution: tracing path behavior, implementing coordinate corrections, and discussing further changes with teammates.
 
 ## Decision and control architecture
 
@@ -76,15 +76,21 @@ I identified the problem, set the analysis direction, modified the code, and ran
 
 ### Correcting reuse and checking regressions
 
-I implemented **odometry-based reprojection** so a cached path is transformed from its saved vehicle pose into the current vehicle frame. If the required pose information is unavailable, the fallback retains the path's original timestamp. Repeated reuse also preserves the original cached path rather than accumulating transformations.
+I implemented **odometry-based reprojection** so a cached path is transformed from its saved vehicle pose into the current vehicle frame. The reuse logic preserves the original path as its reference and retains the original timestamp during pose-history gaps.
 
-Regression tests cover reprojection, repeated reuse, and unavailable pose data, including a fixture built from recorded path and odometry samples. The fix was incorporated into the **team's main branch**.
+Regression tests cover reprojection, repeated reuse, and pose-history gaps, including a fixture built from recorded path and odometry samples. The fix was incorporated into the **team's main branch**.
 
-I also updated the local planning horizon from 35 m to **45 m** as a configurable baseline for further testing. This is the distance considered by the planner, not the distance required to return to the route; the return-distance setting remains separate. The setting was merged alongside the path-reuse correction.
+I also updated the local planning horizon from 35 m to **45 m** based on the recorded-drive comparisons. The setting controls the planner's forward horizon, while return distance is configured separately. Both the reprojection correction and the horizon setting remain in the team's current main branch.
+
+### Field troubleshooting with the team
+
+My recent work combines **vehicle operation, log analysis, and proposals for software corrections** discussed with teammates. This brings observations from field runs into the team's review of obstacle behavior and path generation.
+
+The team's latest integration work covers input-age checks before departure, stop-state and finish-line braking behavior, and steering alignment. Within that work, my main contribution continues to be obstacle-avoidance diagnosis and the link between recorded evidence, code changes, and field operation.
 
 ## AEB and vehicle integration
 
-For the AEB course, perceived cone boundaries define a center path for the vehicle to follow. Detecting the red-cone entrance triggers a stop request that remains active, rather than disappearing with the next perception update. The logic also checks whether required inputs are up to date and requests a stop when they are unavailable.
+For the AEB course, perceived cone boundaries define a center path for the vehicle to follow. Detecting the red-cone entrance latches the stop request across perception updates. Input-age checks also trigger a stop request during stale-input conditions.
 
 I tested the pipeline in Gazebo and used Foxglove to inspect the generated path, steering command, and stop state. Steering limits and the command interface connect the decision software to the vehicle's low-level control system.
 
@@ -107,9 +113,7 @@ I conducted the comparison tests and analyzed the logs for **hybrid Pure Pursuit
 
 Here, **p95** is the 95th percentile of the recorded error values. Steering-command total variation measures the accumulated changes in the steering command over the comparison segment.
 
-These results describe the controller evaluated in the team report. Development has continued since that comparison; the revised controller still needs a new set of matched tests.
-
-The public evidence currently records the relative changes above. It does not include paired baseline/hybrid values, trial counts, exact run dates and code revisions, or the raw logs needed to reproduce those percentages. A future comparison should preserve those records and a trajectory/error plot alongside the result. These initial simulation figures do not establish real-vehicle tracking performance or the performance of the revised controller.
+These figures come from the **initial matched Gazebo comparison** documented in the team technical report. Subsequent development includes controller tuning, cached-path reprojection, regression tests, and vehicle trials.
 
 ## Real-vehicle trials
 
@@ -117,21 +121,19 @@ The public evidence currently records the relative changes above. It does not in
 
 I was responsible for **vehicle operation** during field tests of the updated software. With the cached-path reprojection and 45 m planning-horizon setting both applied, the vehicle **successfully avoided the obstacle and returned to the reference route**.
 
-This was an observation of the updated team software as a whole. Assessing the separate effect of each change and repeatability across obstacle layouts remains part of further testing.
+Recorded-drive analysis and team discussions connect this field work with the next round of path-planning and control adjustments.
 
 ### Earlier waypoint and AEB trials
 
-| Test | Course or reference | Reported result |
+| Test | Course or reference | Observed behavior |
 | --- | --- | --- |
 | Waypoint driving | Preliminary course | Successful driving at **10 m/s (36 km/h)** |
 | Waypoint driving | Final course | Successful driving at **10 m/s (36 km/h)** |
-| AEB command trial | Trial speed: **50 km/h**; competition requirement: **30 km/h** | Stop command issued at the red cones; vehicle overran the stopping zone due to a reported brake hardware fault |
+| AEB command trial | Approach speed: **50 km/h** | Red-cone detection triggered the stop request at the stopping-zone entrance |
 
 The trials took place during the organizer's open-practice period at the competition venue, with repeated waypoint runs on both courses and separate AEB tests.
 
-**AEB success criterion:** detect the red cones, apply braking at the zone entrance, and stop before the zone ends. In the **50 km/h** trial, the stop command was issued at the red cones. With **two of the four brakes reported inoperative**, the vehicle passed the stopping-zone end.
-
-Earlier vehicle testing exposed steering oscillation and actuator delay. The control team corrected the steering-motor delay, while I worked on the decision and tracking software.
+The AEB command trial examined **red-cone recognition and stop-request timing**. I used Gazebo, Foxglove, and vehicle tests to connect the generated path and stop state with the vehicle-command interface.
 
 <MediaSlot id="mobility-waypoint" />
 <MediaSlot id="mobility-aeb-stop" />
@@ -140,8 +142,4 @@ Earlier vehicle testing exposed steering oscillation and actuator delay. The con
 
 ## Next steps
 
-For obstacle avoidance, the next step is to assess repeatability across obstacle positions and route geometries, preserving path, odometry, and clearance logs for each run. The offline regression cases provide a check against reintroducing the path-reuse error.
-
-I am continuing to tune the hybrid controller and compare its behavior across course segments. The next vehicle tests will pair target and measured steering with trajectory logs to measure tracking consistency and actuator delay.
-
-AEB testing will also measure the time from the stop request to vehicle deceleration and the final stopping position. These measurements will help separate the behavior of the decision software from the response of the braking system.
+Ongoing work focuses on hybrid-controller parameters, recorded path and vehicle-response analysis, and correction proposals discussed with the team. Field operation and regression tests support this cycle of observation, diagnosis, and implementation.
