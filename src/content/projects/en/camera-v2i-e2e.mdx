@@ -13,9 +13,9 @@ summary: "A five-member capstone investigating how infrastructure-camera pedestr
 outcome: "Midterm design materials cover pedestrian risk, braking margins, training-label generation, and a paired E2E comparison. This semester focuses on research and design; V2I communication options are under investigation."
 teamScope: "The team is developing a preliminary design for infrastructure perception, information delivery, and vehicle E2E planning. I reviewed related research, prepared midterm presentation materials from team discussions, and am investigating communication options."
 contributions:
-  - Reviewed UniV2X's vehicle–infrastructure fusion framework and open-loop evaluation limitations, preparing a literature summary to guide project scope and a planned small-scale closed-loop comparison.
-  - Prepared midterm presentation materials from team design discussions, documenting the planned E2E comparison, pedestrian-risk assessment, and target-speed labeling based on braking margins.
-  - Investigating V2I communication options, including ROS 2/DDS over Wi-Fi, focusing on message freshness, latency, and reception continuity.
+  - Reviewed UniV2X's vehicle–infrastructure fusion framework and the scope of its open-loop evaluation. Wrote a literature summary to guide project scope and a planned small-scale closed-loop comparison.
+  - Prepared the midterm slides after team design discussions. Described the planned E2E comparison, pedestrian-risk assessment, and target-speed labels based on braking margins.
+  - Investigating V2I communication options, including ROS 2/DDS over Wi-Fi. The review covers message freshness, latency, and reception continuity.
 technologies: [Camera V2I Design, E2E Planning, Experiment Design, Spatial / Temporal Alignment]
 featured: true
 ---
@@ -29,17 +29,17 @@ import SystemFlow from '../../../components/SystemFlow.astro';
 
 The team plans a **camera-only versus V2I-assisted E2E comparison** on a small-scale vehicle. A roadside camera would observe the occluded area and send pedestrian information to the vehicle, where it would be combined with the vehicle's camera input and state.
 
-The current outputs are **research summaries, preliminary design, and midterm presentation materials**. The comparison connects these design decisions with subsequent data collection, learning, and vehicle evaluation.
+This semester's work consists of research summaries, preliminary design, and the midterm presentation. Data collection, model training, and vehicle evaluation are planned for the following stages.
 
 ## Literature review and project scope
 
 I reviewed parts of **UniV2X** to understand its vehicle–infrastructure fusion structure and the scope of its open-loop evaluation. I prepared a literature summary to help define a feasible capstone scope and proposed a simplified fusion direction with a later small-scale closed-loop comparison.
 
-This set up the project's question in terms of vehicle behavior: whether earlier pedestrian information changes when the vehicle slows and how much stopping margin it retains.
+The planned comparison asks whether earlier pedestrian information changes when the vehicle slows and how much stopping margin it retains.
 
 ## Midterm preliminary design
 
-I prepared the midterm presentation materials **after discussions with teammates**. The materials connect the team's problem definition and system concept with pedestrian-risk assessment, braking margins, and training-data requirements.
+I prepared the midterm slides after discussions with teammates. They describe the team's scenario and system concept, pedestrian-risk assessment, braking margins, and training-data requirements.
 
 | Design area | Current proposal |
 | --- | --- |
@@ -50,7 +50,7 @@ I prepared the midterm presentation materials **after discussions with teammates
 | Vehicle planning | Vehicle-camera input and state, with infrastructure information added for the V2I-assisted model |
 | Outputs | Waypoints and target speed for a low-level controller |
 
-The camera concept developed from observing a particular gap between parked vehicles toward an elevated view of several parking spaces. Placement, field of view, and pedestrian visibility form part of the planned site evaluation.
+The team changed the camera concept from observing one gap between parked vehicles to an elevated view of several parking spaces. The planned site evaluation will examine placement, field of view, and pedestrian visibility.
 
 <MediaSlot id="v2i-scenario" />
 
@@ -111,7 +111,7 @@ Evaluation would examine detection and deceleration timing, stopping margin, min
 
 ## V2I communication research
 
-I am investigating **communication options between the infrastructure and vehicle computers**, including ROS 2/DDS over Wi-Fi. The review focuses on when useful information first reaches the vehicle and how continuously it remains available as the vehicle approaches the scenario.
+I am investigating communication options between the infrastructure and vehicle computers, including ROS 2/DDS over Wi-Fi. I am examining how soon observations reach the vehicle and how consistently messages arrive as it approaches the pedestrian scenario.
 
 Current comparison criteria include:
 

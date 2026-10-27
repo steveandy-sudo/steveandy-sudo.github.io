@@ -7,7 +7,7 @@ import { allProjects, projectUrl, statusLabel } from '../lib/projects';
 
 const research = {
   lead: 'Perception and decision-making for learning-based and end-to-end driving.',
-  summary: 'My research interests include perception and decision-making for autonomous driving, with a focus on learning-based and end-to-end driving. Competition projects have given me experience in model training, ROS 2 behavior planning, and vehicle testing. Developing a learned steering pipeline highlighted the importance of training-data coverage and quality, while field work made recorded driving data central to my debugging process. My capstone connects these interests with vehicle–infrastructure information and a planned E2E comparison.',
+  summary: 'I am interested in perception and decision-making for autonomous driving, especially learning-based and end-to-end driving. My competition work includes model training, ROS 2 behavior planning, and vehicle testing. Learned steering showed me how much vehicle operation depends on the coverage and quality of training data. I use recorded driving data to investigate problems and discuss corrections with teammates. In my capstone, I am reviewing vehicle–infrastructure fusion and helping plan a comparison of camera-only and V2I-assisted E2E driving.',
   topics: [
     { title: 'Perception under occlusion', description: 'How can infrastructure sensing support earlier responses to occluded pedestrians?' },
     { title: 'Decisions and vehicle response', description: 'How do input and steering delays change driving behavior?' },
@@ -46,7 +46,7 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'camera-v2i-e2e': {
     title: 'Camera-Based V2I Cooperative End-to-End Autonomous Driving',
-    summary: 'Reviewed UniV2X and prepared midterm materials from team design discussions, documenting an E2E comparison and target-speed labeling based on pedestrian risk and braking margins.',
+    summary: 'Reviewed UniV2X and prepared the midterm slides after team discussions. The design describes a planned E2E comparison and target-speed labels based on pedestrian risk and braking margins.',
     result: 'Research and preliminary design cover an occluded-pedestrian scenario, shared training targets, and a planned small-scale E2E comparison. I am also investigating V2I communication options and message freshness.',
     resultLabel: 'Research & design',
     visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: 'Team proposal for comparing camera-only and V2I-assisted E2E planning', title: 'Proposed E2E comparison', caption: 'Team design proposal · Camera-only and V2I-assisted E2E planning', kind: 'image' },
@@ -66,8 +66,8 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'vmodel-neuro-symbolic': {
     title: 'Dream Semester: Decision & Control',
-    summary: 'An early ROS 2 / CARLA project exploring Pure Pursuit, longitudinal control, and vehicle-command integration.',
-    result: 'Project outputs include ROS 2/CARLA controller integration, closed-loop simulation experiments, and stationary wheel testing with separate control commands.',
+    summary: 'Implemented Pure Pursuit and longitudinal control in ROS 2 / CARLA, then adapted the vehicle-command interface.',
+    result: 'Ran closed-loop controller experiments in CARLA and tested wheel actuation with separate control commands while the vehicle was raised on supports.',
     resultLabel: 'Implementation & experiments',
     visual: {
       src: '/media/projects/vmodel-neuro-symbolic/01-carla-simulation-poster.jpg',

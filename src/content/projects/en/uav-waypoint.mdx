@@ -64,8 +64,6 @@ The mission node supplies pose targets, and the offboard controller converts the
 
 The package implements `hold`, `land`, `disarm`, and `land_then_disarm` finish options. The final simulation demonstrated waypoint tracking followed by landing.
 
-Integration work covered the mission output mode, coordinate origin, ENU/NED conversion, and finish-state commands within the course simulation environment.
-
 ## Mission observability
 
-The package reports the current goal and mission state so target progression can be inspected alongside TF2 pose and arrival checks. Explicit coordinate modes connect the mission's pose targets to the offboard controller's PX4 command convention.
+The package reports the current goal and mission state so target progression can be inspected alongside TF2 pose and arrival checks. The coordinate modes define how pose targets reach the PX4 controller.
