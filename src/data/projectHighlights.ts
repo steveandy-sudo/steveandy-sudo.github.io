@@ -20,7 +20,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Behavior Planning & Control',
-    work: 'Designed FSM states and transitions with teammates, collected GNSS route waypoints, and connected PP–Stanley implementation with Foxglove analysis and vehicle operation.',
+    work: 'Designed FSM states and transitions with teammates and collected GNSS route waypoints. Implemented PP–Stanley tracking, analyzed recordings in Foxglove, and operated vehicle trials.',
     resultLabel: 'Vehicle trial results',
     result: 'Both courses reached up to 11 m/s during venue practice. Separate obstacle-avoidance tests confirmed deceleration, collision-free passage, route return, and acceleration.',
     evidence: [
@@ -31,7 +31,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'camera-v2i-e2e': {
     title: 'Camera-Based V2I & E2E Driving',
-    work: 'Reviewed UniV2X, prepared preliminary-design presentation materials from team discussions, and began investigating V2I communication options.',
+    work: 'Reviewed UniV2X and prepared preliminary-design slides after team discussions. Currently investigating V2I communication options.',
     resultLabel: 'Current stage',
     result: 'The preliminary design covers pedestrian risk, braking-aware training targets, and a planned comparison using shared driving records and labels. Communication research is in progress.',
     evidence: [
@@ -42,7 +42,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'uav-waypoint': {
     title: 'ROS 2 UAV Waypoint Mission',
-    work: 'Developed CSV waypoint sequencing, TF2 arrival checks, coordinate modes, and finish-state controls, and connected pose commands to an existing PX4 offboard controller.',
+    work: 'Developed CSV waypoint sequencing, TF2 arrival checks, coordinate modes, and finish-state controls. Connected pose commands to an existing PX4 offboard controller.',
     resultLabel: 'Simulation result',
     result: 'The integrated PX4 SITL/Gazebo course demonstration completed sequential waypoint flight and final landing. The recording shows takeoff and waypoint flight.',
     evidence: [
@@ -54,7 +54,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
     title: 'Dream Semester: Decision & Control',
     work: 'Implemented Pure Pursuit and longitudinal control in ROS 2/CARLA, investigated steering behavior, and adapted the vehicle-command interface.',
     resultLabel: 'Implementation & experiments',
-    result: 'Exercised the ROS 2 control pipeline in CARLA simulation and tested wheel actuation with separate control commands on the raised vehicle.',
+    result: 'Ran the ROS 2 control pipeline in CARLA simulation and tested wheel actuation with separate control commands on the raised vehicle.',
     evidence: [
       { label: 'Recorded tests', anchor: 'recorded-tests' },
       { label: 'Controller experiments', anchor: 'steering-behavior-and-controller-tuning' },

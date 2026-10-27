@@ -13,7 +13,7 @@ summary: "ResNet18–LiDAR imitation learning, YOLO model comparison, and ROS 2 
 outcome: "Team result: preliminary 2nd place; finals 13th place with course completion; Special Award in the parking event."
 teamScope: "A five-member team developed the XYCAR driving and parking system. I led the team and worked across learning, perception, mission integration, and parking logic."
 contributions:
-  - Developed a ROS 2 imitation-learning pipeline using ResNet18 and a LiDAR 1D CNN, covering data collection, model training, TorchScript inference, and switching between learned and rule-based control.
+  - Built a ROS 2 imitation-learning pipeline with ResNet18 and a LiDAR 1D CNN. Collected driving data, trained models, deployed TorchScript inference, and enabled switching between learned and rule-based control.
   - Implemented learning/rule hybrid driving and traffic-light and mission-state handling.
   - Prepared and reviewed Roboflow datasets, trained YOLOv8n and YOLO11n detectors, and selected a model using validation mAP50 and mAP50–95.
   - Integrated mission-management and driving modules, adjusted lane-following parameters, and configured mission transitions on the competition vehicle.
@@ -62,7 +62,7 @@ The steering policy combines a **ResNet18 image encoder** with a **LiDAR 1D CNN*
 | Measure steering-command MAE and RMSE | Compare predictions with recorded steering commands |
 | Inspect per-session and steering-range errors | Identify behavior hidden by an aggregate score |
 
-I compared steering predictions with recorded commands offline and examined steering response during vehicle trials. This connected model evaluation with the command and controller behavior observed on the vehicle.
+I compared steering predictions with recorded commands offline, then examined steering response and controller behavior during vehicle trials.
 
 ## Perception and dataset workflow
 
@@ -114,10 +114,6 @@ My parking work focused on SLAM-map waypoints and reverse recovery. The parking 
 
 The team used rule-based driving in the competition. Vehicle integration brought together mission priorities, drive gating, perception, and steering commands. Perception and hardware considerations also informed the focus on yellow lane markings.
 
-My work spanned the development cycle: collecting and annotating data, training and evaluating models, connecting ROS 2 mission modules, and tuning the vehicle for the driving and parking events.
-
 ## What I learned
 
-The learned policy drove smoothly in the simulator. Moving from simulation toward vehicle operation highlighted the importance of **training-data coverage and quality** and of examining how perception, decision-making, and control interact.
-
-Working across model training and ROS 2 integration gave me a practical view of the full driving pipeline: how data becomes a prediction, how a mission selects an action, and how that action reaches the vehicle.
+The learned policy drove smoothly in simulation. On the vehicle, I saw how much learned steering depended on the coverage and quality of the training data. Working on perception, mission decisions, and vehicle commands helped me understand how these modules influence each other.

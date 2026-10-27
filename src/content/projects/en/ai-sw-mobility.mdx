@@ -11,7 +11,7 @@ role: FSM Design / Decision-Making / Vehicle Testing
 status: ongoing
 summary: "ROS 2 FSM-based behavior planning, GNSS waypoint trials, Pure Pursuit–Stanley implementation, and data-driven obstacle-avoidance debugging."
 outcome: "Waypoint driving on both competition courses reached up to 11 m/s (39.6 km/h) during venue practice. Separate field tests confirmed deceleration before avoidance, collision-free passage, return to the reference route, and subsequent acceleration."
-teamScope: "I work in the five-member decision-making group of a 27-member vehicle team. My contribution connects FSM design, control implementation, recorded-drive analysis, and field vehicle operation, with obstacle avoidance as a main focus."
+teamScope: "I work in the five-member decision-making group of a 27-member vehicle team. I help design the FSM, implement tracking control, analyze driving recordings, and operate vehicle trials. Much of my field work focuses on obstacle avoidance."
 contributions:
   - Designed FSM states and transition conditions with teammates for traffic-light handling, timed stops, obstacle avoidance, and mission completion.
   - Recorded GNSS coordinates while driving to establish route waypoints and conducted vehicle trials using GNSS/IMU-based localization; both courses reached up to 11 m/s during venue practice.
@@ -33,11 +33,11 @@ import AcademicPresentationMaterials from '../../../components/AcademicPresentat
 
 ## Driving task
 
-The vehicle follows a recorded route, handles traffic lights and stop events, avoids obstacles, and returns to its reference path. My work connects behavior planning with the vehicle: defining FSM states with teammates, implementing hybrid tracking, examining recorded driving data, and operating field tests.
+The vehicle follows a recorded route, handles traffic lights and stop events, and avoids obstacles before returning to its reference path.
 
 ## FSM-based behavior planning
 
-I worked with teammates to define the **states and transition conditions** used by the ROS 2 behavior planner. The design connects the current mission and perception inputs with a target path, target speed, and stop request.
+I worked with teammates to define the states and transition conditions used by the ROS 2 behavior planner. The planner uses the current mission and perception inputs to select a target path, target speed, and stop request.
 
 | Driving task | Behavior managed by the decision software |
 | --- | --- |
@@ -58,22 +58,15 @@ The team implementation uses a shared stop-point state machine for signal, timed
 
 ## GNSS waypoint collection and driving
 
-I recorded **GNSS coordinates while driving the course** to establish route waypoints, then conducted vehicle trials using GNSS/IMU-based localization. This connected route preparation with waypoint following on the vehicle.
+I recorded GNSS coordinates while driving the course to establish route waypoints, then conducted vehicle trials using GNSS/IMU-based localization.
 
 During venue practice, waypoint-following runs on **both the preliminary and final courses reached up to 11 m/s (39.6 km/h)**.
 
 ## Recorded-drive analysis and debugging
 
-I used **Foxglove and ROS 2 rosbag2/MCAP recordings** to investigate driving behavior. I traced perception outputs, behavior-state transitions, planned paths, and vehicle feedback together, checking their timestamps and coordinate frames.
+I used Foxglove to review ROS 2 rosbag2/MCAP recordings. Starting with an observed driving problem, I traced perception outputs, FSM transitions, planned paths, and vehicle feedback, checking timestamps and coordinate frames. I reviewed the evidence with teammates and proposed corrections, then returned to field testing to inspect the vehicle's response.
 
-The review followed the full sequence:
-
-1. Locate the observed behavior in the recorded run.
-2. Follow the relevant perception, FSM, path, and vehicle-state topics.
-3. Review the evidence and discuss corrective actions with teammates.
-4. Return to field testing and inspect the resulting vehicle behavior.
-
-My main contribution to obstacle-avoidance work combined **log analysis, proposals for corrections, and field operation**. Recorded data helped narrow down issues and made debugging more systematic and efficient.
+Obstacle avoidance was my main focus. I analyzed the recordings, discussed software adjustments with teammates, and operated the vehicle during the follow-up tests.
 
 ## From presentation to implementation
 
@@ -86,8 +79,6 @@ The proposal combined their steering outputs, using driving conditions to guide 
 ### Applying the strategy in ROS 2
 
 After the presentation, I wrote and revised code for the combined controller. The implementation calculates both steering commands and blends them by driving phase: straight driving, corner approach, turning, and corner exit. Weight changes are limited from one control step to the next; speed and upcoming path geometry also influence lookahead and the individual steering calculations.
-
-This work connected the strategy discussed in the presentation with **controller implementation, comparison tests, and log analysis**.
 
 ### Recognition
 
@@ -104,15 +95,13 @@ I compared hybrid tracking with Stanley alone on **matched Gazebo course segment
 | Heading-error p95 | Approximately **14% lower** |
 | Steering-command total variation | Approximately **10% lower** |
 
-Here, **p95** is the 95th percentile of the recorded error values. Steering-command total variation measures accumulated changes in the steering command over the comparison segment. These figures describe the initial matched simulation comparison.
+Here, p95 is the 95th percentile of the recorded error values. Steering-command total variation measures accumulated changes in the steering command over the comparison segment.
 
 ## Real-vehicle trials
 
 ### Obstacle avoidance and route return
 
-I operated the vehicle during obstacle-avoidance field tests and checked the complete behavior sequence: **deceleration before avoidance, collision-free passage, return to the reference route, and acceleration afterward**. Each part of this sequence was observed to work in the field tests.
-
-Foxglove analysis and discussions with teammates connected observations from these runs with the next round of software adjustments.
+I operated the vehicle during obstacle-avoidance field tests. The vehicle slowed before the avoidance section and completed a collision-free maneuver. It then returned to its reference route and accelerated. I reviewed the recordings in Foxglove and discussed the next software adjustments with teammates.
 
 ### Venue-practice waypoint and AEB trials
 
@@ -133,6 +122,6 @@ The cone-course AEB workflow forms a path from perceived cone boundaries and lat
 
 ## What I learned
 
-The project made **recorded driving data** central to my debugging process. Tracing the inputs, decision states, and measured vehicle response together helped me narrow down problems and discuss concrete corrections with the team.
+Recorded driving data gave me a faster, more reliable way to investigate problems. In Foxglove, I could follow a perception input through the decision state to the measured vehicle response and use that evidence to discuss corrections with teammates.
 
-Working through both software review and field operation also connected FSM transitions with the behavior I checked on the vehicle: when it slows, how it passes an obstacle, and how it resumes route driving.
+Operating the vehicle also gave those topics a physical reference: when it slowed, how it passed an obstacle, and how it resumed route driving.
