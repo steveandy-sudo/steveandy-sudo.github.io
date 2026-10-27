@@ -15,7 +15,6 @@ for (const path of [src, poster]) {
   <img src={poster} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
   <div class="animation-controls">
     <button type="button" aria-label={`${playLabel}: ${alt}`} aria-pressed="false" hidden>{playLabel}</button>
-    <a href={src} download>Download GIF ↓</a>
   </div>
   <figcaption>{caption}</figcaption>
 </figure>
