@@ -7,10 +7,9 @@ for (const file of [src, poster, captionsSrc, gifSrc].filter(Boolean)) if (!file
 if (src && youtubeId) throw new Error('Use one video source.');
 if (youtubeId && !/^[\w-]{11}$/.test(youtubeId)) throw new Error('Invalid YouTube video ID.');
 ---
-{(src || youtubeId) && <figure class:list={['video-figure', { portrait }]}>{src ? <video controls playsinline preload="none" poster={poster} aria-label={title}><source src={src} type="video/mp4" />{captionsSrc && <track kind="captions" src={captionsSrc} srclang={captionsLang} label="Captions" default />}</video> : <iframe src={`https://www.youtube-nocookie.com/embed/${youtubeId}`} title={title} loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" />}{(caption || gifSrc) && <figcaption>{caption}{gifSrc && <a class="gif-link" href={gifSrc} download aria-label={`Download GIF: ${title}`}>Download GIF <span aria-hidden="true">↓</span></a>}</figcaption>}</figure>}
+{(src || youtubeId) && <figure class:list={['video-figure', { portrait }]}>{src ? <video controls playsinline preload="none" poster={poster} aria-label={title}><source src={src} type="video/mp4" />{captionsSrc && <track kind="captions" src={captionsSrc} srclang={captionsLang} label="Captions" default />}</video> : <iframe src={`https://www.youtube-nocookie.com/embed/${youtubeId}`} title={title} loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" />}{caption && <figcaption>{caption}</figcaption>}</figure>}
 
 <style>
   .video-figure video { aspect-ratio: auto; height: auto; background: var(--soft); border: 1px solid var(--line); }
   .video-figure.portrait { max-width: 360px; margin-inline: auto; }
-  .gif-link { display: block; width: fit-content; margin-top: 6px; }
 </style>
