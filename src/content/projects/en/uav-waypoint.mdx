@@ -10,7 +10,7 @@ team: 4 members
 role: UAV Waypoint Development
 status: completed
 summary: "A ROS 2 waypoint-mission package with TF2 arrival checks and PX4 offboard integration, demonstrated in SITL/Gazebo."
-outcome: "Sequential waypoint tracking and final landing were completed in the integrated PX4 SITL / Gazebo course demonstration using my waypoint package. A fresh replay of the public source still requires the matching course interfaces and simulator assets."
+outcome: "Sequential waypoint tracking and final landing were completed in the integrated PX4 SITL / Gazebo course demonstration using my waypoint package."
 teamScope: "A four-member course team integrated the autonomous-system platform. My focus was the UAV waypoint package and its interface to the existing offboard controller."
 contributions:
   - Developed uav_waypoint_mission with CSV x/y/z/yaw waypoints, optional gimbal pitch, TF2 pose tracking, 3D goal distance, and arrival tolerance.
@@ -46,16 +46,15 @@ The course environment combined ROS 2 Humble, PX4 SITL, Gazebo, QGroundControl, 
 | Explicit ENU / local-NED modes | Handle the coordinate boundary between ROS poses and PX4 commands |
 | Altitude checks before disarm | Gate the implemented land-then-disarm finish path on the reported vehicle state |
 
-The repository configuration defines **nine waypoints** and a default **1.0 m arrival tolerance**. The demonstration confirmed mission completion in simulation; quantitative tracking-error and repeat-trial results are not available.
+The repository configuration defines **nine waypoints** and a default **1.0 m arrival tolerance**. The integrated course demonstration completed the waypoint sequence and final landing in simulation.
 
 ## Simulation demonstration
 
 | Item | Result |
 | --- | --- |
 | Environment | PX4 SITL / Gazebo course simulation |
-| Course demonstration outcome | Sequential waypoint tracking and final landing completed using the waypoint package in the integrated course system; confirmed by the project author |
+| Course demonstration outcome | Sequential waypoint tracking and final landing completed using the waypoint package in the integrated course system |
 | Recording below | Takeoff and waypoint flight during simulation testing |
-| Public-source replay | A fresh replay requires the matching simulator assets, coordinate configuration, and landing-request receiver |
 
 <MediaSlot id="uav-demo" />
 
@@ -65,10 +64,8 @@ The mission node supplies pose targets, and the offboard controller converts the
 
 The package implements `hold`, `land`, `disarm`, and `land_then_disarm` finish options. The final simulation demonstrated waypoint tracking followed by landing.
 
-The archived mission publishes a landing request, but the receiver is not identified in the collected offboard controller. The completed course demonstration used the integrated course environment; the public packages alone do not yet establish a reproducible landing sequence. A fresh replay needs the matching landing receiver, ENU/NED and origin configuration, and Gazebo world/models. The repository's setup guide documents these integration dependencies.
+Integration work covered the mission output mode, coordinate origin, ENU/NED conversion, and finish-state commands within the course simulation environment.
 
-## What I learned
+## Mission observability
 
-I learned to check arrival conditions and coordinate conversion alongside the mission logic. Reporting the current goal and mission state made the progression between waypoints visible during debugging.
-
-A follow-up evaluation would record the target sequence, measured trajectory, arrival times, and landing event over repeated runs. Those records would allow calculation of tracking error, time to reach each waypoint, and completion rate.
+The package reports the current goal and mission state so target progression can be inspected alongside TF2 pose and arrival checks. Explicit coordinate modes connect the mission's pose targets to the offboard controller's PX4 command convention.

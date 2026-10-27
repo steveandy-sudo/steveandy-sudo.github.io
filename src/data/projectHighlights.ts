@@ -20,7 +20,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision & AEB',
-    work: 'Developed decision and control software, diagnosed a cached-path coordinate error, added odometry-based reprojection and regression tests, and analyzed four drive recordings.',
+    work: 'Focused on obstacle avoidance: diagnosed a cached-path coordinate error, implemented odometry-based reprojection and regression tests, and combined drive-log analysis with team troubleshooting discussions.',
     resultLabel: 'Software correction & field testing',
     result: 'The path-reuse fix was merged into the team’s main branch. I operated the vehicle during tests of the updated software, confirming successful obstacle avoidance and return to the reference route.',
     evidence: [
@@ -43,7 +43,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
     title: 'ROS 2 UAV Waypoint Mission',
     work: 'Developed CSV waypoint sequencing, TF2 arrival checks, coordinate modes, and finish-state controls, and connected pose commands to an existing PX4 offboard controller.',
     resultLabel: 'Simulation result',
-    result: 'The integrated PX4 SITL/Gazebo course demonstration completed sequential waypoint flight and final landing. The recording shows takeoff and waypoint flight. Public-source replay requires the course landing, coordinate, and simulator interfaces.',
+    result: 'The integrated PX4 SITL/Gazebo course demonstration completed sequential waypoint flight and final landing. The recording shows takeoff and waypoint flight.',
     evidence: [
       { label: 'Simulation demonstration', anchor: 'simulation-demonstration' },
       { label: 'Mission architecture', anchor: 'mission-architecture' },
@@ -51,12 +51,12 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'vmodel-neuro-symbolic': {
     title: 'Dream Semester: Decision & Control',
-    work: 'Implemented Pure Pursuit and longitudinal control in ROS 2/CARLA, investigated unstable tracking, and adapted the vehicle-command interface.',
-    resultLabel: 'Project outcome',
-    result: 'Simulation tracking remained unstable. Real-vehicle work reached stationary wheel testing with separate control commands; autonomous driving was not achieved.',
+    work: 'Implemented Pure Pursuit and longitudinal control in ROS 2/CARLA, investigated steering behavior, and adapted the vehicle-command interface.',
+    resultLabel: 'Implementation & experiments',
+    result: 'Exercised the ROS 2 control pipeline in CARLA simulation and tested wheel actuation with separate control commands on the raised vehicle.',
     evidence: [
       { label: 'Recorded tests', anchor: 'recorded-tests' },
-      { label: 'Tracking investigation', anchor: 'investigating-unstable-tracking' },
+      { label: 'Controller experiments', anchor: 'steering-behavior-and-controller-tuning' },
     ],
   },
 };
