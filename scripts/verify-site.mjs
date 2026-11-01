@@ -66,7 +66,11 @@ for (const file of htmlFiles) {
       if (project.querySelectorAll('a[href^="https://github.com/"]').length > 1) errors.push('Home: projects must have at most one GitHub link');
     }
     if (new Set(linkedProjects).size !== projectRoutes.length) errors.push('Home: some projects are not accessible');
-    if (document.querySelectorAll('.project-entry a[href^="https://github.com/"]').length !== 3) errors.push('Home: expected three public project repositories');
+    if (document.querySelectorAll('.project-entry a[href^="https://github.com/"]').length !== 4) errors.push('Home: expected four public project repositories');
+  }
+  if (route === '/' || route === '/projects/ai-sw-mobility/') {
+    if (document.querySelectorAll('a[href="https://github.com/steveandy-sudo/ai-sw-mobility-portfolio"]').length !== 1) errors.push(`${route}: expected one public AI·SW repository link`);
+    if (document.querySelector('[data-repository-visibility="private"]')) errors.push(`${route}: obsolete private repository notice`);
   }
   for (const image of document.querySelectorAll('img')) if (!image.getAttribute('alt')?.trim()) errors.push(`${route}: image without alt`);
   const refs = [];

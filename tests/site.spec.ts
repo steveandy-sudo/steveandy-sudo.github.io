@@ -40,7 +40,7 @@ test('keyboard, English-only navigation, project repositories and development sl
   await expect(page.locator('.global-nav a[href$="#cv"], a[href="https://github.com/steveandy-sudo"]')).toHaveCount(0);
   const cards = page.locator('.project-entry');
   await expect(cards).toHaveCount(5);
-  await expect(page.locator('.project-list a')).toHaveCount(13);
+  await expect(page.locator('.project-list a')).toHaveCount(14);
   await expect(page.locator('.project-list a[href^="/projects/"]')).toHaveCount(10);
   await expect(page.getByRole('link', { name: /Read case study/i })).toHaveCount(0);
   for (const slug of ['kookmin-ai-edge', 'ai-sw-mobility', 'camera-v2i-e2e', 'uav-waypoint', 'vmodel-neuro-symbolic']) {
@@ -53,6 +53,7 @@ test('keyboard, English-only navigation, project repositories and development sl
   }
   for (const repository of [
     'https://github.com/steveandy-sudo/kookmin-autonomous-portfolio',
+    'https://github.com/steveandy-sudo/ai-sw-mobility-portfolio',
     'https://github.com/steveandy-sudo/uav-waypoint-portfolio',
     'https://github.com/steveandy-sudo/vmodel-driving-portfolio',
   ]) {
@@ -62,17 +63,14 @@ test('keyboard, English-only navigation, project repositories and development sl
     await expect(card.locator('a[href^="https://github.com/"]')).toHaveCount(1);
     await expect(card.locator('a[href^="https://github.com/"]')).toHaveAccessibleName(/GitHub/);
   }
-  const privateCard = cards.filter({ has: page.locator('[data-repository-visibility="private"]') });
-  await expect(privateCard).toHaveCount(1);
-  await expect(privateCard.getByRole('link')).toHaveCount(2);
-  await expect(privateCard.locator('a[href^="https://github.com/"]')).toHaveCount(0);
-  await expect(privateCard).toContainText('competition is ongoing');
+  await expect(cards.locator('[data-repository-visibility="private"]')).toHaveCount(0);
   const capstoneCard = cards.filter({ has: page.getByRole('heading', { level: 3, name: 'Camera-Based V2I Cooperative End-to-End Autonomous Driving', exact: true }) });
   await expect(capstoneCard).toHaveCount(1);
   await expect(capstoneCard.getByRole('link')).toHaveCount(2);
   await expect(capstoneCard.locator('a[href^="https://github.com/"]')).toHaveCount(0);
   for (const [slug, repository] of [
     ['kookmin-ai-edge', 'https://github.com/steveandy-sudo/kookmin-autonomous-portfolio'],
+    ['ai-sw-mobility', 'https://github.com/steveandy-sudo/ai-sw-mobility-portfolio'],
     ['uav-waypoint', 'https://github.com/steveandy-sudo/uav-waypoint-portfolio'],
     ['vmodel-neuro-symbolic', 'https://github.com/steveandy-sudo/vmodel-driving-portfolio'],
   ]) {
@@ -81,10 +79,10 @@ test('keyboard, English-only navigation, project repositories and development sl
   }
   for (const route of ['/', '/projects/ai-sw-mobility/']) {
     await page.goto(route);
-    await expect(page.locator('a[href*="github.com/steveandy-sudo/ai-sw-mobility-portfolio"]')).toHaveCount(0);
-    const notice = page.locator('[data-repository-visibility="private"]').first();
-    await expect(notice).toBeVisible();
-    await expect(notice).toContainText('competition is ongoing');
+    const repository = page.locator('a[href="https://github.com/steveandy-sudo/ai-sw-mobility-portfolio"]');
+    await expect(repository).toHaveCount(1);
+    await expect(repository).toBeVisible();
+    await expect(page.locator('[data-repository-visibility="private"]')).toHaveCount(0);
   }
   await page.goto('/projects/kookmin-ai-edge/');
   await expect(page.locator('.case-header').getByRole('link', { name: 'GitHub repository', exact: true })).toHaveCount(1);
