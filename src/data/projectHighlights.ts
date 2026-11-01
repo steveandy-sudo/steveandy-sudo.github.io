@@ -21,12 +21,12 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Behavior Planning & Control',
     work: 'Designed FSM states and transitions with teammates and collected GNSS route waypoints. Implemented PP–Stanley tracking, analyzed recordings in Foxglove, and operated vehicle trials.',
-    resultLabel: 'Vehicle trial results',
-    result: 'Both courses reached up to 11 m/s during venue practice. Separate obstacle-avoidance tests confirmed deceleration, collision-free passage, route return, and acceleration.',
+    resultLabel: 'Competition awards',
+    result: 'Team awards, Self-built Autonomous Vehicle: Grand Prize in Autonomous Driving Implementation (Minister of Land, Infrastructure and Transport Award), and Special Award in Creative Technology for the technical report.',
     evidence: [
+      { label: 'Competition awards', anchor: 'competition-awards' },
       { label: 'FSM & mission transitions', anchor: 'fsm-based-behavior-planning' },
       { label: 'Vehicle trials', anchor: 'real-vehicle-trials' },
-      { label: 'Initial simulation comparison', anchor: 'initial-simulation-results' },
     ],
   },
   'camera-v2i-e2e': {
