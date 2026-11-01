@@ -10,13 +10,13 @@ team: 27 members / decision team of 5
 role: FSM Design / Decision-Making / Vehicle Testing
 status: completed
 summary: "ROS 2 FSM-based behavior planning, GNSS waypoint trials, Pure Pursuit–Stanley implementation, and data-driven obstacle-avoidance debugging."
-outcome: "Team awards in the Self-built Autonomous Vehicle category: Grand Prize in Autonomous Driving Implementation (Minister of Land, Infrastructure and Transport Award), and Special Award in Creative Technology for the technical report."
-teamScope: "I worked in the five-member decision-making group of a 27-member vehicle team. I helped design the FSM, implemented tracking control, analyzed driving recordings, and operated vehicle trials. Much of my field work focused on obstacle avoidance."
+outcome: "The team completed all required missions in both preliminary and final rounds under the competition rules."
+teamScope: "I worked in the five-member decision-making group of a 27-member vehicle team. I helped design the FSM, implemented tracking control, analyzed driving recordings, and operated vehicle trials. Much of my field work focused on obstacle avoidance; during Test Week, my main role was vehicle operation for experimental runs."
 contributions:
   - Designed FSM states and transition conditions with teammates for traffic-light handling, timed stops, obstacle avoidance, and mission completion.
   - Recorded GNSS coordinates while driving to establish route waypoints and conducted vehicle trials using GNSS/IMU-based localization; both courses reached up to 11 m/s during venue practice.
   - Analyzed ROS 2 recordings in Foxglove, tracing perception outputs, FSM transitions, planned paths, and vehicle state across timestamps and coordinate frames; reviewed findings and corrective actions with teammates.
-  - Operated the vehicle during obstacle-avoidance tests and confirmed approach deceleration, collision-free passage, route return, and acceleration afterward.
+  - Operated the vehicle during Test Week experimental runs and obstacle-avoidance field tests; confirmed approach deceleration, collision-free passage, route return, and acceleration afterward.
   - Presented a Pure Pursuit–Stanley hybrid strategy at a symposium sponsored by Hyundai Mobis, then implemented steering blending by driving phase in ROS 2.
   - Compared hybrid tracking with Stanley alone on matched Gazebo course segments at 6 m/s; the initial comparison showed approximately 14% lower heading-error p95 and 10% lower steering-command total variation.
 technologies: [ROS 2, FSM Behavior Planning, Pure Pursuit + Stanley, MCAP / Foxglove, Gazebo]
@@ -32,6 +32,8 @@ import SystemFlow from '../../../components/SystemFlow.astro';
 import AcademicPresentationMaterials from '../../../components/AcademicPresentationMaterials.astro';
 
 ## Competition awards
+
+The team completed **all required missions in both the preliminary and final rounds** in accordance with competition rules.
 
 Team K.A.I. received two awards in the **Self-built Autonomous Vehicle** category of the **2026 Student AI·SW Mobility Competition**:
 
@@ -107,6 +109,10 @@ I compared hybrid tracking with Stanley alone on **matched Gazebo course segment
 Here, p95 is the 95th percentile of the recorded error values. Steering-command total variation measures accumulated changes in the steering command over the comparison segment.
 
 ## Real-vehicle trials
+
+### Test Week experimental runs
+
+My main role during Test Week was **vehicle operation for experimental runs**.
 
 ### Obstacle avoidance and route return
 
