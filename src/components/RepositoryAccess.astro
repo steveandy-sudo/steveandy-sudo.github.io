@@ -2,19 +2,21 @@
 interface Props {
   href: string;
   visibility: 'public' | 'private';
-  lang?: 'en';
+  lang?: 'en' | 'ko';
   label: string;
   accessibleName?: string;
-  privateReason?: { en: string };
+  privateReason?: { en: string; ko?: string };
 }
-const { href, visibility, label, accessibleName, privateReason } = Astro.props;
+const { href, visibility, label, accessibleName, privateReason, lang = 'en' } = Astro.props;
+const privateLabel = lang === 'ko' ? 'GitHub · 비공개' : 'GitHub · Private';
+const reason = lang === 'ko' ? privateReason?.ko ?? privateReason?.en : privateReason?.en;
 ---
 {visibility === 'public' ? (
   <a class="repository-link" href={href} aria-label={accessibleName}>{label} <span aria-hidden="true">↗</span></a>
 ) : (
   <span class="repository-private" data-repository-visibility="private">
-    <span class="repository-status">GitHub · Private</span>
-    {privateReason && <span class="repository-note">{privateReason.en}</span>}
+    <span class="repository-status">{privateLabel}</span>
+    {privateReason && <span class="repository-note">{reason}</span>}
   </span>
 )}
 <style>

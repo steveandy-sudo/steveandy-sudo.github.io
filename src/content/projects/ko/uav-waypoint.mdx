@@ -1,0 +1,69 @@
+---
+slug: uav-waypoint
+lang: ko
+order: 4
+title: PX4 SITL/Gazebo 기반 ROS 2 UAV 웨이포인트 미션
+titleEn: ROS 2 UAV Waypoint Mission on PX4 SITL/Gazebo
+context: 자율시스템 플랫폼
+period: May 2026 – Jun 2026
+team: 4 members
+role: UAV 웨이포인트 개발
+status: completed
+summary: "TF2 도착 판정과 PX4 오프보드 연동을 포함한 ROS 2 웨이포인트 미션 패키지 개발 및 SITL/Gazebo 시연"
+outcome: "직접 개발한 웨이포인트 패키지를 사용한 PX4 SITL / Gazebo 수업 통합 시연에서 순차 웨이포인트 추종 및 최종 착륙 완료"
+teamScope: "4명으로 구성된 수업 팀이 자율시스템 플랫폼을 통합했다. 나는 UAV 웨이포인트 패키지와 기존 오프보드 제어기와의 인터페이스에 집중했다."
+contributions:
+  - CSV의 x/y/z/yaw 웨이포인트, 선택적 짐벌 피치, TF2 위치·자세 추적, 3차원 목표 거리, 도착 허용 오차를 포함하는 uav_waypoint_mission을 개발했다.
+  - 목표 지점을 순차적으로 전환하는 기능을 구현하고, /command/pose의 PoseStamped 명령을 기존 PX4 오프보드 제어기와 연동했다.
+  - map/ENU 및 PX4 local-NED 좌표 모드, 시작·중지·초기화 제어, 미션 상태와 현재 목표 보고 기능을 지원했다.
+  - hold, land, disarm, land_then_disarm 종료 옵션을 구현하고, land_then_disarm 처리 과정에 고도 확인을 포함했다.
+technologies: [ROS 2 Humble, PX4 SITL, Gazebo, TF2, QGroundControl]
+github: https://github.com/steveandy-sudo/uav-waypoint-portfolio
+featured: true
+---
+
+import MediaSlot from '../../../components/MediaSlot.astro';
+import SystemFlow from '../../../components/SystemFlow.astro';
+
+## 미션 구조
+
+<SystemFlow title="PX4 SITL / Gazebo의 웨이포인트 미션" steps={[
+  { label: '웨이포인트 순서', detail: 'CSV의 목표 지점은 x, y, z, yaw를 지정하며, 선택적으로 짐벌 피치를 포함한다.' },
+  { label: '위치·자세 및 도착 판정', detail: 'TF2 위치·자세와 3차원 목표 거리를 이용해 현재 목표 지점에 도착했는지 판정한다.' },
+  { label: '미션 진행', detail: '미션 노드는 다음 목표 지점으로 전환하고 /command/pose에 PoseStamped를 발행한다.' },
+  { label: '오프보드 실행', detail: '기존 PX4 오프보드 제어기와 시뮬레이션 구성 요소가 위치·자세 명령을 실행한다.' },
+]} />
+
+수업 환경은 ROS 2 Humble, PX4 SITL, Gazebo, QGroundControl, Micro XRCE-DDS를 결합했다. 나는 웨이포인트 미션 패키지를 개발하고 기존 오프보드 제어기와 통합했다.
+
+## 설계 선택
+
+| 설계 선택 | 기술적 목적 |
+| --- | --- |
+| 3차원 도착 거리 | 수평·수직 위치를 모두 사용한 목표 지점 전환 |
+| 시작·중지·초기화 제어 | 통합 및 시험 과정에서 미션의 진행 단계 명확화 |
+| 현재 목표 및 미션 상태 보고 | 디버깅 중 목표 지점 진행 상태 확인 |
+| ENU / local-NED 모드의 명시적 구분 | ROS 위치·자세와 PX4 명령 사이의 좌표계 차이 처리 |
+| disarm 전 고도 확인 | 보고된 기체 상태를 조건으로 구현된 착륙 후 disarm 종료 절차 진행 |
+
+저장소 설정에는 **9개의 웨이포인트**와 기본 **도착 허용 오차 1.0 m**가 정의돼 있다. 수업 통합 시연에서는 시뮬레이션으로 웨이포인트 순차 진행과 최종 착륙을 완료했다.
+
+## 시뮬레이션 시연
+
+| 항목 | 결과 |
+| --- | --- |
+| 환경 | PX4 SITL / Gazebo 수업 시뮬레이션 |
+| 수업 시연 결과 | 수업 통합 시스템에서 웨이포인트 패키지를 사용해 순차 웨이포인트 추종 및 최종 착륙 완료 |
+| 아래 영상 | 시뮬레이션 시험 중 이륙 및 웨이포인트 비행 |
+
+<MediaSlot id="uav-demo" lang="ko" />
+
+## 좌표 및 종료 상태 연동
+
+미션 노드는 목표 위치·자세를 전달하고, 오프보드 제어기는 이를 ENU에서 NED로 변환한 뒤 PX4 명령을 발행한다. 미션의 출력 모드와 원점은 이 변환에 맞아야 한다.
+
+패키지는 `hold`, `land`, `disarm`, `land_then_disarm` 종료 옵션을 구현한다. 최종 시뮬레이션에서는 웨이포인트 추종 후 착륙하는 동작을 시연했다.
+
+## 미션 상태 확인
+
+패키지는 현재 목표와 미션 상태를 보고하므로, TF2 위치·자세 및 도착 판정과 함께 목표 진행 상태를 확인할 수 있다. 좌표 모드는 목표 위치·자세가 PX4 제어기로 전달되는 방식을 정의한다.

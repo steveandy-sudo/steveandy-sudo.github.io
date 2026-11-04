@@ -1,9 +1,15 @@
 ---
-import { render } from 'astro:content';
+import { getEntry, render } from 'astro:content';
 import { allProjects, projectUrl } from '../lib/projects';
 import ProjectCaseStudy from '../layouts/ProjectCaseStudy.astro';
 export async function getStaticPaths() { return (await allProjects()).map(project => ({ params: { route: projectUrl(project.data).replace(/^\//,'').replace(/\/$/,'') }, props: { project } })); }
 const { project } = Astro.props;
 const { Content, headings } = await render(project);
+const alternate = await getEntry('projects', `${project.data.lang === 'en' ? 'ko' : 'en'}/${project.data.slug}`);
+if (!alternate) throw new Error(`Missing translation for ${project.id}`);
+const { headings: alternateHeadings } = await render(alternate);
+if (headings.length !== alternateHeadings.length || headings.some((heading, i) => heading.depth !== alternateHeadings[i].depth)) {
+  throw new Error(`Heading structure differs between translations: ${project.data.slug}`);
+}
 ---
-<ProjectCaseStudy project={project} headings={headings}><Content /></ProjectCaseStudy>
+<ProjectCaseStudy project={project} headings={headings} alternateHeadings={alternateHeadings}><Content /></ProjectCaseStudy>

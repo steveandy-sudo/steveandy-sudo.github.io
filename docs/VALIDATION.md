@@ -1,34 +1,96 @@
-# Website validation
+# 웹사이트 검증
 
-## Current scope
+## 현재 검증 범위
 
-The website is English-only: one homepage, five existing case-study routes, and the 404 page. Korean website routes and language-switch links are removed. English and Korean CV PDFs remain separate downloadable artifacts at their existing direct URLs.
+영어가 기본 언어이며, 영어 홈페이지·프로젝트 5개와 대응하는 한국어 홈페이지·프로젝트 5개를 제공합니다. 예상 빌드 결과는 영어 6개, 한국어 6개, 공통 `/404.html` 1개로 구성된 총 13개 HTML 페이지입니다. 콘텐츠 페이지에는 `English`·`한국어` 전환 링크를 표시하고, 공통 404 페이지에는 언어 전환 링크를 표시하지 않습니다.
 
-The homepage presents each public project's GitHub link once. Kookmin, UAV, and Dream Semester have public links; AI·SW shows its private status and competition-related reason; the capstone has no repository link. Each project title and preview image links to its case study. There is no separate “Read case study” link.
+CV는 공개 사이트와 저장소의 현재 버전에서 제외합니다. 배포 결과에 CV PDF나 CV 다운로드 링크가 없어야 하며, 이전 직접 주소는 HTTP 404를 반환해야 합니다.
 
-## Checks for each release
+홈페이지의 프로젝트 제목과 대표 이미지는 현재 언어의 상세 페이지로 연결합니다. 국민대, AI·SW, UAV, 드림학기제에는 각각 공개 GitHub 링크를 하나씩 표시합니다. 졸업 프로젝트에는 저장소 링크를 표시하지 않습니다. AI·SW의 과거 비공개 안내와 별도의 `Read case study` 링크는 표시하지 않습니다.
 
-- `npm run check`: validate TypeScript, Astro components, and MDX metadata.
-- `npm run build`: generate the seven HTML pages and referenced assets.
-- `npm run verify`: check local links, assets, anchors, metadata, contribution sections, and CV files. Check that no Korean website route or language-switch link is generated.
-- Browser checks: inspect the six content routes at 1440, 768, 390, and 320 pixels; confirm no horizontal overflow, keyboard skip navigation, section highlighting, mobile TOC behavior, and 200% text enlargement.
-- Homepage navigation: confirm exactly one GitHub link for each public project, a non-link private notice for AI·SW, and no repository link for the capstone. Confirm each project title and preview image links to the correct case study, with no separate “Read case study” action.
-- Media: inspect posters, GIF playback and pause controls, aspect ratios, and captions against the source recordings. Confirm no empty development request boxes appear in production.
-- After deployment: check the live homepage, retained case-study URLs, linked media, and both V2 CV PDFs.
+이 문서는 검사 절차를 설명합니다. 실제 통과 여부는 해당 변경을 대상으로 실행한 명령 결과와 화면 검토 후 기록합니다.
 
-`tests/site.spec.ts` records the browser assertions. Browser tests and visual inspection must be reported from an actual run; editing the assertions does not establish that they pass.
+## 로컬 정적 검사
 
-## Content checks
+Node.js 24 이상에서 의존성을 설치하고 다음 순서로 실행합니다.
 
-- The Kookmin case study has one GitHub link in its header, pointing to `steveandy-sudo/kookmin-autonomous-portfolio`. Obsolete links to the original team repository are rejected.
-- AI·SW records 10 m/s waypoint driving on both courses during venue practice and a 50 km/h AEB stop command. Detailed trial descriptions retain the brake fault and stopping-zone overrun.
-- AI·SW also records the user-confirmed high-level-control report authorship and comparison-test/log-analysis work. The approximately 14% heading-error p95 and 10% steering-command-total-variation reductions on the homepage and CV are explicitly tied to matched 6 m/s Gazebo segments against Stanley alone. The detail page includes the report's additional approximately 7% steering-error p95 and 8% curved-section lateral-error p95 reductions. These percentages do not describe vehicle tests or the hardware repair. The report itself is not hosted on the site; repository access remains private during the competition.
-- Capstone material describes a design-stage project; slide diagrams do not establish completed implementation or vehicle validation.
-- UAV footage shows simulated waypoint flight. Dream Semester footage separates CARLA simulation from supported-wheel testing with separate control commands.
-- V2 English/Korean CVs are included. V1 files are not included while the GPA remains unconfirmed.
+```sh
+npm ci
+npm run check
+npm run build
+npm run verify
+```
 
-## Tooling note
+- `npm run check`: TypeScript, Astro 컴포넌트, MDX 메타데이터를 확인합니다.
+- `npm run build`: 13개 HTML 페이지와 참조 자산을 생성합니다. 영어·한국어 프로젝트 쌍의 누락, 공통 사실값 차이, 제목 구조 차이가 있으면 원본을 수정합니다.
+- `npm run verify`: 로컬 페이지·자산·앵커, 문서 언어, 제목·설명·Open Graph 메타데이터, 현재 경로의 canonical, 언어별 `hreflang`, 언어 전환 링크·활성 상태, 개인 기여 영역, 저장소 링크 정책, CV 공개 제외 여부를 확인합니다.
 
-Astro/MDX can emit Vite `MODULE_LEVEL_DIRECTIVE` warnings concerning its generated `use astro:head-inject` directive. These warnings are not suppressed. They are separate from type-checker diagnostics; any build or browser failure still needs investigation.
+생성된 `dist/`에서 다음 항목도 확인합니다.
 
-Checks do not establish new experimental results or certify accessibility. New media and factual changes require content review alongside the technical checks.
+1. 영어 `/`와 `/projects/<slug>/`, 한국어 `/ko/`와 `/ko/projects/<slug>/`, 공통 `/404.html`이 있고 HTML 파일 수가 13개인지 확인합니다.
+2. 각 콘텐츠 페이지의 `html lang`과 표시 문구가 일치하는지 확인합니다. `canonical`은 현재 페이지, `hreflang="en"`·`hreflang="ko"`는 대응 페이지, `x-default`는 영어 페이지를 가리켜야 합니다. Open Graph 언어와 내용도 현재 언어와 맞춰 확인합니다.
+3. 내부 링크·이미지·포스터·영상 경로와 페이지 내 앵커가 실제로 존재하는지 확인합니다. 중복 ID, 빈 링크, 개발용 자료 요청 상자, GIF 다운로드 링크가 노출되지 않아야 합니다.
+4. 영어·한국어 제목의 개수·깊이·순서와 언어 전환 앵커 대응표를 확인합니다. 각 대응 ID가 양쪽 문서에 존재해야 합니다.
+5. `dist/cv/`와 CV PDF가 없고, 공개 페이지에 CV 메뉴·다운로드 링크가 없는지 확인합니다.
+
+검사 스크립트의 실제 검사 범위는 `scripts/verify-site.mjs`를 기준으로 확인합니다. 메타데이터와 링크 검사는 번역의 의미나 실험 사실의 정확성을 대신하지 않습니다.
+
+## 브라우저 기능과 화면 검사
+
+빌드 결과를 미리보기로 제공한 뒤 별도 터미널에서 브라우저 검사를 실행합니다.
+
+```sh
+npm run preview
+```
+
+```sh
+npx playwright install chromium
+npm run test:ui
+```
+
+기본 미리보기 주소는 `http://127.0.0.1:4321`입니다. 다른 주소는 `SITE_URL`, 설치된 브라우저 실행 파일은 `BROWSER_PATH`로 지정할 수 있습니다. 캡처와 실행 결과는 버전 관리에서 제외된 `test-results/`에서 확인합니다.
+
+`tests/site.spec.ts`의 자동 검사와 실제 화면 검토를 함께 수행합니다.
+
+- **화면 크기:** 영어·한국어 12개 콘텐츠 경로를 1440, 768, 390, 320px에서 확인합니다. 가로 넘침, 제목·표·카드·언어 선택 메뉴의 잘림, 작은 화면의 줄바꿈을 검토합니다. 대표 화면의 캡처도 직접 확인합니다.
+- **언어 전환:** 현재 언어 표시, `English`·`한국어`의 대응 URL, 홈페이지 공통 섹션 유지, 모든 프로젝트 H2의 영어→한국어→영어 왕복 이동을 확인합니다. 상세 페이지에서 다른 언어로 바꿨을 때 같은 내용의 제목으로 이동해야 합니다.
+- **내비게이션:** 메뉴와 브랜드 링크, 전체 프로젝트 돌아가기, 프로젝트 제목·이미지 링크가 현재 언어를 유지하는지 확인합니다. 데스크톱 목차의 현재 섹션 강조와 모바일 목차의 열기·항목 선택·닫기를 확인합니다.
+- **키보드와 확대:** 첫 Tab에서 본문 바로가기 링크로 이동하고 Enter로 본문에 접근하는지 확인합니다. 링크·버튼의 초점 표시와 접근성 이름을 살펴보고, 200% 글자 확대에서도 내용을 읽고 조작할 수 있는지 확인합니다. 자동 확대 검사가 대표 화면을 대상으로 하므로 긴 표와 한국어 제목은 수동으로도 검토합니다.
+- **저장소 링크:** 홈에 공개 프로젝트 저장소 링크가 총 4개 있고 프로젝트별로 중복되지 않는지 확인합니다. 각 해당 상세 페이지에는 GitHub 링크가 하나씩 있어야 합니다. 국민대는 `steveandy-sudo/kookmin-autonomous-portfolio`, AI·SW는 `steveandy-sudo/ai-sw-mobility-portfolio`를 가리켜야 합니다. 졸업 프로젝트에는 저장소 링크가 없어야 합니다.
+- **미디어:** 포스터와 화면 비율, 대체 텍스트·캡션을 원본 자료와 대조합니다. GIF 재생과 정지 이미지 전환, 한국어 조작 문구·접근성 이름·눌림 상태를 확인합니다. GIF 다운로드 버튼과 빈 개발용 요청 상자는 표시하지 않습니다.
+
+자동 검사 실행 중 발생한 브라우저 오류와 실패 항목은 원인을 확인한 뒤 수정합니다. 테스트 파일을 수정한 사실만으로 통과했다고 기록하지 않습니다.
+
+## 콘텐츠와 번역 대조
+
+- `Home.astro`와 `homeKo.ts`, `projectHighlights.ts`와 `projectHighlightsKo.ts`, `media.ts`와 `mediaKo.ts`, 영어·한국어 MDX를 각각 대조합니다. 제목·카드·본문·표·다이어그램·캡션·대체 텍스트의 정보 누락을 확인합니다.
+- 개인 수행 범위와 팀 결과를 구분하고, 설계·구현·시뮬레이션·실차 시험의 단계, 수치·단위·환경·조건이 양쪽에서 같게 유지되는지 확인합니다. 도구·모델 고유명, 수식, 코드·토픽·파일 경로는 원문과 대조합니다.
+- AI·SW의 공식 대회 결과와 대회장 연습·개발 시험을 구분합니다. AEB 시험의 제동장치 상태와 정지 구간 조건을 유지하고, 제어기 비교 수치는 해당 시뮬레이션 조건과 비교 기준을 함께 설명하는지 확인합니다.
+- 졸업 프로젝트는 현재 조사·예비 설계 단계와 후속 학습·비교 계획을 구분합니다. 기존 발표 이미지는 작성 당시의 설계 자료로 설명하고, 이미지와 최신 본문의 작성 시점 차이를 현재 구현 결과로 해석하지 않습니다.
+- UAV의 시연은 시뮬레이션 맥락을 유지합니다. 드림학기제는 CARLA 폐루프 실험과 받침대 위 차량에 별도 명령을 전달한 바퀴 구동 시험을 구분합니다.
+- 원본 발표 이미지와 영상 내부 텍스트는 공통 자료로 유지하고 주변 설명을 각 언어로 검토합니다. 번역을 위해 새로운 실험 결과나 개인 기여를 추가하지 않습니다.
+
+## 배포 후 확인
+
+GitHub Actions에서 배포가 완료된 뒤, 검증하려는 변경과 같은 소스로 생성한 로컬 `dist/`를 기준으로 실행합니다.
+
+```sh
+npm run verify -- --live https://steveandy-sudo.github.io
+```
+
+공개 영어·한국어 12개 경로와 사이트맵의 응답을 확인하고, 공개 페이지의 제목·문서 언어·본문·언어 전환 링크가 로컬 빌드와 같은지 비교합니다. 공개 화면에서 양방향 언어 전환과 대표 미디어 링크도 직접 확인합니다.
+
+이전 CV 직접 주소는 두 개 모두 **HTTP 404**여야 합니다.
+
+```text
+/cv/Junghun_Hwang_CV_V2_EN.pdf
+/cv/Junghun_Hwang_CV_V2_KO.pdf
+```
+
+성공한 요청이나 리디렉션을 CV 비공개 확인으로 처리하지 않습니다. CV 다운로드를 제공하는 페이지·링크가 다시 생기지 않았는지도 확인합니다.
+
+## 도구 진단과 결과 기록
+
+Astro/MDX는 생성된 `use astro:head-inject` 지시문에 관해 Vite `MODULE_LEVEL_DIRECTIVE` 경고를 출력할 수 있습니다. 이 경고와 타입 검사 오류를 구분하고, 빌드·브라우저 실패가 있으면 각각의 원인을 확인합니다.
+
+검사 기록에는 대상 변경 또는 커밋, 실행 명령, 결과, 검토한 화면과 남은 문제를 적습니다. 기술 검사 통과가 새 실험 결과나 접근성 인증을 의미하지는 않으며, 새로운 자료와 사실 변경은 콘텐츠 검토도 함께 수행합니다.

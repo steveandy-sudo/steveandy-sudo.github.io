@@ -1,14 +1,17 @@
 ---
 interface Props {
+  lang?: 'en' | 'ko';
   lead: string;
   summary: string;
   topics: { title: string; description: string }[];
 }
-const { lead, summary, topics } = Astro.props;
+const { lead, summary, topics, lang = 'en' } = Astro.props;
+const eyebrow = lang === 'ko' ? '연구 관심 분야' : 'Research interests';
+const heading = lang === 'ko' ? '인지, 판단, 학습' : 'Perception, decisions, and learning.';
 ---
 <section id="research" class="home-section research-section" aria-labelledby="research-title" data-reveal>
   <div class="section-heading">
-    <div><p class="eyebrow">Research interests</p><h2 id="research-title">Perception, decisions, and learning.</h2></div>
+    <div><p class="eyebrow">{eyebrow}</p><h2 id="research-title">{heading}</h2></div>
   </div>
   <div class="research-grid">
     <div class="research-statement">

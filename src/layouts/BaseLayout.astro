@@ -1,37 +1,67 @@
 ---
 import '../styles/global.css';
 import MotionEnhancements from '../components/MotionEnhancements.astro';
-import type { Language } from '../lib/projects';
-interface Props { title: string; description: string; lang?: Language; noindex?: boolean; }
-const { title, description, noindex = false } = Astro.props;
-const home = '/';
+import { homeUrl, type Language } from '../lib/projects';
+interface Props { title: string; description: string; lang?: Language; noindex?: boolean; alternateAnchors?: Record<string, string>; }
+const { title, description, lang = 'en', noindex = false, alternateAnchors = {} } = Astro.props;
+const home = homeUrl(lang);
 const canonical = new URL(noindex ? "/404.html" : Astro.url.pathname, Astro.site);
-const nav = [['research','Research'],['projects','Projects'],['awards','Awards'],['skills','Skills']];
+const englishPath = Astro.url.pathname.replace(/^\/ko\//, '/');
+const languagePaths = { en: englishPath, ko: `/ko${englishPath}` };
+const nav = lang === 'ko'
+  ? [['research','연구 관심'],['projects','프로젝트'],['awards','수상'],['skills','사용 기술']]
+  : [['research','Research'],['projects','Projects'],['awards','Awards'],['skills','Skills']];
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title><meta name="description" content={description} />
     <link rel="canonical" href={canonical} /><link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {!noindex && <>
+      <link rel="alternate" hreflang="en" href={new URL(languagePaths.en, Astro.site)} />
+      <link rel="alternate" hreflang="ko" href={new URL(languagePaths.ko, Astro.site)} />
+      <link rel="alternate" hreflang="x-default" href={new URL(languagePaths.en, Astro.site)} />
+    </>}
     <meta property="og:type" content="website" /><meta property="og:title" content={title} />
     <meta property="og:description" content={description} /><meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="Junghun Hwang — Engineering Portfolio" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={lang === 'ko' ? 'ko_KR' : 'en_US'} />
+    {!noindex && <meta property="og:locale:alternate" content={lang === 'ko' ? 'en_US' : 'ko_KR'} />}
     <meta name="twitter:card" content="summary" /><meta name="theme-color" content="#070d14" />
     <meta name="color-scheme" content="dark" />
     {noindex && <meta name="robots" content="noindex" />}
   </head>
   <body>
-    <a href="#main" class="skip-link">Skip to content</a>
+    <a href="#main" class="skip-link">{lang === 'ko' ? '본문으로 이동' : 'Skip to content'}</a>
     <header class="site-header"><div class="header-inner">
       <a class="wordmark" href={home}><span class="monogram" aria-hidden="true">JH</span><span class="wordmark-name">Junghun Hwang</span></a>
-      <nav aria-label="Main navigation" class="global-nav">
+      <div class="header-navigation"><nav aria-label={lang === 'ko' ? '주요 메뉴' : 'Main navigation'} class="global-nav">
         {nav.map(([id,label]) => <a href={`${home}#${id}`}>{label}</a>)}
       </nav>
+      {!noindex && <nav class="language-switch" aria-label={lang === 'ko' ? '언어 선택' : 'Language selection'} data-anchor-map={JSON.stringify(alternateAnchors)}>
+        {(['en', 'ko'] as const).map(locale => <a href={languagePaths[locale]} lang={locale} hreflang={locale} aria-current={locale === lang ? 'page' : undefined} data-language={locale} data-base-path={languagePaths[locale]}>{locale === 'en' ? 'English' : '한국어'}</a>)}
+      </nav>}</div>
     </div></header>
     <slot />
-    <footer class="site-footer"><div><span class="footer-name">Junghun Hwang <span lang="ko">황정헌</span></span><a href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a></div><p>Autonomous driving · AI · Autonomous systems</p></footer>
+    <footer class="site-footer"><div><span class="footer-name">Junghun Hwang <span lang="ko">황정헌</span></span><a href="mailto:stevehwang1210@gmail.com">stevehwang1210@gmail.com <span aria-hidden="true">↗</span></a></div><p>{lang === 'ko' ? '자율주행 · AI · 자율 시스템' : 'Autonomous driving · AI · Autonomous systems'}</p></footer>
     <MotionEnhancements />
+    <script>
+      const switcher = document.querySelector<HTMLElement>('.language-switch');
+      if (switcher) {
+        const anchors: Record<string, string> = JSON.parse(switcher.dataset.anchorMap || '{}');
+        const common = new Set(['main', 'research', 'projects', 'awards', 'skills', 'overview', 'my-contribution']);
+        const updateLinks = () => {
+          let section = '';
+          try { section = decodeURIComponent(location.hash.slice(1)); } catch { /* Ignore malformed fragments. */ }
+          for (const link of switcher.querySelectorAll<HTMLAnchorElement>('a[data-language]')) {
+            const target = link.dataset.language === document.documentElement.lang ? section : (anchors[section] || (common.has(section) ? section : ''));
+            link.href = `${link.dataset.basePath}${target ? `#${encodeURIComponent(target)}` : ''}`;
+          }
+        };
+        updateLinks();
+        window.addEventListener('hashchange', updateLinks);
+      }
+    </script>
   </body>
 </html>

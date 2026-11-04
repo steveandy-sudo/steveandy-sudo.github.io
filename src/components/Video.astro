@@ -1,13 +1,16 @@
 ---
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
-interface Props { src?: string; youtubeId?: string; title: string; caption?: string; poster?: string; captionsSrc?: string; captionsLang?: string; gifSrc?: string; portrait?: boolean; lang?: 'en'; }
-const { src, youtubeId, title, caption, poster, captionsSrc, captionsLang = 'en', gifSrc, portrait = false } = Astro.props;
+import { mediaDimensions } from '../lib/mediaDimensions';
+interface Props { src?: string; youtubeId?: string; title: string; caption?: string; poster?: string; captionsSrc?: string; captionsLang?: string; gifSrc?: string; portrait?: boolean; lang?: 'en' | 'ko'; }
+const { src, youtubeId, title, caption, poster, captionsSrc, captionsLang = 'en', gifSrc, portrait = false, lang = 'en' } = Astro.props;
+const captionsLabel = lang === 'ko' ? '자막' : 'Captions';
 for (const file of [src, poster, captionsSrc, gifSrc].filter(Boolean)) if (!file?.startsWith('/media/') || !existsSync(resolve('public', file.slice(1)))) throw new Error(`Missing local video asset: ${file}`);
 if (src && youtubeId) throw new Error('Use one video source.');
 if (youtubeId && !/^[\w-]{11}$/.test(youtubeId)) throw new Error('Invalid YouTube video ID.');
+const dimensions = poster ? await mediaDimensions(poster) : undefined;
 ---
-{(src || youtubeId) && <figure class:list={['video-figure', { portrait }]}>{src ? <video controls playsinline preload="none" poster={poster} aria-label={title}><source src={src} type="video/mp4" />{captionsSrc && <track kind="captions" src={captionsSrc} srclang={captionsLang} label="Captions" default />}</video> : <iframe src={`https://www.youtube-nocookie.com/embed/${youtubeId}`} title={title} loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" />}{caption && <figcaption>{caption}</figcaption>}</figure>}
+{(src || youtubeId) && <figure class:list={['video-figure', { portrait }]}>{src ? <video controls playsinline preload="none" poster={poster} width={dimensions?.width} height={dimensions?.height} aria-label={title}><source src={src} type="video/mp4" />{captionsSrc && <track kind="captions" src={captionsSrc} srclang={captionsLang} label={captionsLabel} default />}</video> : <iframe src={`https://www.youtube-nocookie.com/embed/${youtubeId}`} title={title} loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" />}{caption && <figcaption>{caption}</figcaption>}</figure>}
 
 <style>
   .video-figure video { aspect-ratio: auto; height: auto; background: var(--soft); border: 1px solid var(--line); }

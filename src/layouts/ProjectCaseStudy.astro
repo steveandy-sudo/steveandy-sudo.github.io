@@ -3,36 +3,51 @@ import BaseLayout from './BaseLayout.astro';
 import ProjectToc from '../components/ProjectToc.astro';
 import RepositoryAccess from '../components/RepositoryAccess.astro';
 import { projectHighlights } from '../data/projectHighlights';
-import { statusLabel } from '../lib/projects';
+import { projectHighlightsKo } from '../data/projectHighlightsKo';
+import { homeUrl, statusLabel } from '../lib/projects';
 import type { CollectionEntry } from 'astro:content';
 import type { MarkdownHeading } from 'astro';
-interface Props { project: CollectionEntry<'projects'>; headings: MarkdownHeading[]; }
-const { project, headings } = Astro.props;
+interface Props { project: CollectionEntry<'projects'>; headings: MarkdownHeading[]; alternateHeadings: MarkdownHeading[]; }
+const { project, headings, alternateHeadings } = Astro.props;
 const d = project.data;
-const highlight = projectHighlights[d.slug];
+const ko = d.lang === 'ko';
+const alternateAnchors = Object.fromEntries(headings.map((heading, i) => [heading.slug, alternateHeadings[i].slug]));
+const englishToKorean = ko ? Object.fromEntries(alternateHeadings.map((heading, i) => [heading.slug, headings[i].slug])) : {};
+const sourceHighlight = (ko ? projectHighlightsKo : projectHighlights)[d.slug];
+const highlight = sourceHighlight && { ...sourceHighlight, evidence: sourceHighlight.evidence.map(item => ({ ...item, anchor: ko ? englishToKorean[item.anchor] : item.anchor })) };
 if (!highlight) throw new Error(`Missing project reading summary: ${d.slug}`);
 for (const item of highlight.evidence) {
   if (!headings.some(heading => heading.slug === item.anchor)) throw new Error(`Missing project summary anchor: ${d.slug}#${item.anchor}`);
 }
-const toc = [{slug:'overview',text:'Overview'}, {slug:'my-contribution',text:'My contribution'}, ...headings.filter(h => h.depth === 2)];
+const t = ko ? {
+  all: '전체 프로젝트', project: '프로젝트', period: '기간', team: '팀', role: '역할', status: '상태', summary: '프로젝트 요약',
+  work: '내가 한 일', supporting: '프로젝트 관련 자료', explore: '주요 내용', repository: 'GitHub 저장소', overview: '개요', outcome: '결과', contribution: '개인 기여', context: '프로젝트 배경',
+} : {
+  all: 'All projects', project: 'Project', period: 'Period', team: 'Team', role: 'Role', status: 'Status', summary: 'Project summary',
+  work: 'My work', supporting: 'Supporting project materials', explore: 'Explore the work', repository: 'GitHub repository', overview: 'Overview', outcome: 'Outcome', contribution: 'My contribution', context: 'Project context',
+};
+const months: Record<string, number> = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 };
+const period = ko ? d.period.replace(/([A-Z][a-z]{2}) (?:(\d{1,2}), )?(\d{4})/g, (_, month: string, day: string, year: string) => `${year}년 ${months[month]}월${day ? ` ${day}일` : ''}`).replace('Ongoing', '진행 중') : d.period;
+const team = ko ? d.team?.replace(/(\d+) members/, '$1명').replace(/decision team of (\d+)/, '판단팀 $1명') : d.team;
+const toc = [{slug:'overview',text:t.overview}, {slug:'my-contribution',text:t.contribution}, ...headings.filter(h => h.depth === 2)];
 ---
-<BaseLayout title={`${d.title} | Junghun Hwang`} description={d.summary}>
+<BaseLayout title={`${d.title} | Junghun Hwang`} description={d.summary} lang={d.lang} alternateAnchors={alternateAnchors}>
   <main id="main" class="case-page container">
-    <a class="back-link" href="/#projects">← All projects</a>
+    <a class="back-link" href={`${homeUrl(d.lang)}#projects`}>← {t.all}</a>
     <header class="case-header" data-reveal>
-      <p class="eyebrow">Project {String(d.order).padStart(2,'0')} / {d.context}</p>
+      <p class="eyebrow">{t.project} {String(d.order).padStart(2,'0')} / {d.context}</p>
       <h1>{highlight.title}</h1>
-      <dl class="project-meta"><div><dt>Period</dt><dd>{d.period}</dd></div>{d.team && <div><dt>Team</dt><dd>{d.team}</dd></div>}<div><dt>Role</dt><dd>{d.role}</dd></div><div><dt>Status</dt><dd><span class={`status ${d.status}`}>{statusLabel.en[d.status]}</span></dd></div></dl>
-      <div class="project-brief" aria-label="Project summary">
-        <div><h2>My work</h2><p>{highlight.work}</p></div>
+      <dl class="project-meta"><div><dt>{t.period}</dt><dd>{period}</dd></div>{team && <div><dt>{t.team}</dt><dd>{team}</dd></div>}<div><dt>{t.role}</dt><dd>{d.role}</dd></div><div><dt>{t.status}</dt><dd><span class={`status ${d.status}`}>{statusLabel[d.lang][d.status]}</span></dd></div></dl>
+      <div class="project-brief" aria-label={t.summary}>
+        <div><h2>{t.work}</h2><p>{highlight.work}</p></div>
         <div><h2>{highlight.resultLabel}</h2><p>{highlight.result}</p></div>
-        <nav class="brief-evidence" aria-label="Supporting project materials"><h2>Explore the work</h2><ul>{highlight.evidence.map(item => <li><a href={`#${item.anchor}`}>{item.label}<span aria-hidden="true">↘</span></a></li>)}</ul></nav>
+        <nav class="brief-evidence" aria-label={t.supporting}><h2>{t.explore}</h2><ul>{highlight.evidence.map(item => <li><a href={`#${item.anchor}`}>{item.label}<span aria-hidden="true">↘</span></a></li>)}</ul></nav>
       </div>
-      {d.github && <div class="case-repository"><RepositoryAccess href={d.github} visibility={d.githubVisibility} privateReason={d.githubPrivateReason} label="GitHub repository" /></div>}
+      {d.github && <div class="case-repository"><RepositoryAccess href={d.github} visibility={d.githubVisibility} privateReason={d.githubPrivateReason} label={t.repository} lang={d.lang} /></div>}
     </header>
-    <div class="case-grid"><ProjectToc items={toc} /><article class="case-content">
-      <section aria-labelledby="overview" data-reveal><h2 id="overview">Overview</h2><p class="lead">{d.summary}</p><p class="outcome"><strong>Outcome</strong> {d.outcome}</p></section>
-      <section class="contribution-section" aria-labelledby="my-contribution" data-reveal><h2 id="my-contribution">My contribution</h2><p class="scope-label">Project context</p><p>{d.teamScope}</p><p class="scope-label">My work</p><ul>{d.contributions.map(item => <li>{item}</li>)}</ul></section>
+    <div class="case-grid"><ProjectToc items={toc} lang={d.lang} /><article class="case-content">
+      <section aria-labelledby="overview" data-reveal><h2 id="overview">{t.overview}</h2><p class="lead">{d.summary}</p><p class="outcome"><strong>{t.outcome}</strong> {d.outcome}</p></section>
+      <section class="contribution-section" aria-labelledby="my-contribution" data-reveal><h2 id="my-contribution">{t.contribution}</h2><p class="scope-label">{t.context}</p><p>{d.teamScope}</p><p class="scope-label">{t.work}</p><ul>{d.contributions.map(item => <li>{item}</li>)}</ul></section>
       <slot />
     </article></div>
   </main>
