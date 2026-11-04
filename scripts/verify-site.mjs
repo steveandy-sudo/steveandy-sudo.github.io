@@ -127,7 +127,12 @@ if (liveIndex >= 0) {
       const local = await doc(await targetOf(new URL(route, origin)));
       if (live.title !== local.title) errors.push(`Live ${route}: title differs from built page`);
       if (live.documentElement.lang !== local.documentElement.lang) errors.push(`Live ${route}: language differs from built page`);
-      const content = document => document.querySelector('main')?.textContent.replace(/\s+/g, ' ').trim();
+      const content = document => {
+        const main = document.querySelector('main')?.cloneNode(true);
+        // Bundlers may place inline scripts at different component instances.
+        for (const node of main?.querySelectorAll('script,style,template') ?? []) node.remove();
+        return main?.textContent.replace(/\s+/g, ' ').trim();
+      };
       if (content(live) !== content(local)) errors.push(`Live ${route}: content differs from built page`);
       for (const locale of ['en', 'ko']) if (live.querySelector(`.language-switch a[data-language="${locale}"]`)?.getAttribute('href') !== local.querySelector(`.language-switch a[data-language="${locale}"]`)?.getAttribute('href')) errors.push(`Live ${route}: ${locale} navigation differs`);
     }
