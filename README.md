@@ -70,7 +70,6 @@ npm run test:ui
 │   ├── pages/index.astro / [...route].astro / 404.astro
 │   └── styles/global.css
 ├── public/
-│   ├── cv/                          # 기존 PDF 직접 주소 유지; 홈페이지에는 표시하지 않음
 │   ├── media/projects/              # 실제 자료를 추가할 위치
 │   ├── favicon.svg / robots.txt / .nojekyll
 ├── docs/MEDIA_REQUESTS.md
@@ -189,18 +188,13 @@ import Video from '../../../components/Video.astro';
 
 ## 사이트 언어
 
-홈페이지와 상세 문서는 영어로 관리합니다. 화면 문구, 이미지 대체 텍스트, 캡션도 영어로 작성합니다. 한국어 웹페이지와 언어 전환 메뉴는 제공하지 않습니다. 한국어 CV PDF는 별도 문서로 유지합니다.
+홈페이지와 상세 문서는 영어로 관리합니다. 화면 문구, 이미지 대체 텍스트, 캡션도 영어로 작성합니다. 한국어 웹페이지와 언어 전환 메뉴는 제공하지 않습니다. CV 문서는 개인 로컬 폴더에서 별도로 관리합니다.
 
 ## CV PDF
 
-모든 표준 V1/V2 CV는 최신 연구실 연락용 CV와 동일하게 학점을 표기하지 않습니다. V1은 기존 파일명을 유지하기 위한 버전 이름이며, 학점 포함 여부를 뜻하지 않습니다.
+CV는 개인 로컬 폴더에서 관리하며 공개 사이트와 저장소의 현재 버전에 포함하지 않습니다. 홈페이지에 CV 메뉴나 다운로드 링크를 추가하지 않습니다.
 
-사이트의 `public/cv/`에는 다음 PDF 2종만 동기화합니다.
-
-- `Junghun_Hwang_CV_V2_EN.pdf` — 영어, 학점 미표기
-- `Junghun_Hwang_CV_V2_KO.pdf` — 한국어, 학점 미표기
-
-홈페이지의 CV 섹션과 상단 CV 메뉴는 제거한 상태로 유지합니다. V2 PDF 2종은 직접 주소로 접근할 수 있도록 유지하며, V1은 사이트에 포함하지 않습니다. 공통 GitHub 링크 대신 프로젝트별 저장소를 홈과 상세 페이지에서 안내합니다. AI·SW 저장소는 대회 진행 중 비공개이므로 `githubVisibility: private`와 `githubPrivateReason`으로 사유를 표시하며, 공개 페이지에 접근 불가능한 저장소 링크를 만들지 않습니다. 상태 표시는 `RepositoryAccess.astro`에서 공통으로 관리합니다.
+`public/cv/`는 Git 추적 대상에서 제외하고, 배포 검사는 빌드 결과에 CV PDF가 포함되면 중단합니다. 기존 영문·국문 CV 직접 주소는 HTTP 404를 반환해야 합니다.
 
 ## GitHub Pages 배포
 
@@ -209,7 +203,7 @@ import Video from '../../../components/Video.astro';
 1. GitHub 저장소의 **Settings → Pages → Source**를 **GitHub Actions**로 설정합니다.
 2. `main`에 변경을 push합니다. `.github/workflows/deploy.yml`이 설치, 타입 검사, 정적 빌드, 링크 검사를 수행한 뒤 배포합니다.
 3. Pull request에서는 검사만 수행하고 공개 배포하지 않습니다.
-4. Actions에서 배포 완료를 확인한 뒤 실제 주소와 PDF를 열어 확인합니다.
+4. Actions에서 배포 완료를 확인한 뒤 실제 주소를 열고 기존 CV 직접 주소가 HTTP 404를 반환하는지 확인합니다.
 
 ```sh
 npm run verify -- --live https://steveandy-sudo.github.io

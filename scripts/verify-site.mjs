@@ -14,6 +14,10 @@ async function walk(dir) {
   return files;
 }
 const files = await walk(root);
+for (const file of files) {
+  const path = relative(root, file).split(sep).join('/');
+  if (path.startsWith('cv/') || /(?:Junghun_Hwang_CV|황정헌.*CV).*\.pdf$/i.test(path)) errors.push(`CV must stay private: ${path}`);
+}
 function routeOf(file) {
   const path = '/' + relative(root, file).split(sep).join('/');
   return path.endsWith('/index.html') ? path.slice(0, -10) : path;
@@ -98,7 +102,7 @@ for (const file of ['sitemap-index.xml','sitemap-0.xml','robots.txt','favicon.sv
 const liveIndex = process.argv.indexOf('--live');
 if (liveIndex >= 0) {
   const base = process.argv[liveIndex + 1] ?? origin;
-  for (const route of [...routes.filter(r => r !== '/404.html'), '/cv/Junghun_Hwang_CV_V2_EN.pdf','/cv/Junghun_Hwang_CV_V2_KO.pdf','/sitemap-index.xml']) {
+  for (const route of [...routes.filter(r => r !== '/404.html'), '/sitemap-index.xml']) {
     const response = await fetch(new URL(route, base));
     if (!response.ok) errors.push(`Live ${route}: HTTP ${response.status}`);
     else if (route.endsWith('/')) {
@@ -106,6 +110,10 @@ if (liveIndex >= 0) {
       const local = await doc(await targetOf(new URL(route, origin)));
       if (live.title !== local.title) errors.push(`Live ${route}: title differs from built page`);
     }
+  }
+  for (const route of ['/cv/Junghun_Hwang_CV_V2_EN.pdf', '/cv/Junghun_Hwang_CV_V2_KO.pdf']) {
+    const response = await fetch(new URL(route, base));
+    if (response.status !== 404) errors.push(`Private CV URL ${route}: expected HTTP 404, received ${response.status}`);
   }
 }
 if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
