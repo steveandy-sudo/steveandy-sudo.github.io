@@ -63,5 +63,6 @@ const nav = lang === 'ko'
         window.addEventListener('hashchange', updateLinks);
       }
     </script>
+    {import.meta.env.PROD && <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"736e9b9c9810411e9418958f958eac2a"}'></script>}
   </body>
 </html>
