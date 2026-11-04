@@ -19,19 +19,19 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
     ],
   },
   'ai-sw-mobility': {
-    title: 'AI·SW Mobility: Behavior Planning & Control',
-    work: 'Designed FSM states and transitions with teammates, collected GNSS route waypoints, implemented PP–Stanley tracking, and analyzed recordings in Foxglove. My main role during Test Week was vehicle operation for experimental runs.',
+    title: 'AI·SW Mobility: Decision-Making',
+    work: 'Designed mission FSMs, wrote PP–Stanley tracking code, and used Foxglove recordings to investigate obstacle-path behavior. Operated vehicle trials during Test Week.',
     resultLabel: 'Competition result & awards',
     result: 'All required missions completed in both preliminary and final rounds under the competition rules. Team: Grand Prize in Autonomous Driving Implementation (Minister of Land, Infrastructure and Transport Award) and Creative Technology Special Award for the technical report.',
     evidence: [
       { label: 'Competition awards', anchor: 'competition-awards' },
-      { label: 'FSM & mission transitions', anchor: 'fsm-based-behavior-planning' },
-      { label: 'Test Week & vehicle trials', anchor: 'real-vehicle-trials' },
+      { label: 'Debugging case', anchor: 'recorded-drive-analysis-and-debugging' },
+      { label: 'Controller comparison', anchor: 'initial-simulation-results' },
     ],
   },
   'camera-v2i-e2e': {
     title: 'Camera-Based V2I & E2E Driving',
-    work: 'Reviewed UniV2X and prepared preliminary-design slides after team discussions. Currently investigating V2I communication options.',
+    work: 'Reviewed UniV2X and prepared preliminary-design slides. Currently investigating V2I communication options.',
     resultLabel: 'Current stage',
     result: 'The preliminary design covers pedestrian risk, braking-aware training targets, and a planned comparison using shared driving records and labels. Communication research is in progress.',
     evidence: [

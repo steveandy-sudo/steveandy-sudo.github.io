@@ -32,7 +32,7 @@ const toc = [{slug:'overview',text:'Overview'}, {slug:'my-contribution',text:'My
     </header>
     <div class="case-grid"><ProjectToc items={toc} /><article class="case-content">
       <section aria-labelledby="overview" data-reveal><h2 id="overview">Overview</h2><p class="lead">{d.summary}</p><p class="outcome"><strong>Outcome</strong> {d.outcome}</p></section>
-      <section class="contribution-section" aria-labelledby="my-contribution" data-reveal><h2 id="my-contribution">My contribution</h2><p class="scope-label">Team scope</p><p>{d.teamScope}</p><p class="scope-label">My work</p><ul>{d.contributions.map(item => <li>{item}</li>)}</ul></section>
+      <section class="contribution-section" aria-labelledby="my-contribution" data-reveal><h2 id="my-contribution">My contribution</h2><p class="scope-label">Project context</p><p>{d.teamScope}</p><p class="scope-label">My work</p><ul>{d.contributions.map(item => <li>{item}</li>)}</ul></section>
       <slot />
     </article></div>
   </main>

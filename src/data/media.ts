@@ -5,6 +5,19 @@ export interface MediaEntry {
 }
 // Set src only after reviewing real media. reserve opts an empty slot into a public placeholder.
 export const media: Record<string, MediaEntry> = {
+  'mobility-final-replay': {
+    title: 'Synchronized official final-round replay',
+    request: '',
+    target: '/media/projects/ai-sw-mobility/09-official-final-synchronized-replay.mp4',
+    src: '/media/projects/ai-sw-mobility/09-official-final-synchronized-replay.mp4',
+    poster: '/media/projects/ai-sw-mobility/09-official-final-synchronized-replay-poster.jpg',
+    kind: 'video',
+    portrait: true,
+    alt: 'Official final-round replay with synchronized onboard camera footage, recorded vehicle data, and competition broadcast',
+    caption: 'Official final round: synchronized camera footage, recorded vehicle data, and competition broadcast. The center view shows the tracking path and vehicle-width overlays.',
+  },
+  'mobility-final-obstacle': { title: 'Official final-round obstacle section', request: '', target: '/media/projects/ai-sw-mobility/07-official-final-obstacle.gif', src: '/media/projects/ai-sw-mobility/07-official-final-obstacle.gif', gifSrc: '/media/projects/ai-sw-mobility/07-official-final-obstacle.gif', poster: '/media/projects/ai-sw-mobility/07-official-final-obstacle-poster.jpg', kind: 'image', width: 960, height: 540, alt: 'Team KAI competition vehicle navigating the red barriers during the official final round', caption: 'Obstacle-section maneuver during the official final round.' },
+  'mobility-final-signal': { title: 'Official final-round traffic-light handling', request: '', target: '/media/projects/ai-sw-mobility/08-official-final-signal.gif', src: '/media/projects/ai-sw-mobility/08-official-final-signal.gif', gifSrc: '/media/projects/ai-sw-mobility/08-official-final-signal.gif', poster: '/media/projects/ai-sw-mobility/08-official-final-signal-poster.jpg', kind: 'image', width: 960, height: 540, alt: 'Competition vehicle waiting at a traffic light and continuing through the intersection during the official final round', caption: 'Traffic-light waiting and departure during the official final round.' },
   "v2i-comparison": {"title": "Camera-only and V2I-assisted E2E comparison", "request": "", "target": "/media/projects/camera-v2i/02-week4-e2e-comparison.png", "src": "/media/projects/camera-v2i/02-week4-e2e-comparison.png", "kind": "image", "alt": "Team design proposal showing camera-only and V2I-assisted E2E planning with waypoint and target-speed outputs", "caption": "Team design proposal for a future comparison using the same vehicle, operating conditions, training setup, and controller."},
   'mobility-aeb-replay': { title: 'AEB recorded-data inspection', request: '', target: '/media/projects/ai-sw-mobility/05-aeb-foxglove-replay.gif', src: '/media/projects/ai-sw-mobility/05-aeb-foxglove-replay.gif', gifSrc: '/media/projects/ai-sw-mobility/05-aeb-foxglove-replay.gif', poster: '/media/projects/ai-sw-mobility/05-aeb-foxglove-replay-poster.jpg', kind: 'image', alt: 'Foxglove MCAP replay showing cone geometry, target speed and brake-command plots', caption: 'Foxglove MCAP replay showing cone geometry, commanded speed, and brake requests.' },
   "mobility-waypoint": {"title": "Final-course waypoint driving", "request": "", "target": "/media/projects/ai-sw-mobility/03-final-course-waypoint.gif", "src": "/media/projects/ai-sw-mobility/03-final-course-waypoint.gif", "gifSrc": "/media/projects/ai-sw-mobility/03-final-course-waypoint.gif", "poster": "/media/projects/ai-sw-mobility/03-final-course-waypoint-poster.jpg", "kind": "image", "alt": "Onboard view of final-course waypoint driving through a turn and onto a straight", "caption": "Final-course waypoint driving during venue practice."},

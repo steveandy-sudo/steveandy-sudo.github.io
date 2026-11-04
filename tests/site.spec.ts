@@ -64,7 +64,7 @@ test('keyboard, English-only navigation, project repositories and development sl
     await expect(card.locator('a[href^="https://github.com/"]')).toHaveAccessibleName(/GitHub/);
   }
   await expect(cards.locator('[data-repository-visibility="private"]')).toHaveCount(0);
-  const capstoneCard = cards.filter({ has: page.getByRole('heading', { level: 3, name: 'Camera-Based V2I Cooperative End-to-End Autonomous Driving', exact: true }) });
+  const capstoneCard = cards.filter({ has: page.locator('h3 a[href="/projects/camera-v2i-e2e/"]') });
   await expect(capstoneCard).toHaveCount(1);
   await expect(capstoneCard.getByRole('link')).toHaveCount(2);
   await expect(capstoneCard.locator('a[href^="https://github.com/"]')).toHaveCount(0);

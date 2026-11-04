@@ -1,24 +1,23 @@
 ---
 slug: ai-sw-mobility
 lang: en
-order: 2
+order: 1
 title: 2026 Student AI·SW Mobility Competition
 titleEn: 2026 Student AI·SW Mobility Competition
 context: Student AI·SW Mobility Competition
 period: Mar 2026 – Oct 31, 2026
 team: 27 members / decision team of 5
-role: FSM Design / Decision-Making / Vehicle Testing
+role: Decision-Making / FSM Design / Vehicle Testing
 status: completed
 summary: "ROS 2 FSM-based behavior planning, GNSS waypoint trials, Pure Pursuit–Stanley implementation, and data-driven obstacle-avoidance debugging."
 outcome: "The team completed all required missions in both preliminary and final rounds under the competition rules."
-teamScope: "I worked in the five-member decision-making group of a 27-member vehicle team. I helped design the FSM, implemented tracking control, analyzed driving recordings, and operated vehicle trials. Much of my field work focused on obstacle avoidance; during Test Week, my main role was vehicle operation for experimental runs."
+teamScope: "I worked on the decision-making team, focusing on FSM-based behavior planning and obstacle avoidance. Recorded-run analysis and Test Week vehicle operation guided software adjustments."
 contributions:
-  - Designed FSM states and transition conditions with teammates for traffic-light handling, timed stops, obstacle avoidance, and mission completion.
-  - Recorded GNSS coordinates while driving to establish route waypoints and conducted vehicle trials using GNSS/IMU-based localization; both courses reached up to 11 m/s during venue practice.
-  - Analyzed ROS 2 recordings in Foxglove, tracing perception outputs, FSM transitions, planned paths, and vehicle state across timestamps and coordinate frames; reviewed findings and corrective actions with teammates.
-  - Operated the vehicle during Test Week experimental runs and obstacle-avoidance field tests; confirmed approach deceleration, collision-free passage, route return, and acceleration afterward.
+  - Designed FSM states and transition conditions for traffic-light handling, timed stops, obstacle avoidance, and mission completion.
   - Presented a Pure Pursuit–Stanley hybrid strategy at a symposium sponsored by Hyundai Mobis, then implemented steering blending by driving phase in ROS 2.
-  - Compared hybrid tracking with Stanley alone on matched Gazebo course segments at 6 m/s; the initial comparison showed approximately 14% lower heading-error p95 and 10% lower steering-command total variation.
+  - Evaluated hybrid tracking against Stanley on matched Gazebo segments at 6 m/s; the initial comparison showed approximately 14% lower heading-error p95 and 10% lower steering-command total variation.
+  - Traced perception, FSM states, planned paths, and vehicle feedback in Foxglove; reviewed cached-path coordinate and timestamp consistency to guide corrections and follow-up tests.
+  - Recorded GNSS route waypoints and operated GNSS/IMU-based vehicle trials, reaching up to 11 m/s on both courses during venue practice. During Test Week and obstacle-avoidance trials, confirmed approach deceleration, collision-free passage, route return, and acceleration afterward.
 technologies: [ROS 2, FSM Behavior Planning, Pure Pursuit + Stanley, MCAP / Foxglove, Gazebo]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
 githubVisibility: public
@@ -40,13 +39,46 @@ Team K.A.I. received two awards in the **Self-built Autonomous Vehicle** categor
 | Autonomous Driving Implementation | **Grand Prize - Minister of Land, Infrastructure and Transport Award** |
 | Creative Technology | **Special Award** for the vehicle technical report |
 
+## Official final-round footage
+
+The synchronized replay combines onboard camera footage, recorded vehicle data, and the competition broadcast from the official final round.
+
+<MediaSlot id="mobility-final-replay" />
+
+The final-round footage shows obstacle-section driving and departure after waiting at a traffic light.
+
+<MediaSlot id="mobility-final-obstacle" />
+<MediaSlot id="mobility-final-signal" />
+
+## Recorded-drive analysis and debugging
+
+### Field observations
+
+I reviewed runs with forced S-shaped fallback maneuvers, paths generated from different obstacle references, and straight-ahead motion ending in obstacle contact. These observations led me to inspect obstacle selection, path generation, and fallback behavior in the recordings.
+
+### Cached-path coordinates and timestamps
+
+In Foxglove, I traced perception outputs, FSM states, planned paths, and vehicle feedback to investigate **cached-path coordinates and timestamps**. I reviewed how points stored in an earlier vehicle frame were interpreted when the path was reused and proposed corrections based on the recordings.
+
+Path-reuse logic uses pose history to express the stored points in the current vehicle frame. The diagram below explains that coordinate relationship.
+
+<SystemFlow title="Cached-path reuse: coordinate-frame explanation" steps={[
+  { label: 'Stored path', detail: 'Path points belong to the vehicle frame at the saved timestamp.' },
+  { label: 'Pose-history alignment', detail: 'Saved and current vehicle poses define the coordinate transformation.' },
+  { label: 'Aligned path', detail: 'The reused points are expressed in the current vehicle frame.' },
+]} caption="Conceptual explanation of cached-path coordinate alignment." />
+
+### Follow-up vehicle trials
+
+I operated follow-up trials with the updated software. The vehicle slowed before the avoidance section, passed the obstacles without contact, returned to the reference route, and accelerated afterward. I reviewed the recordings to assess the planning decisions and vehicle response through this sequence.
+
 ## Driving task
 
 The vehicle follows a recorded route, handles traffic lights and stop events, and avoids obstacles before returning to its reference path.
 
 ## FSM-based behavior planning
 
-I worked with teammates to define the states and transition conditions used by the ROS 2 behavior planner. The planner uses the current mission and perception inputs to select a target path, target speed, and stop request.
+I defined states and transition conditions for the ROS 2 behavior planner. The planner uses the current mission and perception inputs to select a target path, target speed, and stop request.
 
 | Driving task | Behavior managed by the decision software |
 | --- | --- |
@@ -56,7 +88,7 @@ I worked with teammates to define the states and transition conditions used by t
 | Obstacle avoidance | Reduce speed, follow an avoidance path, and return to the reference route |
 | Mission completion | Approach the finish and complete the stopping sequence |
 
-The team implementation uses a shared stop-point state machine for signal, timed-stop, and finish events. Obstacle behavior manages its path and speed requests alongside these mission events. An arbiter combines the module outputs before motion control produces vehicle commands.
+The software uses a shared stop-point state machine for signal, timed-stop, and finish events. Obstacle behavior manages its path and speed requests alongside these mission events. An arbiter combines the module outputs before motion control produces vehicle commands.
 
 <SystemFlow title="From mission state to vehicle response" steps={[
   { label: 'Route and perception', detail: 'Route context, traffic observations, obstacle information, and vehicle state describe the current situation.' },
@@ -71,23 +103,19 @@ I recorded GNSS coordinates while driving the course to establish route waypoint
 
 During venue practice, waypoint-following runs on **both the preliminary and final courses reached up to 11 m/s (39.6 km/h)**.
 
-## Recorded-drive analysis and debugging
-
-I used Foxglove to review ROS 2 rosbag2/MCAP recordings. Starting with an observed driving problem, I traced perception outputs, FSM transitions, planned paths, and vehicle feedback, checking timestamps and coordinate frames. I reviewed the evidence with teammates and proposed corrections, then returned to field testing to inspect the vehicle's response.
-
-Obstacle avoidance was my main focus. I analyzed the recordings, discussed software adjustments with teammates, and operated the vehicle during the follow-up tests.
-
 ## From presentation to implementation
 
 ### Presenting the control strategy
 
-I presented a **Pure Pursuit–Stanley hybrid tracking strategy** at a Team K.A.I. technical symposium sponsored by Hyundai Mobis. The presentation, prepared with Woojin Hwang, compared Pure Pursuit's lookahead-based steering with Stanley's heading- and cross-track-error feedback.
+I presented a **Pure Pursuit–Stanley hybrid tracking strategy** at a Team K.A.I. technical symposium sponsored by Hyundai Mobis. The presentation compared Pure Pursuit's lookahead-based steering with Stanley's heading- and cross-track-error feedback.
 
 The proposal combined their steering outputs, using driving conditions to guide the balance between them. It also considered gradual changes in the controller weights and a ROS 2 simulation comparison.
 
 ### Applying the strategy in ROS 2
 
 After the presentation, I wrote and revised code for the combined controller. The implementation calculates both steering commands and blends them by driving phase: straight driving, corner approach, turning, and corner exit. Weight changes are limited from one control step to the next; speed and upcoming path geometry also influence lookahead and the individual steering calculations.
+
+I wrote the high-level control section of the competition vehicle's technical report, describing the path-tracking and command-generation pipeline.
 
 ### Recognition
 
@@ -97,7 +125,7 @@ The presentation by **Woojin Hwang and Junghun Hwang** received the **Hyundai Mo
 
 ## Initial simulation results
 
-I compared hybrid tracking with Stanley alone on **matched Gazebo course segments at 6 m/s** and analyzed the recorded results.
+I evaluated hybrid tracking against Stanley alone on **matched Gazebo course segments at 6 m/s**. The vehicle technical report records the comparison in Section 4.3.1 (pp. 239–240) and its summary table (p. 256).
 
 | Metric | Initial hybrid-tracking result versus Stanley alone |
 | --- | --- |
@@ -114,7 +142,7 @@ My main role during Test Week was **vehicle operation for experimental runs**.
 
 ### Obstacle avoidance and route return
 
-I operated the vehicle during obstacle-avoidance field tests. The vehicle slowed before the avoidance section and completed a collision-free maneuver. It then returned to its reference route and accelerated. I reviewed the recordings in Foxglove and discussed the next software adjustments with teammates.
+I operated the vehicle during obstacle-avoidance field tests. The vehicle slowed before the avoidance section and completed a collision-free maneuver. It then returned to its reference route and accelerated. I reviewed the recordings in Foxglove to propose the next software adjustments.
 
 ### Venue-practice waypoint and AEB trials
 
@@ -135,6 +163,6 @@ The cone-course AEB workflow forms a path from perceived cone boundaries and lat
 
 ## What I learned
 
-Recorded driving data gave me a faster, more reliable way to investigate problems. In Foxglove, I could follow a perception input through the decision state to the measured vehicle response and use that evidence to discuss corrections with teammates.
+Recorded driving data gave me a faster, more reliable way to investigate problems. In Foxglove, I could follow a perception input through the decision state to the measured vehicle response and use that evidence to propose corrections.
 
 Operating the vehicle also gave those topics a physical reference: when it slowed, how it passed an obstacle, and how it resumed route driving.

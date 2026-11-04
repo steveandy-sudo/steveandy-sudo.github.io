@@ -66,6 +66,7 @@ for (const file of htmlFiles) {
       if (project.querySelectorAll('a[href^="https://github.com/"]').length > 1) errors.push('Home: projects must have at most one GitHub link');
     }
     if (new Set(linkedProjects).size !== projectRoutes.length) errors.push('Home: some projects are not accessible');
+    if (linkedProjects[0] !== '/projects/ai-sw-mobility/' || linkedProjects[1] !== '/projects/kookmin-ai-edge/') errors.push('Home: expected AI·SW and Kookmin as the first two projects');
     if (document.querySelectorAll('.project-entry a[href^="https://github.com/"]').length !== 4) errors.push('Home: expected four public project repositories');
   }
   if (route === '/' || route === '/projects/ai-sw-mobility/') {
