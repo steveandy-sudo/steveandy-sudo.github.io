@@ -12,7 +12,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
     title: 'Kookmin AI-Edge Autonomous Driving',
     work: 'Developed the ResNet18–LiDAR CNN pipeline, trained and compared YOLOv8n and YOLO11n, and integrated mission transitions, parking waypoints, and reverse recovery.',
     resultLabel: 'Competition result',
-    result: 'Team: preliminary 2nd, finals 13th with course completion, and a parking Special Award. Rule-based driving was used in the competition.',
+    result: 'Team result: 2nd in the preliminary round, 13th in the final round with course completion, and a Parking Special Award. The final competition run used rule-based driving.',
     evidence: [
       { label: 'Learning & evaluation', anchor: 'learning-pipeline-and-evaluation' },
       { label: 'Competition results', anchor: 'validation-and-competition-results' },
@@ -20,7 +20,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision-Making',
-    work: 'Designed mission FSMs, wrote PP–Stanley tracking code, and used Foxglove recordings to investigate obstacle-path behavior. Operated vehicle trials during Test Week.',
+    work: 'Designed ROS 2 mission FSMs, investigated obstacle-avoidance problems using Foxglove logs, and operated follow-up vehicle trials. Implemented Pure Pursuit–Stanley tracking in ROS 2.',
     resultLabel: 'Competition result & awards',
     result: 'All required missions completed in both preliminary and final rounds under the competition rules. Team: Grand Prize in Autonomous Driving Implementation (Minister of Land, Infrastructure and Transport Award) and Creative Technology Special Award for the technical report.',
     evidence: [
@@ -44,7 +44,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
     title: 'ROS 2 UAV Waypoint Mission',
     work: 'Developed CSV waypoint sequencing, TF2 arrival checks, coordinate modes, and finish-state controls. Connected pose commands to an existing PX4 offboard controller.',
     resultLabel: 'Simulation result',
-    result: 'The integrated PX4 SITL/Gazebo course demonstration completed sequential waypoint flight and final landing. The recording shows takeoff and waypoint flight.',
+    result: 'The integrated course system completed sequential waypoint flight and final landing in PX4 SITL/Gazebo. The recording below shows takeoff and waypoint flight.',
     evidence: [
       { label: 'Simulation demonstration', anchor: 'simulation-demonstration' },
       { label: 'Mission architecture', anchor: 'mission-architecture' },

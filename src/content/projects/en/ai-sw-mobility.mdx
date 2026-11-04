@@ -14,10 +14,10 @@ outcome: "The team completed all required missions in both preliminary and final
 teamScope: "I worked on the decision-making team, focusing on FSM-based behavior planning and obstacle avoidance. Recorded-run analysis and Test Week vehicle operation guided software adjustments."
 contributions:
   - Designed FSM states and transition conditions for traffic-light handling, timed stops, obstacle avoidance, and mission completion.
-  - Presented a Pure Pursuit–Stanley hybrid strategy at a symposium sponsored by Hyundai Mobis, then implemented steering blending by driving phase in ROS 2.
-  - Evaluated hybrid tracking against Stanley on matched Gazebo segments at 6 m/s; the initial comparison showed approximately 14% lower heading-error p95 and 10% lower steering-command total variation.
   - Traced perception, FSM states, planned paths, and vehicle feedback in Foxglove; reviewed cached-path coordinate and timestamp consistency to guide corrections and follow-up tests.
   - Recorded GNSS route waypoints and operated GNSS/IMU-based vehicle trials, reaching up to 11 m/s on both courses during venue practice. During Test Week and obstacle-avoidance trials, confirmed approach deceleration, collision-free passage, route return, and acceleration afterward.
+  - Presented a Pure Pursuit–Stanley hybrid strategy at a symposium sponsored by Hyundai Mobis, then implemented steering blending by driving phase in ROS 2.
+  - Evaluated hybrid tracking against Stanley on matched Gazebo segments at 6 m/s; the initial comparison showed approximately 14% lower heading-error p95 and 10% lower steering-command total variation.
 technologies: [ROS 2, FSM Behavior Planning, Pure Pursuit + Stanley, MCAP / Foxglove, Gazebo]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
 githubVisibility: public
@@ -54,11 +54,11 @@ The final-round footage shows obstacle-section driving and departure after waiti
 
 ### Field observations
 
-I reviewed runs with forced S-shaped fallback maneuvers, paths generated from different obstacle references, and straight-ahead motion ending in obstacle contact. These observations led me to inspect obstacle selection, path generation, and fallback behavior in the recordings.
+The recorded runs showed S-shaped fallback maneuvers, paths generated around different obstacles, and cases where the vehicle continued straight into an obstacle. I used these recordings to examine obstacle selection, path generation, and fallback behavior.
 
 ### Cached-path coordinates and timestamps
 
-In Foxglove, I traced perception outputs, FSM states, planned paths, and vehicle feedback to investigate **cached-path coordinates and timestamps**. I reviewed how points stored in an earlier vehicle frame were interpreted when the path was reused and proposed corrections based on the recordings.
+In Foxglove, I compared perception outputs, FSM states, planned paths, and vehicle feedback. I examined whether a reused path’s coordinates and timestamp were interpreted consistently and used the recordings to propose corrections.
 
 Path-reuse logic uses pose history to express the stored points in the current vehicle frame. The diagram below explains that coordinate relationship.
 
@@ -70,7 +70,7 @@ Path-reuse logic uses pose history to express the stored points in the current v
 
 ### Follow-up vehicle trials
 
-I operated follow-up trials with the updated software. The vehicle slowed before the avoidance section, passed the obstacles without contact, returned to the reference route, and accelerated afterward. I reviewed the recordings to assess the planning decisions and vehicle response through this sequence.
+During Test Week, I operated the vehicle for experimental runs. In follow-up tests with updated software, the vehicle slowed before the avoidance section, passed the obstacles without contact, returned to the reference route, and accelerated afterward. I reviewed the recordings to compare the planner’s outputs with the vehicle response.
 
 ## Driving task
 
@@ -113,7 +113,7 @@ The proposal combined their steering outputs, using driving conditions to guide 
 
 ### Applying the strategy in ROS 2
 
-After the presentation, I wrote and revised code for the combined controller. The implementation calculates both steering commands and blends them by driving phase: straight driving, corner approach, turning, and corner exit. Weight changes are limited from one control step to the next; speed and upcoming path geometry also influence lookahead and the individual steering calculations.
+After the presentation, I implemented and revised a ROS 2 controller that blends Pure Pursuit and Stanley steering commands by driving phase: straight driving, corner approach, turning, and corner exit. The controller limits weight changes between control steps and adjusts lookahead and steering calculations using vehicle speed and upcoming path geometry.
 
 I wrote the high-level control section of the competition vehicle's technical report, describing the path-tracking and command-generation pipeline.
 
@@ -136,14 +136,6 @@ Here, p95 is the 95th percentile of the recorded error values. Steering-command 
 
 ## Real-vehicle trials
 
-### Test Week experimental runs
-
-My main role during Test Week was **vehicle operation for experimental runs**.
-
-### Obstacle avoidance and route return
-
-I operated the vehicle during obstacle-avoidance field tests. The vehicle slowed before the avoidance section and completed a collision-free maneuver. It then returned to its reference route and accelerated. I reviewed the recordings in Foxglove to propose the next software adjustments.
-
 ### Venue-practice waypoint and AEB trials
 
 | Test | Course or reference | Observed behavior |
@@ -163,6 +155,4 @@ The cone-course AEB workflow forms a path from perceived cone boundaries and lat
 
 ## What I learned
 
-Recorded driving data gave me a faster, more reliable way to investigate problems. In Foxglove, I could follow a perception input through the decision state to the measured vehicle response and use that evidence to propose corrections.
-
-Operating the vehicle also gave those topics a physical reference: when it slowed, how it passed an obstacle, and how it resumed route driving.
+I learned to investigate driving problems by reading perception outputs, planning states, paths, and vehicle feedback together. Follow-up trials let me check whether a proposed correction changed the behavior I had observed.

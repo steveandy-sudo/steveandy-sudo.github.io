@@ -7,7 +7,7 @@ import { allProjects, projectUrl, statusLabel } from '../lib/projects';
 
 const research = {
   lead: 'Perception and decision-making for learning-based and end-to-end driving.',
-  summary: 'I want to study how data quality and scenario coverage affect closed-loop end-to-end driving. My competition work connects model training, ROS 2 behavior planning, and vehicle trials. Learned steering brought training-data coverage into focus; Foxglove recordings helped me trace planning decisions to vehicle response. In my capstone, I am reviewing vehicle–infrastructure fusion and helping design a camera-only and V2I-assisted E2E comparison.',
+  summary: 'I want to understand how training-data quality and scenario coverage affect closed-loop E2E driving. In competition projects, I trained driving models and used Foxglove logs to compare planning decisions with vehicle responses. In my capstone, I am reviewing vehicle–infrastructure fusion and helping plan a comparison of camera-only and V2I-assisted E2E driving.',
   topics: [
     { title: 'Perception under occlusion', description: 'How can infrastructure sensing support earlier responses to occluded pedestrians?' },
     { title: 'Decisions and vehicle response', description: 'How do input and steering delays change driving behavior?' },
@@ -24,7 +24,7 @@ const projectCopy: Record<string, HomeProject> = {
   'kookmin-ai-edge': {
     title: 'Kookmin AI-Edge Challenge',
     summary: 'Developed a ResNet18–LiDAR CNN imitation-learning pipeline, compared YOLOv8n and YOLO11n detectors, and integrated mission transitions and parking logic on the competition vehicle.',
-    result: 'Team result: preliminary 2nd, finals 13th with course completion, and Parking Special Award. Final competition driving used the integrated rule-based controller.',
+    result: 'Team result: 2nd in the preliminary round, 13th in the final round with course completion, and a Parking Special Award. The final competition run used rule-based driving.',
     visual: {
       src: '/media/projects/kookmin-ai-edge/01-competition-vehicle.jpg',
       alt: 'Team KAI competition vehicle on the Kookmin course',
@@ -34,7 +34,7 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision-Making',
-    summary: 'Designed mission FSMs, implemented Pure Pursuit–Stanley tracking, and used Foxglove recordings to investigate obstacle avoidance and guide vehicle trials.',
+    summary: 'Designed ROS 2 mission FSMs, investigated obstacle-avoidance problems using Foxglove logs, and operated follow-up vehicle trials.',
     result: 'Team Grand Prize (Minister of Land, Infrastructure and Transport Award) and Creative Technology Special Award. All required missions completed in both preliminary and final rounds.',
     resultLabel: 'Competition result & awards',
     visual: {
@@ -46,15 +46,15 @@ const projectCopy: Record<string, HomeProject> = {
   },
   'camera-v2i-e2e': {
     title: 'Camera-Based V2I Cooperative End-to-End Autonomous Driving',
-    summary: 'Reviewed UniV2X and prepared midterm slides covering pedestrian risk and a planned E2E comparison.',
+    summary: 'Reviewed UniV2X and prepared midterm slides on pedestrian risk and a planned comparison of camera-only and V2I-assisted E2E driving.',
     result: 'Research and design: camera-only versus V2I-assisted E2E driving, braking-aware training targets, and V2I communication options.',
     resultLabel: 'Research & design',
     visual: { src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png', alt: 'Team proposal for comparing camera-only and V2I-assisted E2E planning', title: 'Proposed E2E comparison', caption: 'Team design proposal · Camera-only and V2I-assisted E2E planning', kind: 'image' },
   },
   'uav-waypoint': {
     title: 'UAV Waypoint Mission',
-    summary: 'A ROS 2 mission package for sequential 3D waypoints, TF2 arrival checks, and PX4 offboard integration.',
-    result: 'The integrated PX4 SITL/Gazebo course demonstration completed sequential waypoint tracking and final landing.',
+    summary: 'Developed a ROS 2 waypoint mission package with TF2 arrival checks and PX4 offboard integration.',
+    result: 'The simulated UAV followed sequential waypoints and completed the final landing in a PX4 SITL/Gazebo course demonstration.',
     resultLabel: 'Simulation result',
     visual: {
       src: '/media/projects/uav-waypoint/01-waypoint-flight-poster.jpg',
@@ -100,7 +100,7 @@ const skills = [
         <p class="eyebrow">Smart Vehicle Engineering · Konkuk University</p>
         <h1 id="intro-title">Junghun Hwang<span class="name-period" aria-hidden="true">.</span><span class="korean-name" lang="ko">황정헌</span></h1>
         <p class="intro-field">Autonomous Driving · Perception · Learning</p>
-        <p class="intro-summary">I build and test perception, decision-making, and control software for autonomous vehicles. Through competition vehicles and simulation projects, I am exploring how learning-based models and control algorithms work together in practice.</p>
+        <p class="intro-summary">I develop ROS 2 decision-making software and analyze driving logs to improve autonomous vehicle behavior. My projects span mission FSMs, obstacle-avoidance trials, and imitation-learning pipelines. These experiences shape my interest in perception and learning-based driving.</p>
         <dl class="intro-details">
           <div><dt>{'Born'}</dt><dd><time datetime="2001-12-10">2001.12.10</time></dd></div>
           <div><dt>{'Based in'}</dt><dd>Seoul, Korea</dd></div>
