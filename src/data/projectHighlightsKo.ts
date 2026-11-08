@@ -5,7 +5,7 @@ export const projectHighlightsKo: typeof projectHighlights = {
     title: '국민대 AI-Edge 자율주행',
     work: 'ResNet18–LiDAR CNN 파이프라인을 개발하고, YOLOv8n과 YOLO11n을 학습·비교했으며, 미션 전환·주차 웨이포인트·후진 복구를 통합했다.',
     resultLabel: '대회 성과',
-    result: '팀은 예선 2위, 본선 13위 및 코스 완주, 주차 부문 특별상을 달성했다. 본선 경기에서는 규칙 기반 주행을 사용했다.',
+    result: '팀은 예선 2위와 본선 13위를 기록했고, 본선 코스를 완주했다. 주차 부문 특별상도 수상했다. 본선 경기에서는 규칙 기반 주행을 사용했다.',
     evidence: [
       { label: '학습 및 평가', anchor: 'learning-pipeline-and-evaluation' },
       { label: '대회 결과', anchor: 'validation-and-competition-results' },
@@ -37,7 +37,7 @@ export const projectHighlightsKo: typeof projectHighlights = {
     title: 'ROS 2 UAV 웨이포인트 미션',
     work: 'CSV 웨이포인트 순차 처리, TF2 도착 판정, 좌표 모드, 종료 상태 제어를 개발했다. 위치·자세 명령을 기존 PX4 오프보드 제어기에 연결했다.',
     resultLabel: '시뮬레이션 결과',
-    result: '수업 통합 시스템은 PX4 SITL/Gazebo에서 순차 웨이포인트 비행과 최종 착륙을 완료했다. 아래 영상에는 이륙과 웨이포인트 비행이 담겨 있다.',
+    result: 'PX4 SITL/Gazebo 수업 통합 시연에서 순차 웨이포인트 비행과 최종 착륙을 완료했다. 아래 영상에는 이륙과 웨이포인트 비행이 담겨 있다.',
     evidence: [
       { label: '시뮬레이션 시연', anchor: 'simulation-demonstration' },
       { label: '미션 구조', anchor: 'mission-architecture' },

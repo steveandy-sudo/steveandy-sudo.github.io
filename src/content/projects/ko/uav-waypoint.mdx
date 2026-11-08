@@ -13,7 +13,7 @@ summary: "TF2 도착 판정과 PX4 오프보드 연동을 포함한 ROS 2 웨이
 outcome: "직접 개발한 웨이포인트 패키지를 사용한 PX4 SITL / Gazebo 수업 통합 시연에서 순차 웨이포인트 추종 및 최종 착륙 완료"
 teamScope: "4명으로 구성된 수업 팀이 자율시스템 플랫폼을 통합했다. 나는 UAV 웨이포인트 패키지와 기존 오프보드 제어기와의 인터페이스에 집중했다."
 contributions:
-  - CSV의 x/y/z/yaw 웨이포인트, 선택적 짐벌 피치, TF2 위치·자세 추적, 3차원 목표 거리, 도착 허용 오차를 포함하는 uav_waypoint_mission을 개발했다.
+  - CSV의 x/y/z/yaw 웨이포인트, 선택적 짐벌 피치, TF2 위치·자세 추적, 목표 지점까지의 3차원 거리, 도착 허용 오차를 포함하는 uav_waypoint_mission을 개발했다.
   - 목표 지점을 순차적으로 전환하는 기능을 구현하고, /command/pose의 PoseStamped 명령을 기존 PX4 오프보드 제어기와 연동했다.
   - map/ENU 및 PX4 local-NED 좌표 모드, 시작·중지·초기화 제어, 미션 상태와 현재 목표 보고 기능을 지원했다.
   - hold, land, disarm, land_then_disarm 종료 옵션을 구현하고, land_then_disarm 처리 과정에 고도 확인을 포함했다.
@@ -29,7 +29,7 @@ import SystemFlow from '../../../components/SystemFlow.astro';
 
 <SystemFlow title="PX4 SITL / Gazebo의 웨이포인트 미션" steps={[
   { label: '웨이포인트 순서', detail: 'CSV의 목표 지점은 x, y, z, yaw를 지정하며, 선택적으로 짐벌 피치를 포함한다.' },
-  { label: '위치·자세 및 도착 판정', detail: 'TF2 위치·자세와 3차원 목표 거리를 이용해 현재 목표 지점에 도착했는지 판정한다.' },
+  { label: '위치·자세 및 도착 판정', detail: 'TF2 위치·자세와 목표 지점까지의 3차원 거리를 이용해 현재 목표 지점에 도착했는지 판정한다.' },
   { label: '미션 진행', detail: '미션 노드는 다음 목표 지점으로 전환하고 /command/pose에 PoseStamped를 발행한다.' },
   { label: '오프보드 실행', detail: '기존 PX4 오프보드 제어기와 시뮬레이션 구성 요소가 위치·자세 명령을 실행한다.' },
 ]} />

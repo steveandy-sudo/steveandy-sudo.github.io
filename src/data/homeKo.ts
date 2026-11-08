@@ -28,11 +28,11 @@ export const homeKo = {
   },
   research: {
     lead: '학습 기반·E2E 자율주행을 위한 인지와 판단',
-    summary: '학습 데이터의 품질과 시나리오 범위가 폐루프 E2E 주행에 미치는 영향을 이해하고자 한다. 대회 프로젝트에서는 주행 모델을 학습시키고 Foxglove 로그를 활용해 주행계획·판단 결과와 차량 반응을 비교했다. 졸업 프로젝트에서는 차량·인프라 융합을 검토하고, Camera-only와 V2I 정보 활용 E2E 주행의 비교 계획에 참여하고 있다.',
+    summary: '학습 데이터의 품질과 주행 시나리오의 범위가 폐루프 E2E 주행에 미치는 영향을 이해하고자 한다. 대회 프로젝트에서는 주행 모델을 학습시키고 Foxglove 로그를 활용해 주행계획·판단 결과와 차량 반응을 비교했다. 졸업 프로젝트에서는 차량·인프라 융합을 검토하고, Camera-only와 V2I 정보 활용 E2E 주행의 비교 계획에 참여하고 있다.',
     topics: [
       { title: '가려진 보행자 인지', description: '인프라 센싱은 가려진 보행자에 더 일찍 대응하는 데 어떻게 도움을 줄 수 있는가?' },
       { title: '판단과 차량 반응', description: '입력 지연과 조향 지연은 주행 거동을 어떻게 바꾸는가?' },
-      { title: '학습 기반·E2E 주행', description: '데이터 품질과 시나리오 범위는 폐루프 E2E 주행에 어떤 영향을 미치는가?' },
+      { title: '학습 기반·E2E 주행', description: '데이터 품질과 주행 시나리오의 범위는 폐루프 E2E 주행에 어떤 영향을 미치는가?' },
     ],
   },
   labels: {
@@ -93,7 +93,7 @@ export const homeProjectsKo: Record<string, HomeProjectCopy> = {
   'ai-sw-mobility': {
     title: 'AI·SW 모빌리티: 판단',
     summary: 'ROS 2 미션 FSM 설계, Foxglove 로그 기반 장애물 회피 문제 분석, 후속 실차 시험 운용',
-    result: '팀 대상(국토교통부 장관상) 및 창작기술 부문 특별상. 예선·본선의 모든 필수 미션 완료.',
+    result: '팀 수상: 대상(국토교통부 장관상)·창작기술 부문 특별상. 예선·본선의 모든 필수 미션 완료.',
     resultLabel: '대회 결과 및 수상',
     visual: {
       src: '/media/projects/ai-sw-mobility/06-official-final-driving.jpg',
@@ -105,7 +105,7 @@ export const homeProjectsKo: Record<string, HomeProjectCopy> = {
   'camera-v2i-e2e': {
     title: '카메라 기반 V2I 협력 E2E 자율주행',
     summary: 'UniV2X 검토 및 보행자 위험도와 Camera-only·V2I 정보 활용 E2E 주행 비교 계획에 관한 중간발표 자료 작성.',
-    result: '조사·설계 범위: Camera-only와 V2I 정보 활용 E2E 주행 비교, 제동 특성을 고려한 학습 목표값, V2I 통신 방식.',
+    result: '조사·설계 범위: Camera-only와 V2I 정보 활용 E2E 주행 비교, 제동을 고려한 학습 목표값, V2I 통신 방식.',
     resultLabel: '조사·설계',
     visual: {
       src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png',
@@ -116,8 +116,8 @@ export const homeProjectsKo: Record<string, HomeProjectCopy> = {
     },
   },
   'uav-waypoint': {
-    title: '무인기 웨이포인트 임무',
-    summary: 'TF2 도착 판정 및 PX4 오프보드 연동을 포함한 ROS 2 웨이포인트 임무 패키지 개발.',
+    title: 'UAV 웨이포인트 미션',
+    summary: 'TF2 도착 판정 및 PX4 오프보드 연동을 포함한 ROS 2 웨이포인트 미션 패키지 개발.',
     result: 'PX4 SITL/Gazebo 수업 시연에서 모의 무인기의 순차 웨이포인트 비행 및 최종 착륙 완료.',
     resultLabel: '시뮬레이션 결과',
     visual: {
