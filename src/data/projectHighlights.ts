@@ -31,13 +31,13 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'camera-v2i-e2e': {
     title: 'Camera-Based V2I & E2E Driving',
-    work: 'Reviewed UniV2X and prepared preliminary-design slides. Currently investigating V2I communication options.',
+    work: 'Analyzed stopping-based latency requirements, defined measurement boundaries, and refined the paired-model test plan. Used ChatGPT to prepare a candidate-model runtime test and ran it myself.',
     resultLabel: 'Current stage',
-    result: 'The preliminary design covers pedestrian risk, braking-aware training targets, and a planned comparison using shared driving records and labels. Communication research is in progress.',
+    result: 'Research and preliminary design, with a separate software timing result: the randomly initialized TCP candidate recorded a P95 of 21.88 ms in 600 FP32 runs on an RTX 5070 Laptop GPU, including CPU–GPU transfers.',
     evidence: [
-      { label: 'Literature & scope', anchor: 'literature-review-and-project-scope' },
+      { label: 'Latency requirements', anchor: 'stopping-based-latency-requirements' },
+      { label: 'Model runtime test', anchor: 'candidate-model-runtime-measurement' },
       { label: 'Planned comparison', anchor: 'planned-e2e-comparison' },
-      { label: 'Communication research', anchor: 'v2i-communication-research' },
     ],
   },
   'uav-waypoint': {

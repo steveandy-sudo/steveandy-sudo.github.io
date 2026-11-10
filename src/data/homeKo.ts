@@ -104,8 +104,8 @@ export const homeProjectsKo: Record<string, HomeProjectCopy> = {
   },
   'camera-v2i-e2e': {
     title: '카메라 기반 V2I 협력 E2E 자율주행',
-    summary: 'UniV2X 검토 및 보행자 위험도와 Camera-only·V2I 정보 활용 E2E 주행 비교 계획에 관한 중간발표 자료 작성.',
-    result: '조사·설계 범위: Camera-only와 V2I 정보 활용 E2E 주행 비교, 제동을 고려한 학습 목표값, V2I 통신 방식.',
+    summary: '정지 조건에 따른 허용 지연 분석과 촬영부터 실제 감속 시작까지의 측정 경계 정의. Camera-only·V2I 정보 활용 E2E 비교시험 설계.',
+    result: '조사·예비 설계 진행. 별도로 RTX 5070 Laptop GPU에서 무작위 초기화한 TCP 후보 모델을 FP32로 600회 실행해 P95 21.88 ms를 기록했다.',
     resultLabel: '조사·설계',
     visual: {
       src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png',

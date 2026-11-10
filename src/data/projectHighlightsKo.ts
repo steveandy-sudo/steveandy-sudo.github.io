@@ -24,13 +24,13 @@ export const projectHighlightsKo: typeof projectHighlights = {
   },
   'camera-v2i-e2e': {
     title: '카메라 기반 V2I 및 E2E 주행',
-    work: 'UniV2X를 검토하고 예비 설계 발표 자료를 작성했다. 현재 V2I 통신 방식을 조사하고 있다.',
+    work: '정지 조건에 따른 허용 지연, 측정 경계와 두 모델의 비교시험 계획을 구체화했다. ChatGPT를 활용해 후보 모델 실행시간 측정 시험을 준비하고 직접 실행했다.',
     resultLabel: '현재 단계',
-    result: '예비 설계는 보행자 위험도, 제동을 고려한 학습 목표값, 공통 주행 기록과 라벨을 사용하는 비교 계획을 포함한다. 통신 방식 조사를 진행하고 있다.',
+    result: '조사·예비 설계 단계이며, 별도의 소프트웨어 부분시험에서 무작위 초기화한 TCP 후보 모델을 RTX 5070 Laptop GPU에서 FP32로 600회 실행했다. CPU–GPU 전송을 포함한 실행시간의 P95는 21.88 ms였다.',
     evidence: [
-      { label: '관련 연구 및 범위', anchor: 'literature-review-and-project-scope' },
+      { label: '허용 지연 분석', anchor: 'stopping-based-latency-requirements' },
+      { label: '모델 실행시간 측정', anchor: 'candidate-model-runtime-measurement' },
       { label: '비교 계획', anchor: 'planned-e2e-comparison' },
-      { label: '통신 방식 조사', anchor: 'v2i-communication-research' },
     ],
   },
   'uav-waypoint': {

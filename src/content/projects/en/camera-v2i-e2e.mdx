@@ -9,13 +9,14 @@ period: 2026 – Ongoing
 team: 5 members
 role: Research & Preliminary Design
 status: design
-summary: "A five-member capstone investigating how infrastructure-camera pedestrian information can support E2E driving under occlusion, with preliminary design and a small-scale comparison planned."
-outcome: "Midterm design materials cover pedestrian risk, braking margins, training-label generation, and a paired E2E comparison. This semester focuses on research and design; V2I communication options are under investigation."
-teamScope: "The team is developing a preliminary design for infrastructure perception, information delivery, and vehicle E2E planning. I reviewed related research, prepared midterm presentation materials from team discussions, and am investigating communication options."
+summary: "Preliminary design of camera-based cooperative E2E driving for occluded pedestrians, covering stopping-based latency requirements and a planned camera-only versus V2I-assisted comparison."
+outcome: "Derived allowable latency under explicit stopping assumptions, defined capture-to-deceleration measurement boundaries, and refined the comparison plan. A separate FP32 runtime test of the randomly initialized TCP candidate recorded a P95 of 21.88 ms over 600 runs on an RTX 5070 Laptop GPU."
+teamScope: "The five-member team is developing a preliminary design for infrastructure perception, pedestrian-state delivery, and vehicle E2E planning. My work covers literature review, stopping-based latency analysis, measurement and test planning, and a directly executed candidate-model runtime test."
 contributions:
+  - Derived allowable perception-to-braking latency from vehicle speed, assumed deceleration, available distance, and stopping clearance to inform preliminary system requirements.
+  - Defined measurement boundaries from image capture to physical deceleration onset and refined a paired camera-only versus V2I-assisted evaluation plan.
+  - Used ChatGPT to prepare a runtime test and ran it myself. Measured the randomly initialized TCP candidate in FP32, including CPU–GPU transfers, over 600 runs after 50 warm-up runs.
   - Reviewed UniV2X's vehicle–infrastructure fusion framework and the scope of its open-loop evaluation. Wrote a literature summary to guide project scope and a planned small-scale closed-loop comparison.
-  - Prepared the midterm slides after team design discussions. Described the planned E2E comparison, pedestrian-risk assessment, and target-speed labels based on braking margins.
-  - Investigating V2I communication options, including ROS 2/DDS over Wi-Fi. The review covers message freshness, latency, and reception continuity.
 technologies: [Camera V2I Design, E2E Planning, Experiment Design, Spatial / Temporal Alignment]
 featured: true
 ---
@@ -27,9 +28,9 @@ import SystemFlow from '../../../components/SystemFlow.astro';
 
 **How does adding infrastructure-camera information change an E2E vehicle's response to a pedestrian hidden behind a parked vehicle?**
 
-The team plans a **camera-only versus V2I-assisted E2E comparison** on a small-scale vehicle. A roadside camera would observe the occluded area and send pedestrian information to the vehicle, where it would be combined with the vehicle's camera input and state.
+The project aims to apply this approach to a full-size vehicle. A roadside camera would observe the occluded area and send pedestrian information to the vehicle, where it would be combined with the vehicle's camera input and state. A small-scale campus platform is planned for scenario and system-function trials, including a **camera-only versus V2I-assisted E2E comparison**.
 
-This semester's work consists of research summaries, preliminary design, and the midterm presentation. Data collection, model training, and vehicle evaluation are planned for the following stages.
+This semester focuses on research and preliminary design: quantitative requirements, interfaces, measurement boundaries, and test procedures. A separate software test measures the execution time of a candidate model architecture. Data collection, model training, and integrated vehicle trials are subsequent stages.
 
 ## Literature review and project scope
 
@@ -39,18 +40,18 @@ The planned comparison asks whether earlier pedestrian information changes when 
 
 ## Midterm preliminary design
 
-I prepared the midterm slides after discussions with teammates. They describe the team's scenario and system concept, pedestrian-risk assessment, braking margins, and training-data requirements.
+I prepared the midterm slides after team discussions on the scenario, pedestrian-risk assessment, braking margins, and training-data requirements. In the subsequent design review, I worked through the literature, calculations, and test procedures with AI assistance and revised the presentation materials. The latest work connects stopping conditions to latency requirements and defines how the system would be measured.
 
 | Design area | Current proposal |
 | --- | --- |
 | Representative scenario | One vehicle, one pedestrian, and an occluder on a controlled straight section |
 | Operating conditions | Daytime, clear weather, dry pavement, low-speed driving, and normal positioning and V2I reception |
-| Infrastructure camera | An elevated oblique view covering several parking spaces, with installation geometry to be assessed on site |
-| Pedestrian information | Position, motion, observed risk, and capture time |
+| Infrastructure camera | An elevated view from the opposite side of the road, with installation geometry and pedestrian visibility to be assessed on site |
+| Pedestrian information | Position, velocity, observed risk, capture time, and message sequence and validity information |
 | Vehicle planning | Vehicle-camera input and state, with infrastructure information added for the V2I-assisted model |
 | Outputs | Waypoints and target speed for a low-level controller |
 
-The team changed the camera concept from observing one gap between parked vehicles to an elevated view of several parking spaces. The planned site evaluation will examine placement, field of view, and pedestrian visibility.
+The campus test concept uses a parked car as an occluder and a pedestrian target moving from a concealed roadside position into the road. Camera placement, field of view, and pedestrian visibility are part of the planned site assessment.
 
 <MediaSlot id="v2i-scenario" />
 
@@ -85,6 +86,50 @@ The stopping-distance budget is expressed as `d_req = v × T_system + D_brake(v)
 
 The expert-label plan uses this context to describe **early deceleration, a held stop while the path is occupied, and restart after the path clears**. The same target labels would be used for both E2E models.
 
+## Stopping-based latency requirements
+
+I examined how much delay the vehicle could tolerate while retaining the distance needed to stop. The preliminary analysis uses **30 km/h (about 8.33 m/s)** for the full-size-vehicle case and assumes constant deceleration after braking begins:
+
+`T_total ≤ (D − v² / (2a) − g) / v`
+
+Here, `D` is the distance from the vehicle's front to the collision-zone boundary at image capture, `a` is the assumed deceleration, and `g` is the required stopping clearance. The analysis compares decelerations of 1.5, 2.5, and 3.5 m/s² using literature as a design reference. The table uses **1.5 m/s²** and a **2 m candidate stopping clearance**.
+
+| Available distance D | Calculated upper bound on total latency |
+| --- | --- |
+| 30 m | About 582 ms |
+| 35 m | About 1,182 ms |
+
+These are conditional time budgets. The final latency target will depend on the selected vehicle's braking characteristics and the observation distance available in the scenario. The campus platform has its own operating and braking conditions.
+
+I defined total latency from **image capture to physical deceleration onset**, with the following measurement boundaries:
+
+| Interval | Measurement boundary |
+| --- | --- |
+| Infrastructure | Capture (`t0`) to completed pedestrian state (`t1`) |
+| Communication | Completed state (`t1`) to full message reception at the vehicle (`t2`) |
+| Vehicle | Full reception (`t2`) to physical deceleration onset (`t4`) |
+| Brake actuation | Applied control command (`t3`) to physical deceleration onset (`t4`), within the vehicle interval |
+| Total | Capture (`t0`) to physical deceleration onset (`t4`) |
+
+This boundary definition accounts for brake actuation once in the delay budget, followed by the braking distance after deceleration begins. The measurement plan records processing, delivery, decision, and actuation stages separately.
+
+## Candidate-model runtime measurement
+
+I used ChatGPT to prepare the runtime test and ran it myself to examine the compute time of **OpenDriveLab's TCP (Trajectory-guided Control Prediction)** as a vehicle E2E model candidate.
+
+| Item | Measurement condition or result |
+| --- | --- |
+| Model weights | Random initialization |
+| Hardware and precision | NVIDIA GeForce RTX 5070 Laptop GPU, FP32 |
+| Software | Windows, Python 3.11.9, PyTorch 2.11.0+cu128 |
+| Inputs | Image tensor `1×3×256×900`; state tensor `1×9` |
+| Repetitions | 50 warm-up runs, followed by 600 measured runs |
+| Scope | Prepared CPU inputs → GPU transfer → model forward and action calculation → CPU output values |
+| Mean / median | 20.04 / 20.02 ms |
+| P95 / maximum | 21.88 / 24.65 ms |
+
+This is an execution-time measurement of a candidate architecture with random weights. Camera acquisition, image preprocessing, V2I fusion, scheduling, vehicle delivery, and physical actuation belong to later pipeline measurements. TCP remains a model candidate; driving quality and the paired-model comparison are subjects of subsequent evaluation.
+
 ## Infrastructure geometry and time alignment
 
 The preliminary spatial design uses homography to map an image observation onto the ground plane. A common local ENU frame would connect the pedestrian estimate with vehicle position, followed by a conversion into the vehicle's frame.
@@ -107,11 +152,15 @@ Camera placement, ground reference points, independent accuracy checks, and time
 
 The data plan records vehicle imagery and state together with infrastructure observations during the same run. Training, validation, and test sets would be separated by **run or session**. Planned scenarios include pedestrian absence, standing inside or outside the vehicle path, approach, crossing, and departure.
 
-Evaluation would examine detection and deceleration timing, stopping margin, minimum time to collision, collision occurrence, and unnecessary braking. The goal is to relate any behavioral difference to the added infrastructure information.
+The campus plan uses the small-scale platform for straight-line deceleration and stopping trials, with 8 km/h under consideration as an operating condition. Scenes would be paired and test order alternated while checking that the base model, training, and controller conditions remain comparable.
+
+Evaluation would record event latency (P50, P95, and maximum), position bias and RMSE, deceleration onset, final stopping clearance, unnecessary deceleration, required deceleration that does not occur, contact, and safety interventions. Communication measurements cover message loss, consecutive reception gaps, recovery, model-switching delay, and command continuity.
+
+The sampling unit is an independent run or event. Latency distributions would cover events where the required deceleration occurs; events without that response would be counted separately. Repetition counts and acceptance thresholds are part of the next design decisions. This keeps the response-time distribution separate from the rate of successful responses.
 
 ## V2I communication research
 
-I am investigating communication options between the infrastructure and vehicle computers, including ROS 2/DDS over Wi-Fi. I am examining how soon observations reach the vehicle and how consistently messages arrive as it approaches the pedestrian scenario.
+I am investigating direct UDP messaging and ROS 2/DDS over Wi-Fi as communication options between the infrastructure and vehicle computers. I am examining initial connection, how soon observations reach the vehicle, and reception continuity as the vehicle approaches the pedestrian scenario.
 
 Current comparison criteria include:
 
@@ -119,8 +168,8 @@ Current comparison criteria include:
 - **Delivery latency:** the time from sending to reception.
 - **Reception continuity:** gaps, missed or out-of-order messages, and reconnection behavior.
 
-A dedicated Wi-Fi network and alternative connection arrangements are candidates for team discussion. This work is part of the current **research and design phase**.
+A dedicated Wi-Fi network and alternative connection arrangements are candidates for team discussion. The proposed fallback uses camera-only E2E while infrastructure information is unavailable or invalid and returns to the cooperative model after valid reception is restored. Model-switching delay and command continuity are planned evaluation items. The communication approach is being selected within the current **research and design phase**.
 
 ## Next design work
 
-The next steps are to refine the communication approach and interface, assess camera visibility and spatial alignment on site, establish timing and braking measurements, and prepare the paired data-collection and evaluation procedure. Model training and the small-scale closed-loop comparison follow this design work.
+The next steps are to select the communication approach, refine the pedestrian-state interface, assess camera visibility and spatial alignment on site, and measure the platform's braking characteristics and pipeline timing. Those observations will inform latency targets and acceptance thresholds. Data collection, model training, and the small-scale closed-loop comparison follow this design work.
