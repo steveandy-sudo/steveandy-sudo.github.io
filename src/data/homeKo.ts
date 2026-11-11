@@ -92,7 +92,7 @@ export const homeProjectsKo: Record<string, HomeProjectCopy> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW 모빌리티: 판단',
-    summary: 'ROS 2 미션 FSM 설계, Foxglove 로그 기반 장애물 회피 문제 분석, 후속 실차 시험 운용',
+    summary: 'ROS 2 미션 FSM 설계, Foxglove 로그로 저장 경로 불일치 재현, odometry 기반 재투영 구현 및 후속 실차 시험',
     result: '팀 수상: 대상(국토교통부 장관상)·창작기술 부문 특별상. 예선·본선의 모든 필수 미션 완료.',
     resultLabel: '대회 결과 및 수상',
     visual: {

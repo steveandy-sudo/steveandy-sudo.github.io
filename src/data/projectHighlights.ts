@@ -20,7 +20,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision-Making',
-    work: 'Designed ROS 2 mission FSMs, investigated obstacle-avoidance problems using Foxglove logs, and operated follow-up vehicle trials. Implemented Pure Pursuit–Stanley tracking in ROS 2.',
+    work: 'Designed ROS 2 mission FSMs, reproduced a cached-path mismatch in Foxglove, and implemented odometry-based reprojection. Collected logs and ran follow-up vehicle tests. Implemented Pure Pursuit–Stanley tracking in ROS 2.',
     resultLabel: 'Competition result & awards',
     result: 'All required missions completed in both preliminary and final rounds under the competition rules. Team: Grand Prize in Autonomous Driving Implementation (Minister of Land, Infrastructure and Transport Award) and Creative Technology Special Award for the technical report.',
     evidence: [

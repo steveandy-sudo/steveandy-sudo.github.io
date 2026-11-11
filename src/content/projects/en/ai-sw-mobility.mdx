@@ -11,13 +11,13 @@ role: Decision-Making / FSM Design / Vehicle Testing
 status: completed
 summary: "ROS 2 FSM-based behavior planning, GNSS waypoint trials, Pure Pursuit–Stanley implementation, and data-driven obstacle-avoidance debugging."
 outcome: "The team completed all required missions in both preliminary and final rounds under the competition rules."
-teamScope: "I worked on the decision-making team, focusing on FSM-based behavior planning and obstacle avoidance. Recorded-run analysis and Test Week vehicle operation guided software adjustments."
+teamScope: "I worked on FSM-based behavior planning and obstacle avoidance. I collected and analyzed vehicle logs, implemented cached-path reprojection, and ran follow-up vehicle tests."
 contributions:
   - Designed FSM states and transition conditions for traffic-light handling, timed stops, obstacle avoidance, and mission completion.
-  - Traced perception, FSM states, planned paths, and vehicle feedback in Foxglove; reviewed cached-path coordinate and timestamp consistency to guide corrections and follow-up tests.
-  - Recorded GNSS route waypoints and operated GNSS/IMU-based vehicle trials, reaching up to 11 m/s on both courses during venue practice. During Test Week and obstacle-avoidance trials, confirmed approach deceleration, collision-free passage, route return, and acceleration afterward.
+  - Reproduced a cached-path coordinate and timestamp mismatch in Foxglove and implemented reprojection using saved and current odometry poses. Preserved the saved timestamp when the required pose history was unavailable.
+  - Temporarily extended the local planning horizon from 35 to 45 m and retained the 12 m return target. The configuration and avoidance regression run recorded 90 passing checks on the team branch at the time.
+  - Collected and analyzed driving logs, revised planning logic, and operated follow-up vehicle tests. Recorded GNSS route waypoints and reached up to 11 m/s on both courses in GNSS/IMU-based venue-practice trials.
   - Presented a Pure Pursuit–Stanley hybrid strategy at a symposium sponsored by Hyundai Mobis, then implemented steering blending by driving phase in ROS 2.
-  - Evaluated hybrid tracking against Stanley on matched Gazebo segments at 6 m/s; the initial comparison showed approximately 14% lower heading-error p95 and 10% lower steering-command total variation.
 technologies: [ROS 2, FSM Behavior Planning, Pure Pursuit + Stanley, MCAP / Foxglove, Gazebo]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
 githubVisibility: public
@@ -54,13 +54,18 @@ The final-round footage shows obstacle-section driving and departure after waiti
 
 ### Field observations
 
-The recorded runs showed S-shaped fallback maneuvers, paths generated around different obstacles, and cases where the vehicle continued straight into an obstacle. I used these recordings to examine obstacle selection, path generation, and fallback behavior.
+I collected driving logs during the October 17 K-City final-course tests and inspected them in Foxglove. The logs show selection and publication of S-shaped fallback paths during obstacle avoidance.
+
+- The morning log recorded `FORCED_S_CONTINUE` **5 times** (`20261017_114251_414559_decision_case_03_final_all_v7`).
+- The afternoon log recorded `FORCED_S_CONTINUE` **3 times**, followed by a transition to `RETURN` (`20261017_171607_574849_decision_case_03_final_all_v7`).
+
+The observations cover planner output and state transitions. Physical contact remains unconfirmed.
 
 ### Cached-path coordinates and timestamps
 
-In Foxglove, I compared perception outputs, FSM states, planned paths, and vehicle feedback. I examined whether a reused path’s coordinates and timestamp were interpreted consistently and used the recordings to propose corrections.
+In `20261017_145703_857137_decision_case_03_final_all_v10` near **15:08:46**, I compared perception outputs, FSM states, target paths, and vehicle poses. The vehicle moved about **3.07 m in 0.576 s**. The cached path's timestamp advanced while its coordinates remained in the earlier vehicle frame.
 
-Path-reuse logic uses pose history to express the stored points in the current vehicle frame. The diagram below explains that coordinate relationship.
+I implemented reprojection using the odometry poses at the saved and current timestamps (`b71f307`). When the required pose was unavailable, the code preserved the original timestamp. The mismatch's role in the forced-path selections remains open.
 
 <SystemFlow title="Cached-path reuse: coordinate-frame explanation" steps={[
   { label: 'Stored path', detail: 'Path points belong to the vehicle frame at the saved timestamp.' },
@@ -68,9 +73,19 @@ Path-reuse logic uses pose history to express the stored points in the current v
   { label: 'Aligned path', detail: 'The reused points are expressed in the current vehicle frame.' },
 ]} caption="Conceptual explanation of cached-path coordinate alignment." />
 
+### Offline comparison and temporary horizon setting
+
+A condition added on or after October 21 excluded the second obstacle row from collision checks if the **35 m** local path could not contain both that row and the return target. The recorded geometry required about **40.4–41.3 m** to include the end of the second row and the **12 m** return target.
+
+An offline comparison using the same three October 17 recordings removed only that exclusion condition. At a 10 ms evaluation interval, the first path accounting for both rows appeared **1.10–1.23 s earlier**. The comparison record supplies the result. Attribution for executing the comparison is pending.
+
+I separately committed a temporary **35 to 45 m** horizon setting (`2eb64af`) and kept the return target at **12 m**. In offline recalculation with the 45 m setting, some path candidates still geometrically overlapped observed obstacles. Both personal changes are included in the team `main` and `kgm` branches.
+
 ### Follow-up vehicle trials
 
-During Test Week, I operated the vehicle for experimental runs. In follow-up tests with updated software, the vehicle slowed before the avoidance section, passed the obstacles without contact, returned to the reference route, and accelerated afterward. I reviewed the recordings to compare the planner’s outputs with the vehicle response.
+I operated follow-up vehicle tests after revising the planning logic. The team Git record (`a22188e`) reports passes in the October 23 Midan trials `1452` and `1456`, after changes to perception filtering, forced-path replanning, Stanley-only tracking during avoidance, and avoidance speed settings. The original afternoon rosbags are pending review. The course and configuration changed between October 17 and 23, so the effect of the 45 m setting alone remains unconfirmed.
+
+The team branch recorded **90 passing checks** at the time, comprising 83 avoidance-sequence and seven horizon-configuration checks. The public repository's validation record lists **33 passing offline tests** on the imported source snapshot, covering Pure Pursuit, input-loss latching, and visualization trails.
 
 ## Driving task
 
@@ -125,14 +140,7 @@ The presentation by **Woojin Hwang and Junghun Hwang** received the **Hyundai Mo
 
 ## Initial simulation results
 
-I evaluated hybrid tracking against Stanley alone on **matched Gazebo course segments at 6 m/s**. The vehicle technical report records the comparison in Section 4.3.1 (pp. 239–240) and its summary table (p. 256).
-
-| Metric | Initial hybrid-tracking result versus Stanley alone |
-| --- | --- |
-| Heading-error p95 | Approximately **14% lower** |
-| Steering-command total variation | Approximately **10% lower** |
-
-Here, p95 is the 95th percentile of the recorded error values. Steering-command total variation measures accumulated changes in the steering command over the comparison segment.
+The vehicle technical report describes a comparison of hybrid tracking and Stanley alone on matched Gazebo course segments at **6 m/s** in Section 4.3.1 (pp. 239–240) and the summary table (p. 256). The heading-error p95 and distance-normalized steering-command variation results are pending review of the original runs and metric calculation.
 
 ## Real-vehicle trials
 
@@ -155,4 +163,4 @@ The cone-course AEB workflow forms a path from perceived cone boundaries and lat
 
 ## What I learned
 
-I learned to investigate driving problems by reading perception outputs, planning states, paths, and vehicle feedback together. Follow-up trials let me check whether a proposed correction changed the behavior I had observed.
+I learned to investigate driving problems by reading perception outputs, planning states, paths, and vehicle feedback together. Comparing the path's saved timestamp with odometry history let me reproduce the frame mismatch and implement the correction.

@@ -13,7 +13,7 @@ export const projectHighlightsKo: typeof projectHighlights = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW 모빌리티: 판단',
-    work: 'ROS 2 미션 FSM을 설계하고, Foxglove 로그로 장애물 회피 문제를 분석했으며, 후속 실차 시험에서 차량을 운용했다. ROS 2에서 Pure Pursuit–Stanley 경로 추종을 구현했다.',
+    work: 'ROS 2 미션 FSM을 설계하고 Foxglove에서 저장 경로의 불일치를 재현해 odometry 기반 재투영을 구현했다. 주행 로그를 수집하고 후속 실차 시험을 진행했다. ROS 2에서 Pure Pursuit–Stanley 경로 추종을 구현했다.',
     resultLabel: '대회 성과 및 수상',
     result: '대회 규정에 따라 예선과 본선에서 요구된 모든 미션을 완료했다. 팀은 자작자율차 자율주행구현 부문 대상(국토교통부 장관상)과 기술보고서 관련 자작자율차 창작기술 부문 특별상을 수상했다.',
     evidence: [
