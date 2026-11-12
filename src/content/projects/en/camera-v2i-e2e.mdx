@@ -30,7 +30,7 @@ import SystemFlow from '../../../components/SystemFlow.astro';
 
 The project aims to apply this approach to a full-size vehicle. A roadside camera would observe the occluded area and send pedestrian information to the vehicle, where it would be combined with the vehicle's camera input and state. A small-scale campus platform is planned for scenario and system-function trials, including a **camera-only versus V2I-assisted E2E comparison**.
 
-This semester focuses on research and preliminary design: quantitative requirements, interfaces, measurement boundaries, and test procedures. A separate software test measures the execution time of a candidate model architecture. Data collection, model training, and integrated vehicle trials are subsequent stages.
+This semester focuses on research and preliminary design (L3 in the team's V-model), covering quantitative requirements, interfaces, measurement boundaries, and test procedures. A separate software test measures the execution time of a candidate model architecture. Data collection, model training, and integrated vehicle trials are subsequent stages.
 
 ## Literature review and project scope
 
@@ -94,8 +94,9 @@ I examined how much delay the vehicle could tolerate while retaining the distanc
 
 Here, `D` is the distance from the vehicle's front to the collision-zone boundary at image capture, `a` is the assumed deceleration, and `g` is the required stopping clearance. The analysis compares decelerations of 1.5, 2.5, and 3.5 m/s² using literature as a design reference. The table uses **1.5 m/s²** and a **2 m candidate stopping clearance**.
 
-| Available distance D | Calculated upper bound on total latency |
+| Available distance D | Allowable latency under these assumptions |
 | --- | --- |
+| 25 m | Insufficient distance for the 2 m clearance even at zero latency |
 | 30 m | About 582 ms |
 | 35 m | About 1,182 ms |
 
