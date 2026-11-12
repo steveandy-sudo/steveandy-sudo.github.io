@@ -17,6 +17,7 @@ async function expectLocaleNavigation(page: Page, lang: Language, englishRoute: 
   const home = localizedRoute(lang, '/');
   await expect(page.locator('html')).toHaveAttribute('lang', lang);
   await expect(page.locator('.wordmark')).toHaveAttribute('href', home);
+  await expect(page.locator('.wordmark')).toHaveText('Junghun Hwang');
   await expect(page.locator('.global-nav a')).toHaveText(lang === 'ko'
     ? ['연구 관심', '프로젝트', '수상', '사용 기술']
     : ['Research', 'Projects', 'Awards', 'Skills']);
@@ -119,7 +120,7 @@ for (const lang of languages) {
     for (const [slug, repository] of repositories) {
       await page.goto(localizedRoute(lang, `/projects/${slug}/`));
       await expect(page.locator('.case-header').getByRole('link', { name: repositoryLabel, exact: true })).toHaveAttribute('href', repository);
-      await expect(page.locator('a[href^="https://github.com/"]')).toHaveCount(1);
+      await expect(page.locator('a[href^="https://github.com/"]:not([href*="/blob/"])')).toHaveCount(1);
       await expect(page.locator('[data-repository-visibility="private"]')).toHaveCount(0);
     }
     await page.goto(capstonePath);

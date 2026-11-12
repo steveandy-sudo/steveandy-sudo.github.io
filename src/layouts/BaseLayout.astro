@@ -35,7 +35,7 @@ const nav = lang === 'ko'
   <body>
     <a href="#main" class="skip-link">{lang === 'ko' ? '본문으로 이동' : 'Skip to content'}</a>
     <header class="site-header"><div class="header-inner">
-      <a class="wordmark" href={home}><span class="monogram" aria-hidden="true">JH</span><span class="wordmark-name">Junghun Hwang</span></a>
+      <a class="wordmark" href={home}>Junghun Hwang</a>
       <div class="header-navigation"><nav aria-label={lang === 'ko' ? '주요 메뉴' : 'Main navigation'} class="global-nav">
         {nav.map(([id,label]) => <a href={`${home}#${id}`}>{label}</a>)}
       </nav>

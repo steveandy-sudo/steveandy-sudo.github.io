@@ -104,8 +104,8 @@ export const homeProjectsKo: Record<string, HomeProjectCopy> = {
   },
   'camera-v2i-e2e': {
     title: '카메라 기반 V2I 협력 E2E 자율주행',
-    summary: '정지 조건에 따른 허용 지연 분석과 촬영부터 실제 감속 시작까지의 측정 경계 정의. Camera-only·V2I 정보 활용 E2E 비교시험 설계.',
-    result: '조사·예비 설계 진행. 별도로 RTX 5070 Laptop GPU에서 무작위 초기화한 TCP 후보 모델을 FP32로 600회 실행해 P95 21.88 ms를 기록했다.',
+    summary: '예비 설계에서 촬영부터 차량 감속 시작까지를 응답 지연의 측정 범위로 정했다.',
+    result: '카메라 단독과 V2I 보조 E2E 주행을 응답 시간과 정지 여유 거리로 비교하고, V2I 통신 연속성을 별도로 확인하는 시험을 계획했다.',
     resultLabel: '조사·설계',
     visual: {
       src: '/media/projects/camera-v2i/02-week4-e2e-comparison.png',

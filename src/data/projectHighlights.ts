@@ -12,7 +12,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
     title: 'Kookmin AI-Edge Autonomous Driving',
     work: 'Developed the ResNet18–LiDAR CNN pipeline, trained and compared YOLOv8n and YOLO11n, and integrated mission transitions, parking waypoints, and reverse recovery.',
     resultLabel: 'Competition result',
-    result: 'Team result: 2nd in the preliminary round, 13th in the final round with course completion, and a Parking Special Award. The final competition run used rule-based driving.',
+    result: 'Team result: 2nd in the preliminary round, 13th in the final round with course completion, and a Parking Special Award. The real-vehicle finals used rule-based lane following.',
     evidence: [
       { label: 'Learning & evaluation', anchor: 'learning-pipeline-and-evaluation' },
       { label: 'Competition results', anchor: 'validation-and-competition-results' },
@@ -20,7 +20,7 @@ export const projectHighlights: Record<string, ProjectHighlight> = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW Mobility: Decision-Making',
-    work: 'Designed ROS 2 mission FSMs, reproduced a cached-path mismatch in Foxglove, and implemented odometry-based reprojection. Collected logs and ran follow-up vehicle tests. Implemented Pure Pursuit–Stanley tracking in ROS 2.',
+    work: 'During K-City vehicle tests, I observed repeated selection of S-shaped fallback paths during obstacle avoidance. In a separate log from the same day, I identified a cached-path coordinate and timestamp mismatch in Foxglove, implemented odometry-based reprojection, and ran follow-up vehicle tests.',
     resultLabel: 'Competition result & awards',
     result: 'All required missions completed in both preliminary and final rounds under the competition rules. Team: Grand Prize in Autonomous Driving Implementation (Minister of Land, Infrastructure and Transport Award) and Creative Technology Special Award for the technical report.',
     evidence: [

@@ -74,7 +74,9 @@ for (const file of htmlFiles) {
   if (route.includes('/projects/')) {
     if (!document.querySelector('#my-contribution') || !document.querySelector('.contribution-section li')) errors.push(`${route}: missing personal contribution`);
     if (!document.querySelector('.toc-desktop') || !document.querySelector('.toc-mobile')) errors.push(`${route}: missing responsive local navigation`);
-    if (document.querySelectorAll('a[href^="https://github.com/"]').length > 1) errors.push(`${route}: duplicate GitHub links`);
+    const githubLinks = [...document.querySelectorAll('a[href^="https://github.com/"]')];
+    const repositoryLinks = githubLinks.filter((link) => !/^\/[^/]+\/[^/]+\/blob\//.test(new URL(link.href).pathname));
+    if (repositoryLinks.length > 1) errors.push(`${route}: duplicate GitHub navigation links`);
   }
   if (document.querySelector('a[download][href$=".gif"]')) errors.push(`${route}: GIF download button must not be displayed`);
   if (englishRoute === '/') {

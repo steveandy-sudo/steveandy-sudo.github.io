@@ -15,8 +15,9 @@ teamScope: "판단팀에서 FSM 기반 행동 계획과 장애물 회피를 담�
 contributions:
   - 신호등 대응, 지정 시간 정지, 장애물 회피, 미션 완료를 위한 FSM 상태와 전이 조건을 설계했다.
   - Foxglove에서 저장 경로의 좌표·시각 불일치를 재현하고 저장 시점과 현재 시점의 odometry 자세를 사용해 재투영을 구현했다. 필요한 자세 이력이 없으면 기존 타임스탬프를 유지하도록 했다.
-  - 복귀 목표 12 m를 유지하며 지역 경로 범위를 35 m에서 45 m로 임시 조정했다. 당시 팀 브랜치의 설정·회피 회귀 검사에서는 90개가 통과했다.
+  - 복귀 목표 12 m를 유지하며 지역 경로 범위를 35 m에서 45 m로 임시 조정했다.
   - 주행 로그를 수집·분석해 판단 로직을 수정하고 후속 실차 시험을 진행했다. GNSS 웨이포인트를 기록하고, 대회장 연습에서 GNSS/IMU 기반으로 예선·본선 코스 모두 최대 11 m/s까지 주행했다.
+  - 자동 긴급 제동(AEB)의 정지 판단 로직을 개발하고, 대회장 연습 중 빨간 콘을 감지하면 정지 명령이 발행되는 것을 실차에서 확인했다.
   - 현대모비스가 후원한 심포지엄에서 Pure Pursuit–Stanley 혼합 전략을 발표한 뒤, ROS 2에서 주행 단계별 조향 명령 혼합을 구현했다.
 technologies: [ROS 2, FSM Behavior Planning, Pure Pursuit + Stanley, MCAP / Foxglove, Gazebo]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
@@ -54,18 +55,18 @@ Team K.A.I.는 **2026 대학생 AI·SW 모빌리티 경진대회**의 **자작�
 
 ### 주행 시험 중 관찰
 
-10월 17일 K-City 본선 코스 시험에서 주행 로그를 수집하고 Foxglove로 확인했다. 장애물 회피 중 S자 대체 경로가 선택·발행된 기록은 다음과 같다.
+10월 17일 K-City 본선 코스 시험에서 로그를 수집하고 Foxglove에서 계획기의 경로 선택과 상태 전환을 살폈다.
 
 - 오전 로그에서는 `FORCED_S_CONTINUE`가 **5회** 기록됐다(`20261017_114251_414559_decision_case_03_final_all_v7`).
 - 오후 로그에서는 `FORCED_S_CONTINUE`가 **3회** 기록된 뒤 `RETURN`으로 전환됐다(`20261017_171607_574849_decision_case_03_final_all_v7`).
 
-로그에서 확인한 범위는 계획기의 경로 선택·발행과 상태 전환이다. 실제 접촉 여부는 확인 대기 중이다.
+로그에서 확인한 범위는 계획기의 경로 선택·발행과 상태 전환이다. 실제 접촉 여부는 확인 대기 중이다. [실차 관측 기록](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#october-17-k-city-final-course-tests)
 
 ### 저장 경로의 좌표와 타임스탬프
 
 `20261017_145703_857137_decision_case_03_final_all_v10`의 **15:08:46** 부근에서 인지 출력, FSM 상태, 목표 경로와 차량 자세를 대조했다. 차량이 0.576초 동안 약 3.07 m 이동했지만 저장 경로의 좌표는 이전 차량 기준에 남아 있었고 타임스탬프만 갱신됐다.
 
-저장 시점과 현재 시점의 odometry 자세로 경로를 재투영하도록 구현했다(`b71f307`). 필요한 자세 이력이 없으면 기존 타임스탬프를 유지한다. 이 불일치와 강제 경로 선택의 인과관계는 확인 대기 중이다.
+저장 시점과 현재 시점의 odometry 자세로 경로를 재투영하도록 구현했다(`b71f307`). 필요한 자세 이력이 없으면 기존 타임스탬프를 유지한다. 이 불일치와 강제 경로 선택의 인과관계는 확인 대기 중이다. [재투영 기록](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#cached-path-reprojection)
 
 <SystemFlow title="저장 경로 재사용: 좌표계 관계" steps={[
   { label: '저장 경로', detail: '경로점은 저장된 타임스탬프 시점의 차량 좌표계를 기준으로 한다.' },
@@ -77,15 +78,17 @@ Team K.A.I.는 **2026 대학생 AI·SW 모빌리티 경진대회**의 **자작�
 
 10월 21일 이후 추가된 조건에서는 35 m 지역 경로에 두 번째 장애물 열과 복귀 목표를 함께 담을 수 없으면 두 번째 열을 충돌 검사에서 제외했다. 기록의 기하 관계를 기준으로 두 번째 열 후단과 복귀 목표 12 m까지 포함하려면 약 40.4–41.3 m가 필요했다.
 
-위에 나온 10월 17일 녹화 3개를 같은 입력으로 사용한 오프라인 비교에서는 이 제외 조건만 제거했다. 10 ms 간격으로 계산했을 때 두 장애물 열을 처음 반영한 경로가 1.10–1.23초 일찍 나타났다. 이 결과는 오프라인 비교 기록에 근거하며, 비교 실행자의 개인 기여는 확인 대기 중이다.
+오프라인 비교에서는 동일한 10월 17일 K-City 주행 로그 세 건을 계획기에 재생하고 장애물 제외 조건만 제거했다. 10 ms 간격으로 계산했을 때 두 장애물 열을 처음 반영한 경로가 **1.10–1.23초 일찍** 나타났다. [오프라인 비교 기록](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#offline-comparison-and-temporary-horizon-setting)
 
 별도로 복귀 목표 12 m를 유지하며 지역 경로 범위를 35 m에서 45 m로 임시 조정해 커밋했다(`2eb64af`). 45 m로 다시 계산한 일부 경로 후보에서도 관측 장애물과 기하학적 겹침이 남았다. 두 개인 수정은 팀의 `main`과 `kgm`에 반영됐다.
 
 ### 후속 실차 시험
 
-판단 로직을 수정한 뒤 후속 실차 시험을 진행했다. 팀 Git 기록(`a22188e`)에는 인지 필터, 강제 경로 재탐색, 회피 중 Stanley 단독 추종과 회피 속도 설정을 함께 바꾼 뒤 10월 23일 미단 시험 `1452`와 `1456`에서 통과했다고 적혀 있다. 오후 원본 rosbag은 확인 대기 중이다. 10월 17일과 23일의 코스와 설정이 달라 45 m 설정의 단독 효과는 확인 대기 중이다.
+판단 로직을 수정한 뒤 후속 실차 시험을 진행했다. 팀 Git 기록(`a22188e`)에는 인지 필터, 강제 경로 재탐색, 회피 중 Stanley 단독 추종과 회피 속도 설정을 함께 바꾼 뒤 10월 23일 미단 시험 `1452`와 `1456`에서 통과했다고 적혀 있다. 오후 원본 rosbag은 확인 대기 중이다. K-City와 미단 시험의 코스와 설정이 달라 45 m 설정의 단독 효과는 확인 대기 중이다. [팀 재시험 기록](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#october-23-team-vehicle-retests)
 
-당시 팀 브랜치에서는 회피 시퀀스 83개와 경로 범위 설정 7개를 합쳐 회귀 검사 90개가 통과했다. 공개 저장소에는 옮긴 소스를 대상으로 한 별도의 오프라인 검사 33개 통과가 기록돼 있다. 이 검사는 Pure Pursuit, 입력 유실 시 정지 유지, 시각화 궤적 처리를 다룬다.
+당시 팀 브랜치에서는 장애물 회피 시퀀스 83개와 경로 범위 설정 7개를 합쳐 **회귀 검사 90개**가 통과했다. [팀 브랜치 검사 기록](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/VALIDATION.md#completed-checks)
+
+공개 저장소로 옮긴 소스는 Pure Pursuit, 입력 유실 시 정지 유지, 시각화 궤적 처리를 다루는 **오프라인 검사 33개**를 통과했다. [공개 저장소 검사 범위](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/VALIDATION.md#existing-offline-tests)
 
 ## 주행 과제
 
@@ -150,11 +153,11 @@ ROS 2 행동 계획기의 상태와 전이 조건을 정의했다. 계획기는 
 | --- | --- | --- |
 | 웨이포인트 주행 | 예선 코스 | 최대 **11 m/s(39.6 km/h)** 주행 성공 |
 | 웨이포인트 주행 | 본선 코스 | 최대 **11 m/s(39.6 km/h)** 주행 성공 |
-| AEB 명령 시험 | 접근 속도: **50 km/h** | 빨간 콘 감지에 따라 정지 구역 입구에서 정지 요청 발생 |
+| AEB 명령 시험 | 접근 속도: **50 km/h** | 빨간 콘을 감지해 정지 구역 입구에서 정지 명령이 발행됐다. 차량은 지정 정지 구역을 넘어갔다. |
 
 웨이포인트 주행과 AEB 시험은 대회장에서 주최 측이 제공한 공개 연습 시간에 진행했다. AEB 영상에는 **빨간 콘 인식과 정지 명령 발생**이 기록되어 있다.
 
-콘 코스 AEB 처리 흐름은 인지된 콘 경계를 바탕으로 경로를 생성하고, 빨간 콘에 대한 정지 요청이 발생하면 이를 유지한다. Gazebo, Foxglove, 실차 시험을 이용해 생성 경로, 조향 명령, 정지 상태를 확인했다.
+AEB 정지 판단 로직을 개발했다. 콘 코스 주행에서는 감지한 콘 경계를 따라 경로를 생성하고, 빨간 콘을 감지한 뒤에는 정지 요청을 유지한다. Gazebo, Foxglove, 실차 시험을 이용해 생성 경로, 조향 명령, 정지 상태를 확인했다. [대회장 연습 기록](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#earlier-venue-practice)
 
 <MediaSlot id="mobility-waypoint" lang="ko" />
 <MediaSlot id="mobility-aeb-stop" lang="ko" />

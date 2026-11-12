@@ -15,8 +15,9 @@ teamScope: "I worked on FSM-based behavior planning and obstacle avoidance. I co
 contributions:
   - Designed FSM states and transition conditions for traffic-light handling, timed stops, obstacle avoidance, and mission completion.
   - Reproduced a cached-path coordinate and timestamp mismatch in Foxglove and implemented reprojection using saved and current odometry poses. Preserved the saved timestamp when the required pose history was unavailable.
-  - Temporarily extended the local planning horizon from 35 to 45 m and retained the 12 m return target. The configuration and avoidance regression run recorded 90 passing checks on the team branch at the time.
+  - Temporarily extended the local planning horizon from 35 to 45 m and retained the 12 m return target.
   - Collected and analyzed driving logs, revised planning logic, and operated follow-up vehicle tests. Recorded GNSS route waypoints and reached up to 11 m/s on both courses in GNSS/IMU-based venue-practice trials.
+  - Developed stop logic for automatic emergency braking (AEB) and confirmed during venue practice that red-cone detection triggered a stop command on the vehicle.
   - Presented a Pure Pursuit–Stanley hybrid strategy at a symposium sponsored by Hyundai Mobis, then implemented steering blending by driving phase in ROS 2.
 technologies: [ROS 2, FSM Behavior Planning, Pure Pursuit + Stanley, MCAP / Foxglove, Gazebo]
 github: https://github.com/steveandy-sudo/ai-sw-mobility-portfolio
@@ -54,18 +55,18 @@ The final-round footage shows obstacle-section driving and departure after waiti
 
 ### Field observations
 
-I collected driving logs during the October 17 K-City final-course tests and inspected them in Foxglove. The logs show selection and publication of S-shaped fallback paths during obstacle avoidance.
+I collected logs during the October 17 K-City final-course tests and inspected the planner's path selections and state transitions in Foxglove.
 
 - The morning log recorded `FORCED_S_CONTINUE` **5 times** (`20261017_114251_414559_decision_case_03_final_all_v7`).
 - The afternoon log recorded `FORCED_S_CONTINUE` **3 times**, followed by a transition to `RETURN` (`20261017_171607_574849_decision_case_03_final_all_v7`).
 
-The observations cover planner output and state transitions. Physical contact remains unconfirmed.
+These logs establish which paths the planner selected and published. Physical contact remains unconfirmed. [Field observation record](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#october-17-k-city-final-course-tests)
 
 ### Cached-path coordinates and timestamps
 
 In `20261017_145703_857137_decision_case_03_final_all_v10` near **15:08:46**, I compared perception outputs, FSM states, target paths, and vehicle poses. The vehicle moved about **3.07 m in 0.576 s**. The cached path's timestamp advanced while its coordinates remained in the earlier vehicle frame.
 
-I implemented reprojection using the odometry poses at the saved and current timestamps (`b71f307`). When the required pose was unavailable, the code preserved the original timestamp. The mismatch's role in the forced-path selections remains open.
+I implemented reprojection using the odometry poses at the saved and current timestamps (`b71f307`). When the required pose was unavailable, the code preserved the original timestamp. The mismatch's role in the forced-path selections remains open. [Reprojection record](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#cached-path-reprojection)
 
 <SystemFlow title="Cached-path reuse: coordinate-frame explanation" steps={[
   { label: 'Stored path', detail: 'Path points belong to the vehicle frame at the saved timestamp.' },
@@ -75,17 +76,19 @@ I implemented reprojection using the odometry poses at the saved and current tim
 
 ### Offline comparison and temporary horizon setting
 
-A condition added on or after October 21 excluded the second obstacle row from collision checks if the **35 m** local path could not contain both that row and the return target. The recorded geometry required about **40.4–41.3 m** to include the end of the second row and the **12 m** return target.
+A condition introduced on or after October 21 excluded the second obstacle row from collision checks if the **35 m** local path could not contain both that row and the return target. The recorded geometry required about **40.4–41.3 m** to include the end of the second row and the **12 m** return target.
 
-An offline comparison using the same three October 17 recordings removed only that exclusion condition. At a 10 ms evaluation interval, the first path accounting for both rows appeared **1.10–1.23 s earlier**. The comparison record supplies the result. Attribution for executing the comparison is pending.
+The offline comparison replayed the same three October 17 K-City logs through the planner, removing only the obstacle exclusion condition. At 10 ms evaluation intervals, the first path accounting for both rows appeared **1.10–1.23 s earlier**. [Offline comparison record](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#offline-comparison-and-temporary-horizon-setting)
 
 I separately committed a temporary **35 to 45 m** horizon setting (`2eb64af`) and kept the return target at **12 m**. In offline recalculation with the 45 m setting, some path candidates still geometrically overlapped observed obstacles. Both personal changes are included in the team `main` and `kgm` branches.
 
 ### Follow-up vehicle trials
 
-I operated follow-up vehicle tests after revising the planning logic. The team Git record (`a22188e`) reports passes in the October 23 Midan trials `1452` and `1456`, after changes to perception filtering, forced-path replanning, Stanley-only tracking during avoidance, and avoidance speed settings. The original afternoon rosbags are pending review. The course and configuration changed between October 17 and 23, so the effect of the 45 m setting alone remains unconfirmed.
+I operated follow-up vehicle tests after revising the planning logic. The team Git record (`a22188e`) reports passes in the October 23 Midan trials `1452` and `1456`, after changes to perception filtering, forced-path replanning, Stanley-only tracking during avoidance, and avoidance speed settings. The original afternoon rosbags are pending review. The K-City and Midan trials used different courses and configurations, so the effect of the 45 m setting alone remains unconfirmed. [Team retest record](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#october-23-team-vehicle-retests)
 
-The team branch recorded **90 passing checks** at the time, comprising 83 avoidance-sequence and seven horizon-configuration checks. The public repository's validation record lists **33 passing offline tests** on the imported source snapshot, covering Pure Pursuit, input-loss latching, and visualization trails.
+The team branch recorded **90 passing checks**, comprising 83 obstacle-avoidance sequence checks and seven horizon-configuration checks. [Team-branch check record](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/VALIDATION.md#completed-checks)
+
+The public repository's imported snapshot passed **33 offline tests** covering Pure Pursuit, input-loss latching, and visualization trails. [Public offline test scope](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/VALIDATION.md#existing-offline-tests)
 
 ## Driving task
 
@@ -150,11 +153,11 @@ The vehicle technical report describes a comparison of hybrid tracking and Stanl
 | --- | --- | --- |
 | Waypoint driving | Preliminary course | Successful driving at speeds up to **11 m/s (39.6 km/h)** |
 | Waypoint driving | Final course | Successful driving at speeds up to **11 m/s (39.6 km/h)** |
-| AEB command trial | Approach speed: **50 km/h** | Red-cone detection triggered the stop request at the stopping-zone entrance |
+| AEB command trial | Approach speed: **50 km/h** | Red-cone detection triggered a stop command at the zone entrance. The vehicle went beyond the designated stopping zone. |
 
 The waypoint and AEB trials took place during the organizer's open-practice period at the competition venue. The AEB footage documents **red-cone recognition and stop-command triggering**.
 
-The cone-course AEB workflow forms a path from perceived cone boundaries and latches the red-cone stop request. I used Gazebo, Foxglove, and vehicle tests to inspect the generated path, steering command, and stop state.
+I developed the AEB stop logic. The cone-course workflow generates a path from detected cone boundaries and holds the stop request after red-cone detection. I used Gazebo, Foxglove, and vehicle tests to inspect the generated path, steering command, and stop state. [Venue-practice record](https://github.com/steveandy-sudo/ai-sw-mobility-portfolio/blob/main/docs/EXPERIMENTS.md#earlier-venue-practice)
 
 <MediaSlot id="mobility-waypoint" />
 <MediaSlot id="mobility-aeb-stop" />

@@ -5,7 +5,7 @@ export const projectHighlightsKo: typeof projectHighlights = {
     title: '국민대 AI-Edge 자율주행',
     work: 'ResNet18–LiDAR CNN 파이프라인을 개발하고, YOLOv8n과 YOLO11n을 학습·비교했으며, 미션 전환·주차 웨이포인트·후진 복구를 통합했다.',
     resultLabel: '대회 성과',
-    result: '팀은 예선 2위와 본선 13위를 기록했고, 본선 코스를 완주했다. 주차 부문 특별상도 수상했다. 본선 경기에서는 규칙 기반 주행을 사용했다.',
+    result: '팀은 예선 2위와 본선 13위를 기록했고, 본선 코스를 완주했다. 주차 부문 특별상도 수상했다. 최종 실차 본선에서는 규칙 기반 차선 추종을 사용했다.',
     evidence: [
       { label: '학습 및 평가', anchor: 'learning-pipeline-and-evaluation' },
       { label: '대회 결과', anchor: 'validation-and-competition-results' },
@@ -13,7 +13,7 @@ export const projectHighlightsKo: typeof projectHighlights = {
   },
   'ai-sw-mobility': {
     title: 'AI·SW 모빌리티: 판단',
-    work: 'ROS 2 미션 FSM을 설계하고 Foxglove에서 저장 경로의 불일치를 재현해 odometry 기반 재투영을 구현했다. 주행 로그를 수집하고 후속 실차 시험을 진행했다. ROS 2에서 Pure Pursuit–Stanley 경로 추종을 구현했다.',
+    work: 'K-City 실차 시험에서 장애물 회피 중 S자 대체 경로가 반복 선택된 것을 확인했다. 같은 날 별도 주행 로그를 Foxglove에서 분석해 저장 경로의 좌표·시각 불일치를 찾고, odometry 기반 재투영을 구현한 뒤 후속 실차 시험을 진행했다.',
     resultLabel: '대회 성과 및 수상',
     result: '대회 규정에 따라 예선과 본선에서 요구된 모든 미션을 완료했다. 팀은 자작자율차 자율주행구현 부문 대상(국토교통부 장관상)과 기술보고서 관련 자작자율차 창작기술 부문 특별상을 수상했다.',
     evidence: [
